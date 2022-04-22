@@ -22,6 +22,10 @@ public class MapView extends Container {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+
+        Point originRelativeToParent = new Point(getX(), getY());
+        Point originRelativeToScreen = new Point(getAbsoluteX(), getAbsoluteY());
+
         // draw all objects in the gameworld relative to this container object
         //
         for(GameObject go:gw.getGameObjectCollection())

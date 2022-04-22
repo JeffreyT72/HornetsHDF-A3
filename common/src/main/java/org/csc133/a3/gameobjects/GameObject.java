@@ -2,6 +2,7 @@ package org.csc133.a3.gameobjects;
 
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
+import com.codename1.ui.Transform;
 import org.csc133.a3.GameWorld;
 import org.csc133.a3.interfaces.Drawable;
 
