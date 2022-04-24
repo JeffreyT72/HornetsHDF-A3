@@ -1,22 +1,30 @@
 package org.csc133.a3.gameobjects;
 
+import com.codename1.ui.Graphics;
+import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
-import com.codename1.ui.Transform;
 import org.csc133.a3.GameWorld;
-import org.csc133.a3.interfaces.Drawable;
 
-public abstract class GameObject implements Drawable {
+public abstract class GameObject {
     private int color;
     Point location;
     Dimension dimension;
     Dimension worldSize;
+    Transform gXform;
+    Transform gOrigXform;
+    Transform myTranslation;
+    Transform myRotation;
+    Transform myScale;
     // For getting the fuel value from GameWorld
     //
     GameWorld gw;
 
     public GameObject() {
         gw = GameWorld.getInstance();
+        myTranslation = Transform.makeIdentity();
+        myRotation = Transform.makeIdentity();
+        myScale = Transform.makeIdentity();
     }
 
     void setColor(int color) {
@@ -33,6 +41,69 @@ public abstract class GameObject implements Drawable {
 
     Point getLocation() {
         return this.location;
+    }
+
+    public void draw(Graphics g, Point containerOrigin, Point screenOrigin) {
+        g.setColor(color);
+
+        //Transform gXform = preLTransform(g, screenOrigin);
+        Transform gXform = Transform.makeIdentity();
+        g.getTransform(gXform);
+        Transform gOrigXform = gXform.copy();
+
+        // move drawing coordinates back
+        //
+        gXform.translate(screenOrigin.getX(), screenOrigin.getY());
+
+        localTransforms(gXform);
+        //postLTransform(g, screenOrigin, gXform);
+
+        // move the drawing coordinates as part of the "local origin" transformations
+        //
+        gXform.translate(-screenOrigin.getX(), -screenOrigin.getY());
+
+        // set the current transform of the graphics context
+        //
+        g.setTransform(gXform);
+
+        cn1ForwardPrimitiveTranslate(g, dimension);
+        containerTranslate(g, containerOrigin);
+
+        localDraw(g, containerOrigin, screenOrigin);
+
+        // restore the original xform in g
+        //
+        //g.resetAffine();
+        g.setTransform(gOrigXform);
+    }
+
+    protected abstract void localDraw(Graphics g, Point containerOrigin, Point screenOrigin);
+
+    protected void localTransforms(Transform gxForm) {
+        gxForm.translate(myTranslation.getTranslateX(), myTranslation.getTranslateY());
+        gxForm.concatenate(myRotation);
+        gxForm.scale(myScale.getScaleX(), myScale.getScaleY());
+    }
+
+    protected void containerTranslate(Graphics g, Point parentOrigin) {
+        Transform gxForm = Transform.makeIdentity();
+        g.getTransform(gxForm);
+        gxForm.translate(parentOrigin.getX(), parentOrigin.getY());
+        g.setTransform(gxForm);
+    }
+
+    protected void cn1ForwardPrimitiveTranslate(Graphics g, Dimension pDimension) {
+        Transform gxForm = Transform.makeIdentity();
+        g.getTransform(gxForm);
+        gxForm.translate(-pDimension.getWidth()/2, -pDimension.getHeight()/2);
+        g.setTransform(gxForm);
+    }
+
+    protected void cn1ReversePrimitiveTranslate(Graphics g, Dimension pDimension) {
+        Transform gxForm = Transform.makeIdentity();
+        g.getTransform(gxForm);
+        gxForm.translate(pDimension.getWidth()/2, pDimension.getHeight()/2);
+        g.setTransform(gxForm);
     }
 }
 

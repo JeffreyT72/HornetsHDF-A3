@@ -4,11 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="Initial upload, migrate the all codes from A2 to A3.">
+    <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="Transforms. 80% TODO: Fire transforms, local coordinates. Hierarchical objects.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/Building.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/Building.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/Fire.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/Fire.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/GameObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/Helicopter.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/Helicopter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/Helipad.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/Helipad.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/River.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/River.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/interfaces/Drawable.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/views/MapView.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/views/MapView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/target/HornetsHDF-A3-common-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/HornetsHDF-A3-common-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Building.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Building.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Fire$Burning.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Fire$Burning.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Fire$Extinguished.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Fire$Extinguished.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Fire$UnStarted.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Fire$UnStarted.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Fire.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Fire.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Fixed.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Fixed.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/GameObject.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/GameObject.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Helicopter.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Helicopter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Helipad.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Helipad.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Movable.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Movable.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/River.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/River.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/codenameone/simulator.properties" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/codenameone/simulator.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/target/compliance-check.jar" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/compliance-check.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -856,7 +874,14 @@
       <option name="project" value="LOCAL" />
       <updated>1649996601473</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Transforms. TODO: Transforms, local coordinates, and hierarchical objects.">
+      <created>1650603792033</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1650603792034</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -872,6 +897,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial upload, migrate the all codes from A2 to A3." />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial upload, migrate the all codes from A2 to A3." />
+    <MESSAGE value="Transforms. TODO: Transforms, local coordinates, and hierarchical objects." />
+    <MESSAGE value="Transforms. 80% TODO: Fire transforms, local coordinates. Hierarchical objects." />
+    <option name="LAST_COMMIT_MESSAGE" value="Transforms. 80% TODO: Fire transforms, local coordinates. Hierarchical objects." />
   </component>
 </project>

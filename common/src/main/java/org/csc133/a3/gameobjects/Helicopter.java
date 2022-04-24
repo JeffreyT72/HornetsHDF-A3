@@ -34,8 +34,8 @@ public class Helicopter extends Movable implements Steerable {
         this.isOverRiver = false;
         this.currentSpeed = 0;
         heading = Math.toRadians(SANGLE);
-        x = (int)helipad.getLocation().getX(); // centerX
-        y = (int)helipad.getLocation().getY(); // centerY
+        //x = (int)helipad.getLocation().getX(); // centerX
+        //y = (int)helipad.getLocation().getY(); // centerY
         location = new Point(x, y);
         headingX = (int) (location.getX() + (currentSpeed + Heli_LENGTH)
                 * Math.cos(heading));
@@ -111,7 +111,7 @@ public class Helicopter extends Movable implements Steerable {
     public void fuel() {
         gw.setFuel((int)(Math.sqrt(currentSpeed) + 5));
     }
-
+    /*
     @Override
     public void draw(Graphics g, Point containerOrigin) {
         // Helicopter
@@ -140,6 +140,11 @@ public class Helicopter extends Movable implements Steerable {
         g.drawString("F  : " + gw.getFuel(), textX, textY);
         textY += 30;
         g.drawString("W : " + water, textX, textY);
+    }
+    */
+    @Override
+    protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
+
     }
 
     @Override

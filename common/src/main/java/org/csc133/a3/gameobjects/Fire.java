@@ -43,12 +43,26 @@ public class Fire extends GameObject{
         this.r = new Random();
         this.size = MIN_SIZE + r.nextInt(10);
         this.dimension = new Dimension(size, size);
+
+        this.translate(worldSize.getWidth(), worldSize.getHeight());
+        this.scale(1,-1);
+        this.rotate(0);
+
         // set fire object into unStarted state
         //
         unStarted.fireAction(context);
     }
 
     // Getter
+    //
+    public int getWidth() {
+        return dimension.getWidth();
+    }
+
+    public int getHeight() {
+        return dimension.getHeight();
+    }
+
     boolean getIsOverFire() {
         return this.isOverFire;
     }
@@ -126,7 +140,7 @@ public class Fire extends GameObject{
     public void Extinguished() {
         extinguished.fireAction(context);
     }
-
+    /*
     @Override
     public void draw(Graphics g, Point containerOrigin) {
         g.setColor(getColor());
@@ -144,8 +158,26 @@ public class Fire extends GameObject{
         int strY = y + dimension.getHeight();
         g.drawString(String.valueOf(size), strX, strY);
     }
-
+    */
     public void setup(int x, int y, int w, int h) {
-        this.location = new Point(x + r.nextInt(w), y + r.nextInt(h));
+        //this.location = new Point(x + r.nextInt(w), y + r.nextInt(h));
+        this.translate(x, y);
+    }
+
+    @Override
+    protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
+        g.fillArc(0, 0, getWidth(), getHeight(), 0, 360);
+    }
+
+    public void rotate(float degrees) {
+        myRotation.rotate((float)Math.toRadians(degrees), 0, 0);
+    }
+
+    public void scale(double sx, double sy) {
+        myScale.scale((float)sx, (float)sy);
+    }
+
+    public void translate(double tx, double ty) {
+        myTranslation.translate((float)tx, (float)ty);
     }
 }

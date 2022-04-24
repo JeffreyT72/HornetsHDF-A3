@@ -10,13 +10,18 @@ public class Helipad extends Fixed{
     // Constants
     private final int DISTANCE = 10;
     private final int SIZE = 150;
+    private final int THICKNESS = 2;
 
     public Helipad(Dimension worldSize) {
-        this.worldSize = worldSize;
+        //this.worldSize = worldSize;
         setColor(ColorUtil.GRAY);
         this.dimension = new Dimension(SIZE, SIZE);
-        setLocation(new Point(worldSize.getWidth()/2,
-                worldSize.getHeight()-200));
+        //setLocation(new Point(worldSize.getWidth()/2,
+        //        worldSize.getHeight()-200));
+
+        this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.9);
+        this.scale(1,-1);
+        this.rotate(0);
     }
 
     // Getter
@@ -28,7 +33,7 @@ public class Helipad extends Fixed{
     public int getSize() {
         return this.SIZE;
     }
-
+    /*
     @Override
     public void draw(Graphics g, Point containerOrigin) {
         g.setColor(getColor());
@@ -46,5 +51,33 @@ public class Helipad extends Fixed{
 
         g.drawRect(x, y, w, h, 2);
         g.drawArc(circleX, circleY, circleW, circleH, 0, 360);
+    }
+    */
+    @Override
+    protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
+        g.drawRect(0, 0, getWidth(), getHeight(), THICKNESS);
+        g.drawArc(DISTANCE, DISTANCE, getWidth() - DISTANCE*2, getHeight() - DISTANCE*2, 0, 360);
+    }
+
+    public void rotate(float degrees) {
+        myRotation.rotate((float)Math.toRadians(degrees), 0, 0);
+    }
+
+    public void scale(double sx, double sy) {
+        myScale.scale((float)sx, (float)sy);
+    }
+
+    public void translate(double tx, double ty) {
+        myTranslation.translate((float)tx, (float)ty);
+    }
+
+    // Getter
+    //
+    public int getWidth() {
+        return dimension.getWidth();
+    }
+
+    public int getHeight() {
+        return dimension.getHeight();
     }
 }
