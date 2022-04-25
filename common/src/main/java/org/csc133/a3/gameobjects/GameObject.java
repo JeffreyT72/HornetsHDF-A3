@@ -22,6 +22,7 @@ public abstract class GameObject {
 
     public GameObject() {
         gw = GameWorld.getInstance();
+        this.worldSize = worldSize;
         myTranslation = Transform.makeIdentity();
         myRotation = Transform.makeIdentity();
         myScale = Transform.makeIdentity();
@@ -37,6 +38,16 @@ public abstract class GameObject {
 /*    void setLocation(Point location) {
         this.location = location;
     }*/
+
+    // Getter
+    //
+    public int getWidth() {
+    return dimension.getWidth();
+}
+
+    public int getHeight() {
+        return dimension.getHeight();
+    }
 
     int getColor() {
         return this.color;
@@ -137,6 +148,7 @@ abstract class Fixed extends GameObject {
         }
         fixed = true;
     }*/
+
 }
 
 abstract class Movable extends GameObject {
@@ -144,6 +156,10 @@ abstract class Movable extends GameObject {
     double heading;
 
     public Movable() {
+    }
+
+    public void move(int elaspedTimeInMillis) {
+
     }
 
     public int getSpeed() {

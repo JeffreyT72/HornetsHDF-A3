@@ -172,7 +172,7 @@ public class GameWorld {
             }
         }
 
-        helicopter.move();
+        //helicopter.move();
         //helicopter.checkDrinkable(river);
         helicopter.fuel();
 

@@ -168,6 +168,11 @@ public class Fire extends GameObject{
     @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
         g.fillArc(0, 0, getWidth(), getHeight(), 0, 360);
+
+        // Text (need to transforms)
+        g.setFont(Font.createSystemFont(FACE_MONOSPACE,
+                STYLE_BOLD, SIZE_MEDIUM));
+        g.drawString(String.valueOf(size), size/2 + 10, size/2 + 10);
     }
 
     public void rotate(float degrees) {

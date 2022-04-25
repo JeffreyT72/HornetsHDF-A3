@@ -61,7 +61,7 @@ public class Helicopter extends Movable implements Steerable {
             currentSpeed--;
     }
 
-    public void move() {
+/*    public void move() {
         headingX = (int) (location.getX() + (currentSpeed + Heli_LENGTH)
                 * Math.cos(heading));
         headingY = (int) (location.getY() + (currentSpeed + Heli_LENGTH)
@@ -69,7 +69,7 @@ public class Helicopter extends Movable implements Steerable {
         x = (int) (location.getX() + currentSpeed * Math.cos(heading));
         y = (int) (location.getY() + currentSpeed * Math.sin(heading));
         location = new Point(x, y);
-    }
+    }*/
 
  /*   public void checkDrinkable(River river) {
         int riverStartX = (int)river.getLocation().getX()
@@ -206,7 +206,6 @@ public class Helicopter extends Movable implements Steerable {
         this.scale(1,-1);
         this.rotate(180);
 
-
         heloParts = new ArrayList<>();
 
         heloParts.add(new HeloBubble());
@@ -226,16 +225,16 @@ public class Helicopter extends Movable implements Steerable {
 
     @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
-
-        cn1ReversePrimitiveTranslate(g, getDimension());
-        cn1ReverseContainerTranslate(g, containerOrigin);
-
-        for (GameObject go : heloParts)
-            go.draw(g, containerOrigin, screenOrigin);
-
         // draw axis for debugging
         g.setColor(ColorUtil.LTGRAY);
         g.drawLine(-worldSize.getWidth()/2, 0, worldSize.getWidth()/2, 0);
         g.drawLine(0, -worldSize.getHeight()/2, 0, worldSize.getHeight()/2);
+
+        //cn1ReversePrimitiveTranslate(g, getDimension());
+        //cn1ReverseContainerTranslate(g, containerOrigin);
+
+        for (GameObject go : heloParts)
+            go.draw(g, containerOrigin, screenOrigin);
+
     }
 }

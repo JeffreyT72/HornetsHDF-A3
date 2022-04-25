@@ -17,7 +17,6 @@ public class River extends Fixed {
         //setLocation(new Point(worldSize.getWidth()/2,
         //        worldSize.getHeight()/4));
         this.dimension = new Dimension(worldSize.getWidth(), 200);
-
         this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.7);
         this.scale(1,-1);
         this.rotate(0);
@@ -51,15 +50,5 @@ public class River extends Fixed {
 
     public void translate(double tx, double ty) {
         myTranslation.translate((float)tx, (float)ty);
-    }
-
-    // Getter
-    //
-    public int getWidth() {
-        return dimension.getWidth();
-    }
-
-    public int getHeight() {
-        return dimension.getHeight();
     }
 }

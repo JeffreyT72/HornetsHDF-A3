@@ -70,14 +70,4 @@ public class Helipad extends Fixed{
     public void translate(double tx, double ty) {
         myTranslation.translate((float)tx, (float)ty);
     }
-
-    // Getter
-    //
-    public int getWidth() {
-        return dimension.getWidth();
-    }
-
-    public int getHeight() {
-        return dimension.getHeight();
-    }
 }
