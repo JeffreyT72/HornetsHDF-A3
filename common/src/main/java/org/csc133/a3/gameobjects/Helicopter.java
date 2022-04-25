@@ -7,6 +7,8 @@ import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
 import org.csc133.a3.interfaces.Steerable;
 
+import java.util.ArrayList;
+
 import static com.codename1.ui.CN.*;
 
 //-----------------------------------------------------------------------------
@@ -69,7 +71,7 @@ public class Helicopter extends Movable implements Steerable {
         location = new Point(x, y);
     }
 
-    public void checkDrinkable(River river) {
+ /*   public void checkDrinkable(River river) {
         int riverStartX = (int)river.getLocation().getX()
                 - river.getWidth()/2;
         int riverStartY = (int)river.getLocation().getY()
@@ -83,7 +85,7 @@ public class Helicopter extends Movable implements Steerable {
                 getLocation().getX() >= riverStartX &&
                 getLocation().getY() <= riverEndY &&
                 getLocation().getY() >= riverStartY;
-    }
+    }*/
 
     public void drink() {
         if (isOverRiver && water < MAX_WATER)
@@ -142,10 +144,6 @@ public class Helicopter extends Movable implements Steerable {
         g.drawString("W : " + water, textX, textY);
     }
     */
-    @Override
-    protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
-
-    }
 
     @Override
     public void steerLeft() {
@@ -155,5 +153,89 @@ public class Helicopter extends Movable implements Steerable {
     @Override
     public void steerRight() {
         heading += Math.toRadians(15);
+    }
+
+    final static int BUBBLE_RADIUS = 125;
+
+    //```````````````````````````````````````````````````````````````````````````````````````
+    private static class HeloBubble extends GameObject {
+
+        public HeloBubble() {
+            setColor(ColorUtil.YELLOW);
+            setDimension(new Dimension(2*Helicopter.BUBBLE_RADIUS,
+                                        2*Helicopter.BUBBLE_RADIUS));
+            translate(0, Helicopter.BUBBLE_RADIUS * 0.80);
+        }
+
+        @Override
+        protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
+            g.setColor(getColor());
+            containerTranslate(g, containerOrigin);
+            cn1ForwardPrimitiveTranslate(g, getDimension());
+            g.drawArc(0, 0,
+                        getDimension().getWidth(), getDimension().getHeight(),
+                    135, 270);
+        }
+
+        public void rotate(float degrees) {
+            myRotation.rotate((float)Math.toRadians(degrees), 0, 0);
+        }
+
+        public void scale(double sx, double sy) {
+            myScale.scale((float)sx, (float)sy);
+        }
+
+        public void translate(double tx, double ty) {
+            myTranslation.translate((float)tx, (float)ty);
+        }
+    }
+
+    //```````````````````````````````````````````````````````````````````````````````````````
+    private ArrayList<GameObject> heloParts;
+
+    public Helicopter(Dimension worldSize) {
+        this.worldSize = worldSize;
+        setColor(ColorUtil.YELLOW);
+        this.water = MIN_WATER;
+        this.isOverRiver = false;
+        this.currentSpeed = 0;
+        heading = Math.toRadians(SANGLE);
+        this.dimension = new Dimension(SIZE, SIZE);
+
+        this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.5);
+        this.scale(1,-1);
+        this.rotate(180);
+
+
+        heloParts = new ArrayList<>();
+
+        heloParts.add(new HeloBubble());
+    }
+
+    public void rotate(float degrees) {
+        myRotation.rotate((float)Math.toRadians(degrees), 0, 0);
+    }
+
+    public void scale(double sx, double sy) {
+        myScale.scale((float)sx, (float)sy);
+    }
+
+    public void translate(double tx, double ty) {
+        myTranslation.translate((float)tx, (float)ty);
+    }
+
+    @Override
+    protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
+
+        cn1ReversePrimitiveTranslate(g, getDimension());
+        cn1ReverseContainerTranslate(g, containerOrigin);
+
+        for (GameObject go : heloParts)
+            go.draw(g, containerOrigin, screenOrigin);
+
+        // draw axis for debugging
+        g.setColor(ColorUtil.LTGRAY);
+        g.drawLine(-worldSize.getWidth()/2, 0, worldSize.getWidth()/2, 0);
+        g.drawLine(0, -worldSize.getHeight()/2, 0, worldSize.getHeight()/2);
     }
 }

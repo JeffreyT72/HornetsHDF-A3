@@ -8,7 +8,7 @@ import org.csc133.a3.GameWorld;
 
 public abstract class GameObject {
     private int color;
-    Point location;
+    //Point location;
     Dimension dimension;
     Dimension worldSize;
     Transform gXform;
@@ -31,17 +31,23 @@ public abstract class GameObject {
         this.color = color;
     }
 
-    void setLocation(Point location) {
-        this.location = location;
+    void setDimension(Dimension d) {
+        dimension = new Dimension(d.getWidth(), d.getHeight());
     }
+/*    void setLocation(Point location) {
+        this.location = location;
+    }*/
 
     int getColor() {
         return this.color;
     }
 
-    Point getLocation() {
-        return this.location;
+    Dimension getDimension() {
+        return this.dimension;
     }
+/*    Point getLocation() {
+        return this.location;
+    }*/
 
     public void draw(Graphics g, Point containerOrigin, Point screenOrigin) {
         g.setColor(color);
@@ -92,6 +98,13 @@ public abstract class GameObject {
         g.setTransform(gxForm);
     }
 
+    protected void cn1ReverseContainerTranslate(Graphics g, Point parentOrigin) {
+        Transform gxForm = Transform.makeIdentity();
+        g.getTransform(gxForm);
+        gxForm.translate(-parentOrigin.getX(), -parentOrigin.getY());
+        g.setTransform(gxForm);
+    }
+
     protected void cn1ForwardPrimitiveTranslate(Graphics g, Dimension pDimension) {
         Transform gxForm = Transform.makeIdentity();
         g.getTransform(gxForm);
@@ -117,13 +130,13 @@ abstract class Fixed extends GameObject {
     // Once object's location is initialized,
     // it won't be able to set it again.
     //
-    @Override
+/*    @Override
     void setLocation(Point location) {
         if (!fixed) {
             this.location = location;
         }
         fixed = true;
-    }
+    }*/
 }
 
 abstract class Movable extends GameObject {

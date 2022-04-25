@@ -29,10 +29,7 @@ public class Game extends Form implements Runnable {
         //
         getToolbar().hideToolbar();
 
-        this.setLayout(new BorderLayout());
-        this.add(BorderLayout.NORTH, glassCockpit);
-        this.add(BorderLayout.CENTER, mapView);
-        this.add(BorderLayout.SOUTH, controlCluster);
+        setupLayout();
 
         ActionListener AccelerateCommand    = new AccelerateCommand(gw);
         ActionListener BrakeCommand         = new BrakeCommand(gw);
@@ -60,6 +57,14 @@ public class Game extends Form implements Runnable {
         gw.init();
     }
 
+    private void setupLayout() {
+        this.setLayout(new BorderLayout());
+        this.add(BorderLayout.NORTH, glassCockpit);
+        this.add(BorderLayout.SOUTH, controlCluster);
+        this.add(BorderLayout.CENTER, mapView);
+    }
+
+    @Override
     public void paint(Graphics g) {
         super.paint(g);
     }

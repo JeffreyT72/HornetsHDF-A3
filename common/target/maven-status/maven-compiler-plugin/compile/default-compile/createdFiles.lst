@@ -21,10 +21,10 @@ org\csc133\a3\AppMain.class
 org\csc133\a3\commands\AccelerateCommand.class
 org\csc133\a3\gameobjects\GameObject.class
 org\csc133\a3\gameobjects\GameObjectCollection$GameObjectIterator.class
-org\csc133\a3\interfaces\Drawable.class
 org\csc133\a3\gameobjects\GameObjectCollection.class
 org\csc133\a3\gameobjects\Building.class
 org\csc133\a3\gameobjects\Fixed.class
 org\csc133\a3\interfaces\FireState.class
 org\csc133\a3\commands\DrinkCommand.class
+org\csc133\a3\gameobjects\Helicopter$HeloBubble.class
 org\csc133\a3\gameobjects\Fire$Extinguished.class

@@ -1,5 +1,6 @@
 package org.csc133.a3.views;
 
+import com.codename1.charts.util.ColorUtil;
 import com.codename1.ui.Button;
 import com.codename1.ui.Command;
 import com.codename1.ui.Container;
@@ -31,6 +32,8 @@ public class ControlCluster extends Container {
         exitBtn = this.buttonMaker(new ExitCommand(gw), "Exit");
 
         this.setLayout(new BorderLayout());
+        //this.getAllStyles().setBgColor(ColorUtil.WHITE);
+        //this.getAllStyles().setBgTransparency(255);
         createEastBtn();
         createWestBtn();
         this.add(BorderLayout.CENTER, exitBtn);
@@ -65,6 +68,8 @@ public class ControlCluster extends Container {
                 Font.FACE_PROPORTIONAL,
                 Font.STYLE_BOLD,
                 Font.SIZE_MEDIUM));
+        //btnStyle.setFgColor(ColorUtil.BLUE);
+        //btnStyle.setBgColor(ColorUtil.WHITE);
         btnStyle.setBgTransparency(255);
         return button;
     }

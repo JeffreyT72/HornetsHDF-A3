@@ -9,6 +9,7 @@ import com.codename1.ui.geom.Point;
 //-----------------------------------------------------------------------------
 public class River extends Fixed {
     //private Transform riverTranslation, riverRotation, riverScale;
+    private final int THICKNESS = 3;
 
     public River(Dimension worldSize) {
         //this.worldSize = worldSize;
@@ -17,7 +18,7 @@ public class River extends Fixed {
         //        worldSize.getHeight()/4));
         this.dimension = new Dimension(worldSize.getWidth(), 200);
 
-        this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.3);
+        this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.7);
         this.scale(1,-1);
         this.rotate(0);
     }
@@ -37,7 +38,7 @@ public class River extends Fixed {
     */
     @Override
     public void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
-        g.drawRect(0, 0, getWidth(), getHeight());
+        g.drawRect(0, 0, getWidth(), getHeight(), THICKNESS);
     }
 
     public void rotate(float degrees) {

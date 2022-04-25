@@ -3,6 +3,7 @@ package org.csc133.a3;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.geom.Dimension;
+import com.codename1.ui.geom.Point;
 import org.csc133.a3.gameobjects.*;
 import com.codename1.util.MathUtil;
 
@@ -70,7 +71,8 @@ public class GameWorld {
         winLossText = "";
         river = new River(worldSize);
         helipad = new Helipad(worldSize);
-        helicopter = new Helicopter(worldSize, helipad);
+        //helicopter = new Helicopter(worldSize, helipad);
+        helicopter = new Helicopter(worldSize);
         fireCollection = new ArrayList<>();
         buildingCollection = new ArrayList<>();
 
@@ -132,7 +134,7 @@ public class GameWorld {
                     if (ticks % randomTicks == 0)
                         f.grow();
                 }
-                f.isOverFire(helicopter);
+                //f.isOverFire(helicopter);
                 if (f.getWasExtinguished()) {   // If the fire was extinguished,
                     f.Extinguished();           // put fire into extinguished state
                     gameObjectCollectionDelete.add(f);
@@ -171,16 +173,16 @@ public class GameWorld {
         }
 
         helicopter.move();
-        helicopter.checkDrinkable(river);
+        //helicopter.checkDrinkable(river);
         helicopter.fuel();
 
         // GameClear/GameOver screen
         // Set some tick delay preventing gameWorld init() bug
-        if (!(ticks <= 10)) {
+/*        if (!(ticks <= 10)) {
             if (checkWinCondition() || checkRanOutFuel()
                     || checkBuildingDestroy())
                 drawDialog();
-        }
+        }*/
     }
 
     public int getFuel() {
@@ -289,7 +291,7 @@ public class GameWorld {
         helicopter.miss();
     }
 
-    private boolean checkWinCondition() {
+/*    private boolean checkWinCondition() {
         boolean inHelipad = helicopter.getLocation().getX() >=
                 helipad.getLocation().getX() - helipad.getSize() / 2 &&
                 helicopter.getLocation().getX() <=
@@ -301,7 +303,7 @@ public class GameWorld {
         return inHelipad &&
                 helicopter.getSpeed() == 0 &&
                 getTotalFireSize() == 0;
-    }
+    }*/
 
     private boolean checkRanOutFuel() {
         return fuel <= 0;
@@ -311,7 +313,7 @@ public class GameWorld {
         return getTotalDmg() > 100;
     }
 
-    private void drawDialog() {
+/*    private void drawDialog() {
         if (checkWinCondition()) {
             winLossText = "You Won!\nScore : " + score() + "\nPlay again?";
         } else if (checkRanOutFuel()) {
@@ -325,7 +327,7 @@ public class GameWorld {
         } else {
             quit();
         }
-    }
+    }*/
 
     public void quit() {
         Display.getInstance().exitApplication();

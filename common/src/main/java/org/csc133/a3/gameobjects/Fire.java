@@ -44,7 +44,7 @@ public class Fire extends GameObject{
         this.size = MIN_SIZE + r.nextInt(10);
         this.dimension = new Dimension(size, size);
 
-        this.translate(worldSize.getWidth(), worldSize.getHeight());
+        //this.translate(worldSize.getWidth(), worldSize.getHeight());
         this.scale(1,-1);
         this.rotate(0);
 
@@ -96,9 +96,10 @@ public class Fire extends GameObject{
         increaseRate = 1 + r.nextInt(2);
         size += increaseRate;
         this.dimension = new Dimension(size, size);
+        //scale(increaseRate, increaseRate);
     }
 
-    public void isOverFire(Helicopter helicopter) {
+/*    public void isOverFire(Helicopter helicopter) {
         isOverFire = helicopter.getLocation().getX() >=
                 this.location.getX() - this.size / 2 &&
                 helicopter.getLocation().getX() <=
@@ -107,7 +108,7 @@ public class Fire extends GameObject{
                         this.location.getY() - this.size / 2 &&
                 helicopter.getLocation().getY() <=
                         this.location.getY() + this.size / 2;
-    }
+    }*/
 
     public class UnStarted implements FireState {
         private int size;
@@ -161,7 +162,7 @@ public class Fire extends GameObject{
     */
     public void setup(int x, int y, int w, int h) {
         //this.location = new Point(x + r.nextInt(w), y + r.nextInt(h));
-        this.translate(x, y);
+        this.translate(x + r.nextInt(w), y + r.nextInt(h));
     }
 
     @Override

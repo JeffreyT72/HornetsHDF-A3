@@ -35,7 +35,7 @@ public class Building extends Fixed {
             this.dimension = new Dimension(1000, 150);
             this.value = (r.nextInt(10) + 1)* 100;
 
-            this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.1);
+            this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.9);
             this.scale(1,-1);
             this.rotate(0);
         } else if (id == 1) {       // Left building
@@ -44,7 +44,7 @@ public class Building extends Fixed {
             this.dimension = new Dimension(200, 600);
             this.value = (r.nextInt(10) + 1)* 100;
 
-            this.translate(worldSize.getWidth() * 0.2, worldSize.getHeight() * 0.7);
+            this.translate(worldSize.getWidth() * 0.2, worldSize.getHeight() * 0.3);
             this.scale(1,-1);
             this.rotate(0);
         } else if (id == 2) {       // Right building
@@ -53,7 +53,7 @@ public class Building extends Fixed {
             this.dimension = new Dimension(250, 400);
             this.value = (r.nextInt(10) + 1)* 100;
 
-            this.translate(worldSize.getWidth() * 0.8, worldSize.getHeight() * 0.7);
+            this.translate(worldSize.getWidth() * 0.8, worldSize.getHeight() * 0.3);
             this.scale(1,-1);
             this.rotate(0);
         }
