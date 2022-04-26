@@ -17,9 +17,9 @@ public class River extends Fixed {
         //setLocation(new Point(worldSize.getWidth()/2,
         //        worldSize.getHeight()/4));
         this.dimension = new Dimension(worldSize.getWidth(), 200);
-        this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.7);
-        this.scale(1,-1);
-        this.rotate(0);
+        translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.7);
+        scale(1,-1);
+        rotate(0);
     }
     /*
     @Override
@@ -38,17 +38,5 @@ public class River extends Fixed {
     @Override
     public void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
         g.drawRect(0, 0, getWidth(), getHeight(), THICKNESS);
-    }
-
-    public void rotate(float degrees) {
-        myRotation.rotate((float)Math.toRadians(degrees), 0, 0);
-    }
-
-    public void scale(double sx, double sy) {
-        myScale.scale((float)sx, (float)sy);
-    }
-
-    public void translate(double tx, double ty) {
-        myTranslation.translate((float)tx, (float)ty);
     }
 }

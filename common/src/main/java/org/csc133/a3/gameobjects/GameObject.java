@@ -28,11 +28,11 @@ public abstract class GameObject {
         myScale = Transform.makeIdentity();
     }
 
-    void setColor(int color) {
+    protected void setColor(int color) {
         this.color = color;
     }
 
-    void setDimension(Dimension d) {
+    protected void setDimension(Dimension d) {
         dimension = new Dimension(d.getWidth(), d.getHeight());
     }
 /*    void setLocation(Point location) {
@@ -49,16 +49,27 @@ public abstract class GameObject {
         return dimension.getHeight();
     }
 
-    int getColor() {
+    protected int getColor() {
         return this.color;
     }
 
-    Dimension getDimension() {
+    protected Dimension getDimension() {
         return this.dimension;
     }
 /*    Point getLocation() {
         return this.location;
     }*/
+    public void rotate(float degrees) {
+    myRotation.rotate((float)Math.toRadians(degrees), 0, 0);
+}
+
+    public void scale(double sx, double sy) {
+        myScale.scale((float)sx, (float)sy);
+    }
+
+    public void translate(double tx, double ty) {
+        myTranslation.translate((float)tx, (float)ty);
+    }
 
     public void draw(Graphics g, Point containerOrigin, Point screenOrigin) {
         g.setColor(color);

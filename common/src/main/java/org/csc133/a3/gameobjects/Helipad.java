@@ -19,9 +19,9 @@ public class Helipad extends Fixed{
         //setLocation(new Point(worldSize.getWidth()/2,
         //        worldSize.getHeight()-200));
 
-        this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.1);
-        this.scale(1,-1);
-        this.rotate(0);
+        translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.1);
+        scale(1,-1);
+        rotate(0);
     }
 
     // Getter

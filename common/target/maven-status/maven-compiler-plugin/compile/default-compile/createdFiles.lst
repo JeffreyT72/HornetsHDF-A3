@@ -1,3 +1,4 @@
+org\csc133\a3\gameobjects\Helicopter$HeloEngineBlock.class
 org\csc133\a3\views\GlassCockpit.class
 org\csc133\a3\commands\FightCommand.class
 org\csc133\a3\gameobjects\Fire$UnStarted.class
@@ -13,6 +14,7 @@ org\csc133\a3\gameobjects\River.class
 org\csc133\a3\StateContext.class
 org\csc133\a3\gameobjects\Helicopter.class
 org\csc133\a3\gameobjects\Helipad.class
+org\csc133\a3\gameobjects\parts\Arc.class
 org\csc133\a3\gameobjects\Fire$Burning.class
 org\csc133\a3\views\MapView.class
 org\csc133\a3\commands\BrakeCommand.class
@@ -21,6 +23,8 @@ org\csc133\a3\AppMain.class
 org\csc133\a3\commands\AccelerateCommand.class
 org\csc133\a3\gameobjects\GameObject.class
 org\csc133\a3\gameobjects\GameObjectCollection$GameObjectIterator.class
+org\csc133\a3\gameobjects\Helicopter$HeloBlade.class
+org\csc133\a3\gameobjects\parts\Rectangle.class
 org\csc133\a3\gameobjects\GameObjectCollection.class
 org\csc133\a3\gameobjects\Building.class
 org\csc133\a3\gameobjects\Fixed.class
@@ -28,3 +32,4 @@ org\csc133\a3\interfaces\FireState.class
 org\csc133\a3\commands\DrinkCommand.class
 org\csc133\a3\gameobjects\Helicopter$HeloBubble.class
 org\csc133\a3\gameobjects\Fire$Extinguished.class
+org\csc133\a3\gameobjects\Helicopter$HeloBladeShaft.class

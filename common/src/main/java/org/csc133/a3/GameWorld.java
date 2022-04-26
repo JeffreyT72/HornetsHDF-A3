@@ -126,6 +126,7 @@ public class GameWorld {
 
     void tick() {
         ticks++;
+        updateLocalTransforms();
         for (GameObject go: gameObjectCollection) {
             if (go instanceof Fire) {
                 Fire f = (Fire) go;
@@ -339,5 +340,9 @@ public class GameWorld {
 
     public void setDimension(Dimension worldSize) {
         this.worldSize = worldSize;
+    }
+
+    public void updateLocalTransforms() {
+        helicopter.updateLocalTransforms();
     }
 }
