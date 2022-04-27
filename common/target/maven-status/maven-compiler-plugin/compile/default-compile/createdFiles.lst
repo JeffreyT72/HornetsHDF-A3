@@ -42,6 +42,7 @@ org\csc133\a3\gameobjects\Helipad.class
 org\csc133\a3\gameobjects\parts\Arc.class
 org\csc133\a3\gameobjects\Helicopter$HeloTailCone.class
 org\csc133\a3\gameobjects\Helicopter$1.class
+org\csc133\a3\gameobjects\BezierCurve.class
 org\csc133\a3\gameobjects\Helicopter$HeloRightLandingSkid.class
 org\csc133\a3\gameobjects\Helicopter$HeloBlade.class
 org\csc133\a3\gameobjects\GameObjectCollection.class

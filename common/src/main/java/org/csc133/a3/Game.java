@@ -72,7 +72,6 @@ public class Game extends Form implements Runnable {
     @Override
     public void run() {
         glassCockpit.update();
-        gw.updateLocalTransforms();
         gw.tick();
         repaint();
     }

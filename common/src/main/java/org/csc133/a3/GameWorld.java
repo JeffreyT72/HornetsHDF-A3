@@ -39,6 +39,7 @@ public class GameWorld {
     private Helicopter helicopter;
     private Helipad helipad;
     private River river;
+    private BezierCurve bc;
 
     // ArrayLists
     //
@@ -76,6 +77,7 @@ public class GameWorld {
         helicopter = new Helicopter(worldSize);
         fireCollection = new ArrayList<>();
         buildingCollection = new ArrayList<>();
+        bc = new BezierCurve(worldSize);
 
         building0Dmg = 0;
         building1Dmg = 0;
@@ -93,6 +95,7 @@ public class GameWorld {
         gameObjectCollection.add(river);
         gameObjectCollection.add(helipad);
         gameObjectCollection.add(PlayerHelicopter.getInstance());
+        gameObjectCollection.add(bc);
         // Adding three building with at least 6 fires
         for (int i = 0; i < MAX_BUILDING; i++) {
             building = new Building(worldSize, i);
@@ -128,7 +131,7 @@ public class GameWorld {
 
     void tick() {
         ticks++;
-        //updateLocalTransforms();
+        updateLocalTransforms();
         for (GameObject go: gameObjectCollection) {
             if (go instanceof Fire) {
                 Fire f = (Fire) go;
