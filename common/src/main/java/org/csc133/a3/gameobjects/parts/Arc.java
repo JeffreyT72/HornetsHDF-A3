@@ -1,5 +1,6 @@
 package org.csc133.a3.gameobjects.parts;
 
+import com.codename1.charts.util.ColorUtil;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
@@ -39,6 +40,9 @@ public class Arc extends GameObject {
         g.setColor(getColor());
         //containerTranslate(g, containerOrigin);
         //cn1ForwardPrimitiveTranslate(g, getDimension());
-        g.drawArc(0, 0, getWidth(), getHeight(), startAngle, arcAngle);
+        if (getColor() == ColorUtil.BLACK)
+            g.fillArc(0, 0, getWidth(), getHeight(), startAngle, arcAngle);
+        else
+            g.drawArc(0, 0, getWidth(), getHeight(), startAngle, arcAngle);
     }
 }

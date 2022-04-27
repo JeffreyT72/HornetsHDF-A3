@@ -7,6 +7,7 @@ import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
 import org.csc133.a3.gameobjects.parts.Arc;
 import org.csc133.a3.gameobjects.parts.Rectangle;
+import org.csc133.a3.gameobjects.parts.Trapezoid;
 import org.csc133.a3.interfaces.Steerable;
 
 import java.awt.*;
@@ -55,6 +56,7 @@ public class Helicopter extends Movable implements Steerable {
     }
 
     public void accelerate() {
+        heloState.accelerate();
         if (currentSpeed < MAX_SPEED)
             currentSpeed++;
     }
@@ -165,7 +167,10 @@ public class Helicopter extends Movable implements Steerable {
     final static int BLADE_WIDTH = 25;
     final static int BLADE_STARTING_ANGLE = 45;
     final static double rotationSpeed = 30d;
-
+    final static int JOINT_WIDTH = 30;
+    final static int JOINT_HEIGHT = 10;
+    final static int SKID_WIDTH = 30;
+    final static int SKID_HEIGHT = 400;
     //```````````````````````````````````````````````````````````````````````````````````````
     private static class HeloBubble extends Arc {
         public HeloBubble() {
@@ -203,7 +208,7 @@ public class Helicopter extends Movable implements Steerable {
     //```````````````````````````````````````````````````````````````````````````````````````
     private static class HeloBladeShaft extends Arc {
         public HeloBladeShaft() {
-            super(ColorUtil.GRAY,
+            super(ColorUtil.BLACK,
                     2 * BLADE_WIDTH / 3,
                     2 * BLADE_WIDTH / 3,
                     0, -ENGINE_BLOCK_HEIGHT / 2,
@@ -212,8 +217,152 @@ public class Helicopter extends Movable implements Steerable {
                     0, 360);
         }
     }
+    //```````````````````````````````````````````````````````````````````````````````````````
+    private static class HeloFrontLeftJoint extends Rectangle {
+        public HeloFrontLeftJoint() {
+            super(ColorUtil.GRAY,
+                    JOINT_WIDTH, JOINT_HEIGHT, Helicopter.BUBBLE_RADIUS+10, Helicopter.BUBBLE_RADIUS + 10,
+                    1, 1, 0);
+        }
+    }
+    //```````````````````````````````````````````````````````````````````````````````````````
+    private static class HeloFrontRightJoint extends Rectangle {
+        public HeloFrontRightJoint() {
+            super(ColorUtil.GRAY,
+                    JOINT_WIDTH, JOINT_HEIGHT, -Helicopter.BUBBLE_RADIUS-10, Helicopter.BUBBLE_RADIUS + 10,
+                    1, 1, 0);
+        }
+    }
+    //```````````````````````````````````````````````````````````````````````````````````````
+    private static class HeloBackLeftJoint extends Rectangle {
+        public HeloBackLeftJoint() {
+            super(ColorUtil.GRAY,
+                    JOINT_WIDTH, JOINT_HEIGHT, -ENGINE_BLOCK_WIDTH/2-10, -ENGINE_BLOCK_HEIGHT/2,
+                    1, 1, 0);
+        }
+    }
+    //```````````````````````````````````````````````````````````````````````````````````````
+    private static class HeloBackRightJoint extends Rectangle {
+        public HeloBackRightJoint() {
+            super(ColorUtil.GRAY,
+                    JOINT_WIDTH, JOINT_HEIGHT, ENGINE_BLOCK_WIDTH/2+10, -ENGINE_BLOCK_HEIGHT/2,
+                    1, 1, 0);
+        }
+    }
+    //```````````````````````````````````````````````````````````````````````````````````````
+    private static class HeloLeftLandingSkid extends Rectangle {
+        public HeloLeftLandingSkid() {
+            super(ColorUtil.YELLOW,
+                    SKID_WIDTH, SKID_HEIGHT, ENGINE_BLOCK_WIDTH/2+40, ENGINE_BLOCK_HEIGHT/2-30,
+                    1, 1, 0);
+        }
+    }
+    //```````````````````````````````````````````````````````````````````````````````````````
+    private static class HeloRightLandingSkid extends Rectangle {
+        public HeloRightLandingSkid() {
+            super(ColorUtil.YELLOW,
+                    SKID_WIDTH, SKID_HEIGHT, -ENGINE_BLOCK_WIDTH/2-40, ENGINE_BLOCK_HEIGHT/2-30,
+                    1, 1, 0);
+        }
+    }
+    //```````````````````````````````````````````````````````````````````````````````````````
+    private static class HeloTailCone extends Trapezoid {
+        public HeloTailCone() {
+            super(ColorUtil.YELLOW,
+                    SKID_WIDTH, SKID_HEIGHT, 10, -Helicopter.ENGINE_BLOCK_HEIGHT,
+                    1, 1, 0);
+        }
+    }
+    //```````````````````````````````````````````````````````````````````````````````````````
+    private static class HeloTailFin extends Rectangle {
+        public HeloTailFin() {
+            super(ColorUtil.YELLOW,
+                    60, 20, 5, (float)(-Helicopter.ENGINE_BLOCK_HEIGHT*5.1),
+                    1, 1, 0);
+        }
+    }
+    //```````````````````````````````````````````````````````````````````````````````````````
+    private static class HeloTailRotor extends Rectangle {
+        public HeloTailRotor() {
+            super(ColorUtil.GRAY,
+                    10, 70, -30, (float)(-Helicopter.ENGINE_BLOCK_HEIGHT*5.1),
+                    1, 1, 0);
+        }
+    }
 
+    //```````````````````````````````````````````````````````````````````````````````````````
+    // Helicopter State Pattern
     //
+    HeloState heloState;
+
+    private void chageState(HeloState heloState) {
+        this.heloState = heloState;
+    }
+
+    //```````````````````````````````````````````````````````````````````````````````````````
+    private abstract class HeloState {
+        protected Helicopter getHelo() {
+            return Helicopter.this;
+        }
+
+        public void accelerate() {}
+        public abstract void startOrStopEngine();
+        public boolean hasLandedAt() {
+            return false;
+        }
+
+        public void updateLocalTransforms() {}
+    }
+
+    //```````````````````````````````````````````````````````````````````````````````````````
+    private class Off extends HeloState {
+
+        @Override
+        public void startOrStopEngine() {
+            getHelo().chageState(new Starting());
+        }
+
+        @Override
+        public boolean hasLandedAt() {
+            // check other requirements
+            return true;// some boolean expression;
+        }
+    }
+
+    //```````````````````````````````````````````````````````````````````````````````````````
+    private class Starting extends HeloState {
+        @Override
+        public void startOrStopEngine() {
+            getHelo().chageState(new Stopping());
+        }
+    }
+
+    //```````````````````````````````````````````````````````````````````````````````````````
+    private class Stopping extends HeloState {
+        @Override
+        public void startOrStopEngine() {
+            getHelo().chageState(new Starting());
+        }
+    }
+    //```````````````````````````````````````````````````````````````````````````````````````
+    private class Ready extends HeloState {
+        @Override
+        public void startOrStopEngine() {
+            // conditions to stop engine
+            if (1 > 2)
+                getHelo().chageState(new Stopping());
+        }
+
+        public void accelearate() {
+
+        }
+    }
+
+    public void startOrStopEngine() {
+        heloState.startOrStopEngine();
+    }
+
+
 
     //```````````````````````````````````````````````````````````````````````````````````````
     private ArrayList<GameObject> heloParts;
@@ -221,6 +370,7 @@ public class Helicopter extends Movable implements Steerable {
     private HeloBlade heloBlade;
 
     public Helicopter(Dimension worldSize) {
+        heloState = new Off();
         this.worldSize = worldSize;
         setColor(ColorUtil.YELLOW);
         this.water = MIN_WATER;
@@ -230,7 +380,7 @@ public class Helicopter extends Movable implements Steerable {
         this.dimension = new Dimension(SIZE, SIZE);
 
         this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.5);
-        this.scale(1,-1);
+        this.scale(0.3,-0.3);
         this.rotate(180);
 
         heloParts = new ArrayList<>();
@@ -240,18 +390,15 @@ public class Helicopter extends Movable implements Steerable {
         heloBlade = new HeloBlade();
         heloParts.add(heloBlade);
         heloParts.add(new HeloBladeShaft());
-    }
-
-    public void rotate(float degrees) {
-        myRotation.rotate((float)Math.toRadians(degrees), 0, 0);
-    }
-
-    public void scale(double sx, double sy) {
-        myScale.scale((float)sx, (float)sy);
-    }
-
-    public void translate(double tx, double ty) {
-        myTranslation.translate((float)tx, (float)ty);
+        heloParts.add(new HeloFrontLeftJoint());
+        heloParts.add(new HeloFrontRightJoint());
+        heloParts.add(new HeloBackLeftJoint());
+        heloParts.add(new HeloBackRightJoint());
+        heloParts.add(new HeloLeftLandingSkid());
+        heloParts.add(new HeloRightLandingSkid());
+        heloParts.add(new HeloTailCone());
+        heloParts.add(new HeloTailFin());
+        heloParts.add(new HeloTailRotor());
     }
 
     @Override

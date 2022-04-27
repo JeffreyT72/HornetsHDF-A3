@@ -2,6 +2,7 @@ package org.csc133.a3;
 
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
+import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
 import org.csc133.a3.gameobjects.*;
@@ -91,6 +92,7 @@ public class GameWorld {
         //
         gameObjectCollection.add(river);
         gameObjectCollection.add(helipad);
+        gameObjectCollection.add(PlayerHelicopter.getInstance());
         // Adding three building with at least 6 fires
         for (int i = 0; i < MAX_BUILDING; i++) {
             building = new Building(worldSize, i);
@@ -126,7 +128,7 @@ public class GameWorld {
 
     void tick() {
         ticks++;
-        updateLocalTransforms();
+        //updateLocalTransforms();
         for (GameObject go: gameObjectCollection) {
             if (go instanceof Fire) {
                 Fire f = (Fire) go;
@@ -173,7 +175,7 @@ public class GameWorld {
             }
         }
 
-        //helicopter.move();
+        helicopter.move(3);
         //helicopter.checkDrinkable(river);
         helicopter.fuel();
 
@@ -184,6 +186,10 @@ public class GameWorld {
                     || checkBuildingDestroy())
                 drawDialog();
         }*/
+    }
+
+    public Dimension getDimension() {
+        return worldSize;
     }
 
     public int getFuel() {
@@ -276,6 +282,10 @@ public class GameWorld {
         helicopter.steerRight();
     }
 
+/*    private void move(long elapsedTimeInMillis) {
+        Helicopter.move(elapsedTimeInMillis);
+    }*/
+
     public void drink() {
         helicopter.drink();
     }
@@ -345,4 +355,8 @@ public class GameWorld {
     public void updateLocalTransforms() {
         helicopter.updateLocalTransforms();
     }
+
+/*    public Transform getStartingPoint() {
+        return 0;
+    }*/
 }

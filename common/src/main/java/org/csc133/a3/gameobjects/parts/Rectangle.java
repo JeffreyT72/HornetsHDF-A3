@@ -1,5 +1,6 @@
 package org.csc133.a3.gameobjects.parts;
 
+import com.codename1.charts.util.ColorUtil;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
@@ -26,6 +27,9 @@ public class Rectangle extends GameObject {
         g.setColor(getColor());
         //containerTranslate(g, containerOrigin);
         //cn1ForwardPrimitiveTranslate(g, getDimension());
-        g.drawRect(0, 0, getWidth(), getHeight());
+        if (getColor() == ColorUtil.GRAY)
+            g.fillRect(0, 0, getWidth(), getHeight());
+        else
+            g.drawRect(0, 0, getWidth(), getHeight());
     }
 }

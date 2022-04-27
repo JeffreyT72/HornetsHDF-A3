@@ -72,9 +72,6 @@ public abstract class GameObject {
     }
 
     public void draw(Graphics g, Point containerOrigin, Point screenOrigin) {
-        g.setColor(color);
-
-        //Transform gXform = preLTransform(g, screenOrigin);
         Transform gXform = Transform.makeIdentity();
         g.getTransform(gXform);
         Transform gOrigXform = gXform.copy();
@@ -84,7 +81,6 @@ public abstract class GameObject {
         gXform.translate(screenOrigin.getX(), screenOrigin.getY());
 
         localTransforms(gXform);
-        //postLTransform(g, screenOrigin, gXform);
 
         // move the drawing coordinates as part of the "local origin" transformations
         //
@@ -97,6 +93,7 @@ public abstract class GameObject {
         cn1ForwardPrimitiveTranslate(g, dimension);
         containerTranslate(g, containerOrigin);
 
+        g.setColor(color);
         localDraw(g, containerOrigin, screenOrigin);
 
         // restore the original xform in g
@@ -169,8 +166,19 @@ abstract class Movable extends GameObject {
     public Movable() {
     }
 
-    public void move(int elaspedTimeInMillis) {
+    public void move(long elapsedTimeInMillis) {
+        double speedMultiplier = calcSpeedMultiplier(elapsedTimeInMillis);
+        double angle = Math.toRadians(heading + 90);
 
+        // The speed is multiplied by SPEED_MULTIPLIER to indirectly reduce
+        // the fuel cost of the helicopter's movement.
+        //
+        this.translate(currentSpeed * speedMultiplier * Math.cos(angle),
+                currentSpeed * speedMultiplier * Math.sin(angle));
+    }
+
+    private double calcSpeedMultiplier(long elapsedTime) {
+        return (elapsedTime / 100f) * 4;
     }
 
     public int getSpeed() {
