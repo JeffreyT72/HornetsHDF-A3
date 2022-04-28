@@ -162,6 +162,7 @@ abstract class Fixed extends GameObject {
 abstract class Movable extends GameObject {
     int currentSpeed;
     double heading;
+    double displayAngle;
 
     public Movable() {
     }
@@ -185,7 +186,7 @@ abstract class Movable extends GameObject {
         return currentSpeed;
     }
 
-    public double getHeading() {
-        return heading;
+    public double getDisplayAngle() {
+        return displayAngle;
     }
 }

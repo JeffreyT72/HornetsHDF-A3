@@ -17,15 +17,23 @@ public class BezierCurve extends GameObject{
     }
 
     public BezierCurve(Dimension worldSize) {
-        Transform defaultLocation = Transform.makeIdentity();
+/*        Transform defaultLocation = Transform.makeIdentity();
         defaultLocation.translate(worldSize.getWidth() * 0.85f,
-                worldSize.getHeight() * 0.15f);
+                worldSize.getHeight() * 0.15f);*/
         this.worldSize = worldSize;
+        this.dimension = new Dimension(30, 30);
+
         controlPoints = new ArrayList<>();
-        controlPoints.add(new Point2D(0,0));
-        controlPoints.add(new Point2D(200,700));
-        controlPoints.add(new Point2D(500,50));
-        controlPoints.add(new Point2D(1000,1000));
+        // point start from bottom left corner
+        controlPoints.add(new Point2D(30,30));
+        controlPoints.add(new Point2D(30,worldSize.getHeight()/2));
+        controlPoints.add(new Point2D(30,worldSize.getHeight()-30));
+        controlPoints.add(new Point2D(worldSize.getWidth()/2,30));
+        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight()/2));
+        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight()-30));
+        controlPoints.add(new Point2D(worldSize.getWidth()-30,30));
+        controlPoints.add(new Point2D(worldSize.getWidth()-30,worldSize.getHeight()/2));
+        controlPoints.add(new Point2D(worldSize.getWidth()-30,worldSize.getHeight()-30));
     }
 
     private void drawBezierCurve(Graphics g, ArrayList<Point2D> controlPoints) {
@@ -36,7 +44,6 @@ public class BezierCurve extends GameObject{
 
     @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
-
         drawBezierCurve(g, controlPoints);
 
     }

@@ -1,7 +1,6 @@
 package org.csc133.a3.gameobjects;
 
 import com.codename1.charts.util.ColorUtil;
-import com.codename1.ui.Font;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
@@ -10,10 +9,7 @@ import org.csc133.a3.gameobjects.parts.Rectangle;
 import org.csc133.a3.gameobjects.parts.Trapezoid;
 import org.csc133.a3.interfaces.Steerable;
 
-import java.awt.*;
 import java.util.ArrayList;
-
-import static com.codename1.ui.CN.*;
 
 //-----------------------------------------------------------------------------
 public class Helicopter extends Movable implements Steerable {
@@ -51,9 +47,9 @@ public class Helicopter extends Movable implements Steerable {
     }
 
     // Getter
-    public Point getLocation() {
+/*    public Point getLocation() {
         return this.location;
-    }
+    }*/
 
     public void accelerate() {
         heloState.accelerate();
@@ -65,16 +61,6 @@ public class Helicopter extends Movable implements Steerable {
         if (currentSpeed > MIN_SPEED)
             currentSpeed--;
     }
-
-/*    public void move() {
-        headingX = (int) (location.getX() + (currentSpeed + Heli_LENGTH)
-                * Math.cos(heading));
-        headingY = (int) (location.getY() + (currentSpeed + Heli_LENGTH)
-                * Math.sin(heading));
-        x = (int) (location.getX() + currentSpeed * Math.cos(heading));
-        y = (int) (location.getY() + currentSpeed * Math.sin(heading));
-        location = new Point(x, y);
-    }*/
 
  /*   public void checkDrinkable(River river) {
         int riverStartX = (int)river.getLocation().getX()
@@ -152,12 +138,17 @@ public class Helicopter extends Movable implements Steerable {
 
     @Override
     public void steerLeft() {
-        heading -= Math.toRadians(15);
+        //heading -= Math.toRadians(15);
+        displayAngle -= 15;
+        heading += 15;
+        this.rotate(15);
     }
 
     @Override
     public void steerRight() {
-        heading += Math.toRadians(15);
+        displayAngle += 15;
+        heading -= 15;
+        this.rotate(-15);
     }
 
     final static int BUBBLE_RADIUS = 125;
@@ -166,7 +157,7 @@ public class Helicopter extends Movable implements Steerable {
     final static int BLADE_LENGTH = BUBBLE_RADIUS * 5;
     final static int BLADE_WIDTH = 25;
     final static int BLADE_STARTING_ANGLE = 45;
-    final static double rotationSpeed = 30d;
+    static double rotationSpeed = 30d;
     final static int JOINT_WIDTH = 30;
     final static int JOINT_HEIGHT = 10;
     final static int SKID_WIDTH = 30;
@@ -362,8 +353,6 @@ public class Helicopter extends Movable implements Steerable {
         heloState.startOrStopEngine();
     }
 
-
-
     //```````````````````````````````````````````````````````````````````````````````````````
     private ArrayList<GameObject> heloParts;
 
@@ -377,6 +366,7 @@ public class Helicopter extends Movable implements Steerable {
         this.isOverRiver = false;
         this.currentSpeed = 0;
         heading = Math.toRadians(SANGLE);
+        displayAngle = 0;
         this.dimension = new Dimension(SIZE, SIZE);
 
         this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.5);
@@ -384,21 +374,27 @@ public class Helicopter extends Movable implements Steerable {
         this.rotate(180);
 
         heloParts = new ArrayList<>();
+        heloParts = buildHeli();
+    }
 
-        heloParts.add(new HeloBubble());
-        heloParts.add(new HeloEngineBlock());
+    private ArrayList<GameObject> buildHeli() {
+        ArrayList<GameObject> buildHeliArr = new ArrayList<>();
+        buildHeliArr.add(new HeloBubble());
+        buildHeliArr.add(new HeloEngineBlock());
         heloBlade = new HeloBlade();
-        heloParts.add(heloBlade);
-        heloParts.add(new HeloBladeShaft());
-        heloParts.add(new HeloFrontLeftJoint());
-        heloParts.add(new HeloFrontRightJoint());
-        heloParts.add(new HeloBackLeftJoint());
-        heloParts.add(new HeloBackRightJoint());
-        heloParts.add(new HeloLeftLandingSkid());
-        heloParts.add(new HeloRightLandingSkid());
-        heloParts.add(new HeloTailCone());
-        heloParts.add(new HeloTailFin());
-        heloParts.add(new HeloTailRotor());
+        buildHeliArr.add(heloBlade);
+        buildHeliArr.add(new HeloBladeShaft());
+        buildHeliArr.add(new HeloFrontLeftJoint());
+        buildHeliArr.add(new HeloFrontRightJoint());
+        buildHeliArr.add(new HeloBackLeftJoint());
+        buildHeliArr.add(new HeloBackRightJoint());
+        buildHeliArr.add(new HeloLeftLandingSkid());
+        buildHeliArr.add(new HeloRightLandingSkid());
+        buildHeliArr.add(new HeloTailCone());
+        buildHeliArr.add(new HeloTailFin());
+        buildHeliArr.add(new HeloTailRotor());
+
+        return buildHeliArr;
     }
 
     @Override

@@ -58,16 +58,4 @@ public class Helipad extends Fixed{
         g.drawRect(0, 0, getWidth(), getHeight(), THICKNESS);
         g.drawArc(DISTANCE, DISTANCE, getWidth() - DISTANCE*2, getHeight() - DISTANCE*2, 0, 360);
     }
-
-    public void rotate(float degrees) {
-        myRotation.rotate((float)Math.toRadians(degrees), 0, 0);
-    }
-
-    public void scale(double sx, double sy) {
-        myScale.scale((float)sx, (float)sy);
-    }
-
-    public void translate(double tx, double ty) {
-        myTranslation.translate((float)tx, (float)ty);
-    }
 }

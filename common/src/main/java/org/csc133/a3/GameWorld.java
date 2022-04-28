@@ -201,7 +201,8 @@ public class GameWorld {
 
     public int getDisplayHeading() {
         double displayHeading;
-        double temp = 90 + Math.toDegrees(helicopter.getHeading());
+        //double temp = 90 + Math.toDegrees(helicopter.getDisplayAngle());
+        double temp = helicopter.getDisplayAngle();
         displayHeading = temp % 360;
         if (displayHeading < 0)
             displayHeading = displayHeading + 360;

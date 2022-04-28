@@ -26,22 +26,10 @@ public class GlassCockpit extends Container {
         addDescribeLabel();
 
         // Initializes all display label
-        heading     = new Label("0");
-        speed       = new Label("0");
-        fuel        = new Label("0");
-        fireCount   = new Label("0");
-        fireSize    = new Label("0");
-        damage      = new Label("0");
-        loss        = new Label("0");
+        initDisplayLabel();
 
         // Add display label into second row
-        this.add(heading);
-        this.add(speed);
-        this.add(fuel);
-        this.add(fireCount);
-        this.add(fireSize);
-        this.add(damage);
-        this.add(loss);
+        addDisplayLabel();
 
         // Set label style
         Style labelStyle = this.getAllStyles();
@@ -50,6 +38,26 @@ public class GlassCockpit extends Container {
                 Font.STYLE_BOLD,
                 Font.SIZE_MEDIUM));
         labelStyle.setBgTransparency(255);
+    }
+
+    private void addDisplayLabel() {
+        this.add(heading);
+        this.add(speed);
+        this.add(fuel);
+        this.add(fireCount);
+        this.add(fireSize);
+        this.add(damage);
+        this.add(loss);
+    }
+
+    private void initDisplayLabel() {
+        heading     = new Label("0");
+        speed       = new Label("0");
+        fuel        = new Label("0");
+        fireCount   = new Label("0");
+        fireSize    = new Label("0");
+        damage      = new Label("0");
+        loss        = new Label("0");
     }
 
     private void addDescribeLabel() {

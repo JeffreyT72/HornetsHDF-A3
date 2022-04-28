@@ -20,6 +20,7 @@ public class Trapezoid extends GameObject {
     private int midRightY;
     private int x[] = new int[4];
     private int y[] = new int[4];
+    final static int TRAPEZOID_POINTS = 4;
     private Trapezoid() {}
 
     public Trapezoid (int color, int width, int height,
@@ -55,7 +56,7 @@ public class Trapezoid extends GameObject {
     @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
         g.setColor(getColor());
-        g.drawPolygon(x, y, 4);
+        g.drawPolygon(x, y, TRAPEZOID_POINTS);
         g.drawLine(topRightX, topRightY, midLeftX, midLeftY);
         g.drawLine(topLeftX, topLeftY, midRightX, midRightY);
         g.drawLine(bottomRightX, bottomRightY, midLeftX, midLeftY);
