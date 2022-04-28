@@ -41,6 +41,7 @@ public class GameWorld {
     private River river;
     private BezierCurve bc;
 
+    private Helicopter testObject;
     // ArrayLists
     //
     private ArrayList<Fire> fireCollection;
@@ -77,7 +78,12 @@ public class GameWorld {
         helicopter = new Helicopter(worldSize);
         fireCollection = new ArrayList<>();
         buildingCollection = new ArrayList<>();
+
+        //testing
         bc = new BezierCurve(worldSize);
+        testObject = new Helicopter(worldSize);
+        testObject.translate(bc.getStartControlPoint().getX(), bc.getStartControlPoint().getY());
+        testObject.setPath(bc);
 
         building0Dmg = 0;
         building1Dmg = 0;
@@ -90,12 +96,12 @@ public class GameWorld {
         gameObjectCollection = new ArrayList<>();
         gameObjectCollectionDelete = new ArrayList<>();
 
+        // testing
+        gameObjectCollection.add(testObject);
         // Add game objects into gameObjectCollection
         //
         gameObjectCollection.add(river);
         gameObjectCollection.add(helipad);
-        gameObjectCollection.add(PlayerHelicopter.getInstance());
-        gameObjectCollection.add(bc);
         // Adding three building with at least 6 fires
         for (int i = 0; i < MAX_BUILDING; i++) {
             building = new Building(worldSize, i);
@@ -125,13 +131,23 @@ public class GameWorld {
                 i = 0;
         }
         gameObjectCollection.add(helicopter);
+
+        gameObjectCollection.add(PlayerHelicopter.getInstance());
+        gameObjectCollection.add(NonPlayerHelicopter.getInstance());
+        gameObjectCollection.add(bc);
+
         for (Building b: buildingCollection)
             totalValue += b.getValue();
     }
 
     void tick() {
         ticks++;
+
         updateLocalTransforms();
+        PlayerHelicopter.getInstance().updateLocalTransforms();
+        NonPlayerHelicopter.getInstance().updateLocalTransforms();
+        testObject.updateLocalTransforms();
+
         for (GameObject go: gameObjectCollection) {
             if (go instanceof Fire) {
                 Fire f = (Fire) go;

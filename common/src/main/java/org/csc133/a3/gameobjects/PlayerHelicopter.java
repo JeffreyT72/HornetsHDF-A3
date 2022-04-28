@@ -1,7 +1,6 @@
 package org.csc133.a3.gameobjects;
 
 import com.codename1.charts.util.ColorUtil;
-import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
 import org.csc133.a3.GameWorld;
 

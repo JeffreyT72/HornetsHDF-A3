@@ -2,8 +2,10 @@ package org.csc133.a3.gameobjects;
 
 import com.codename1.charts.util.ColorUtil;
 import com.codename1.ui.Graphics;
+import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
+import com.codename1.ui.geom.Point2D;
 import org.csc133.a3.gameobjects.parts.Arc;
 import org.csc133.a3.gameobjects.parts.Rectangle;
 import org.csc133.a3.gameobjects.parts.Trapezoid;
@@ -138,7 +140,6 @@ public class Helicopter extends Movable implements Steerable {
 
     @Override
     public void steerLeft() {
-        //heading -= Math.toRadians(15);
         displayAngle -= 15;
         heading += 15;
         this.rotate(15);
@@ -162,6 +163,13 @@ public class Helicopter extends Movable implements Steerable {
     final static int JOINT_HEIGHT = 10;
     final static int SKID_WIDTH = 30;
     final static int SKID_HEIGHT = 400;
+
+    // testing
+    private BezierCurve bc;
+    public void setPath(BezierCurve bc) {
+        this.bc = bc;
+    }
+
     //```````````````````````````````````````````````````````````````````````````````````````
     private static class HeloBubble extends Arc {
         public HeloBubble() {
@@ -268,7 +276,7 @@ public class Helicopter extends Movable implements Steerable {
     private static class HeloTailFin extends Rectangle {
         public HeloTailFin() {
             super(ColorUtil.YELLOW,
-                    60, 20, 5, (float)(-Helicopter.ENGINE_BLOCK_HEIGHT*5.1),
+                    60, 20, -5, (float)(-Helicopter.ENGINE_BLOCK_HEIGHT*5.1),
                     1, 1, 0);
         }
     }
@@ -276,7 +284,7 @@ public class Helicopter extends Movable implements Steerable {
     private static class HeloTailRotor extends Rectangle {
         public HeloTailRotor() {
             super(ColorUtil.GRAY,
-                    10, 70, -30, (float)(-Helicopter.ENGINE_BLOCK_HEIGHT*5.1),
+                    15, 100, 35, (float)(-Helicopter.ENGINE_BLOCK_HEIGHT*5.1),
                     1, 1, 0);
         }
     }
@@ -296,8 +304,11 @@ public class Helicopter extends Movable implements Steerable {
             return Helicopter.this;
         }
 
-        public void accelerate() {}
         public abstract void startOrStopEngine();
+        public void accelerate() {}
+        public void decelerate() {}
+        public void steerLeft() {}
+        public void steerRight() {}
         public boolean hasLandedAt() {
             return false;
         }
@@ -359,7 +370,7 @@ public class Helicopter extends Movable implements Steerable {
     private HeloBlade heloBlade;
 
     public Helicopter(Dimension worldSize) {
-        heloState = new Off();
+
         this.worldSize = worldSize;
         setColor(ColorUtil.YELLOW);
         this.water = MIN_WATER;
@@ -368,10 +379,11 @@ public class Helicopter extends Movable implements Steerable {
         heading = Math.toRadians(SANGLE);
         displayAngle = 0;
         this.dimension = new Dimension(SIZE, SIZE);
+        heloState = new Off();
 
         this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.5);
-        this.scale(0.3,-0.3);
-        this.rotate(180);
+        this.scale(0.3,0.3);
+        this.rotate(0);
 
         heloParts = new ArrayList<>();
         heloParts = buildHeli();
@@ -412,7 +424,11 @@ public class Helicopter extends Movable implements Steerable {
 
     }
 
+    private double t = 0;
+    private double pathSpeed = 1;
     public void updateLocalTransforms() {
+
         heloBlade.updateLocalTransforms(rotationSpeed);
+
     }
 }
