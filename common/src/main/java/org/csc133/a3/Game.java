@@ -31,21 +31,22 @@ public class Game extends Form implements Runnable {
 
         setupLayout();
 
-        ActionListener AccelerateCommand    = new AccelerateCommand(gw);
-        ActionListener BrakeCommand         = new BrakeCommand(gw);
-        ActionListener TurnLeftCommand      = new TurnLeftCommand(gw);
-        ActionListener TurnRightCommand     = new TurnRightCommand(gw);
-        ActionListener DrinkCommand         = new DrinkCommand(gw);
-        ActionListener FightCommand         = new FightCommand(gw);
-        ActionListener ExitCommand          = new ExitCommand(gw);
+//        ActionListener AccelerateCommand    = new AccelerateCommand(gw);
+//        ActionListener BrakeCommand         = new BrakeCommand(gw);
+//        ActionListener TurnLeftCommand      = new TurnLeftCommand(gw);
+//        ActionListener TurnRightCommand     = new TurnRightCommand(gw);
+//        ActionListener DrinkCommand         = new DrinkCommand(gw);
+//        ActionListener FightCommand         = new FightCommand(gw);
+//        ActionListener ExitCommand          = new ExitCommand(gw);
 
-        addKeyListener(-91, AccelerateCommand);
-        addKeyListener(-92, BrakeCommand);
-        addKeyListener(-93, TurnLeftCommand);
-        addKeyListener(-94, TurnRightCommand);
-        addKeyListener('d', DrinkCommand);
-        addKeyListener('f', FightCommand);
-        addKeyListener('Q', ExitCommand);
+        // Add all keys listener
+        addKeyListener(-91, new AccelerateCommand(gw));
+        addKeyListener(-92, new BrakeCommand(gw));
+        addKeyListener(-93, new TurnLeftCommand(gw));
+        addKeyListener(-94, new TurnRightCommand(gw));
+        addKeyListener('d', new DrinkCommand(gw));
+        addKeyListener('f', new FightCommand(gw));
+        addKeyListener('Q', new ExitCommand(gw));
 
         // Timer, 50ms for each tick
         //

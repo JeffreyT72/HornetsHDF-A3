@@ -26,7 +26,7 @@ public class BezierCurve extends GameObject{
 
         controlPoints = new ArrayList<>();
         // point start from bottom left corner
-        controlPoints.add(new Point2D(worldSize.getWidth()/2,30));
+        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.1));
 
         //controlPoints.add(new Point2D(30,30));
         controlPoints.add(new Point2D(30,worldSize.getHeight()/2));
@@ -60,7 +60,7 @@ public class BezierCurve extends GameObject{
     }
 
     private void drawBezierCurve(Graphics g, ArrayList<Point2D> controlPoints) {
-        final double smallFloatIncrement = 0.1;
+        final double smallFloatIncrement = 0.06;
         g.setColor(ColorUtil.GRAY);
         for (Point2D p : controlPoints)
             g.fillArc((int)p.getX()-15, (int)p.getY()-15, 30, 30, 0, 360);

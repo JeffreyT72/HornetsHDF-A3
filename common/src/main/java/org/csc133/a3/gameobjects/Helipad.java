@@ -9,30 +9,17 @@ import com.codename1.ui.geom.Point;
 public class Helipad extends Fixed{
     // Constants
     private final int DISTANCE = 10;
-    private final int SIZE = 150;
+    private final int SIZE = 200;
     private final int THICKNESS = 2;
 
     public Helipad(Dimension worldSize) {
-        //this.worldSize = worldSize;
+        this.worldSize = worldSize;
         setColor(ColorUtil.GRAY);
         this.dimension = new Dimension(SIZE, SIZE);
-        //setLocation(new Point(worldSize.getWidth()/2,
-        //        worldSize.getHeight()-200));
 
         translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.1);
-        scale(1,-1);
-        rotate(0);
     }
 
-    // Getter
-    //
-/*    public Point getLocation() {
-        return this.location;
-    }*/
-
-    public int getSize() {
-        return this.SIZE;
-    }
     /*
     @Override
     public void draw(Graphics g, Point containerOrigin) {
@@ -56,6 +43,6 @@ public class Helipad extends Fixed{
     @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
         g.drawRect(0, 0, getWidth(), getHeight(), THICKNESS);
-        g.drawArc(DISTANCE, DISTANCE, getWidth() - DISTANCE*2, getHeight() - DISTANCE*2, 0, 360);
+        g.drawArc(DISTANCE, DISTANCE, getWidth()-DISTANCE*2, getHeight()-DISTANCE*2, 0, 360);
     }
 }

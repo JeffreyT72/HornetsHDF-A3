@@ -73,7 +73,7 @@ public class GlassCockpit extends Container {
     public void update() {
         heading.setText(String.valueOf(gw.getDisplayHeading()));
         speed.setText(String.valueOf(gw.getCurrentSpeed()));
-        fuel.setText(String.valueOf(gw.getFuel()));
+        fuel.setText(String.valueOf(gw.getInitFuel()));
         fireCount.setText(String.valueOf(gw.getCurrentFireNo()));
         fireSize.setText(String.valueOf(gw.getTotalFireSize()));
         damage.setText(gw.getTotalDmg() + " %");

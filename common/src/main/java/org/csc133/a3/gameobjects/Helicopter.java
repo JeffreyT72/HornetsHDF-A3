@@ -2,10 +2,8 @@ package org.csc133.a3.gameobjects;
 
 import com.codename1.charts.util.ColorUtil;
 import com.codename1.ui.Graphics;
-import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
-import com.codename1.ui.geom.Point2D;
 import org.csc133.a3.gameobjects.parts.Arc;
 import org.csc133.a3.gameobjects.parts.Rectangle;
 import org.csc133.a3.gameobjects.parts.Trapezoid;
@@ -104,7 +102,7 @@ public class Helicopter extends Movable implements Steerable {
     }
 
     public void fuel() {
-        gw.setFuel((int)(Math.sqrt(currentSpeed) + 5));
+        gw.setInitFuel((int)(Math.sqrt(currentSpeed) + 5));
     }
     /*
     @Override
@@ -172,8 +170,8 @@ public class Helicopter extends Movable implements Steerable {
 
     //```````````````````````````````````````````````````````````````````````````````````````
     private static class HeloBubble extends Arc {
-        public HeloBubble() {
-            super(ColorUtil.YELLOW,
+        public HeloBubble(int color) {
+            super(color,
                   2*Helicopter.BUBBLE_RADIUS,
                   2*Helicopter.BUBBLE_RADIUS,
                     0,(float) (Helicopter.BUBBLE_RADIUS * 0.80),
@@ -184,8 +182,8 @@ public class Helicopter extends Movable implements Steerable {
     }
     //```````````````````````````````````````````````````````````````````````````````````````
     private static class HeloEngineBlock extends Rectangle {
-        public HeloEngineBlock() {
-            super(ColorUtil.YELLOW,
+        public HeloEngineBlock(int color) {
+            super(color,
                     Helicopter.ENGINE_BLOCK_WIDTH, Helicopter.ENGINE_BLOCK_HEIGHT, 0, (float) (-Helicopter.ENGINE_BLOCK_HEIGHT/2),
                     1, 1, 0);
         }
@@ -250,32 +248,32 @@ public class Helicopter extends Movable implements Steerable {
     }
     //```````````````````````````````````````````````````````````````````````````````````````
     private static class HeloLeftLandingSkid extends Rectangle {
-        public HeloLeftLandingSkid() {
-            super(ColorUtil.YELLOW,
+        public HeloLeftLandingSkid(int color) {
+            super(color,
                     SKID_WIDTH, SKID_HEIGHT, ENGINE_BLOCK_WIDTH/2+40, ENGINE_BLOCK_HEIGHT/2-30,
                     1, 1, 0);
         }
     }
     //```````````````````````````````````````````````````````````````````````````````````````
     private static class HeloRightLandingSkid extends Rectangle {
-        public HeloRightLandingSkid() {
-            super(ColorUtil.YELLOW,
+        public HeloRightLandingSkid(int color) {
+            super(color,
                     SKID_WIDTH, SKID_HEIGHT, -ENGINE_BLOCK_WIDTH/2-40, ENGINE_BLOCK_HEIGHT/2-30,
                     1, 1, 0);
         }
     }
     //```````````````````````````````````````````````````````````````````````````````````````
     private static class HeloTailCone extends Trapezoid {
-        public HeloTailCone() {
-            super(ColorUtil.YELLOW,
+        public HeloTailCone(int color) {
+            super(color,
                     SKID_WIDTH, SKID_HEIGHT, 10, -Helicopter.ENGINE_BLOCK_HEIGHT,
                     1, 1, 0);
         }
     }
     //```````````````````````````````````````````````````````````````````````````````````````
     private static class HeloTailFin extends Rectangle {
-        public HeloTailFin() {
-            super(ColorUtil.YELLOW,
+        public HeloTailFin(int color) {
+            super(color,
                     60, 20, -5, (float)(-Helicopter.ENGINE_BLOCK_HEIGHT*5.1),
                     1, 1, 0);
         }
@@ -363,16 +361,18 @@ public class Helicopter extends Movable implements Steerable {
     public void startOrStopEngine() {
         heloState.startOrStopEngine();
     }
-
     //```````````````````````````````````````````````````````````````````````````````````````
     private ArrayList<GameObject> heloParts;
 
     private HeloBlade heloBlade;
+    private int color;
+    private int fuel;
 
-    public Helicopter(Dimension worldSize) {
-
+    public Helicopter(Dimension worldSize, int HeliColor, int initFuel) {
         this.worldSize = worldSize;
-        setColor(ColorUtil.YELLOW);
+        this.color = HeliColor;
+        setColor(HeliColor);
+        this.fuel = initFuel;
         this.water = MIN_WATER;
         this.isOverRiver = false;
         this.currentSpeed = 0;
@@ -391,8 +391,8 @@ public class Helicopter extends Movable implements Steerable {
 
     private ArrayList<GameObject> buildHeli() {
         ArrayList<GameObject> buildHeliArr = new ArrayList<>();
-        buildHeliArr.add(new HeloBubble());
-        buildHeliArr.add(new HeloEngineBlock());
+        buildHeliArr.add(new HeloBubble(color));
+        buildHeliArr.add(new HeloEngineBlock(color));
         heloBlade = new HeloBlade();
         buildHeliArr.add(heloBlade);
         buildHeliArr.add(new HeloBladeShaft());
@@ -400,10 +400,10 @@ public class Helicopter extends Movable implements Steerable {
         buildHeliArr.add(new HeloFrontRightJoint());
         buildHeliArr.add(new HeloBackLeftJoint());
         buildHeliArr.add(new HeloBackRightJoint());
-        buildHeliArr.add(new HeloLeftLandingSkid());
-        buildHeliArr.add(new HeloRightLandingSkid());
-        buildHeliArr.add(new HeloTailCone());
-        buildHeliArr.add(new HeloTailFin());
+        buildHeliArr.add(new HeloLeftLandingSkid(color));
+        buildHeliArr.add(new HeloRightLandingSkid(color));
+        buildHeliArr.add(new HeloTailCone(color));
+        buildHeliArr.add(new HeloTailFin(color));
         buildHeliArr.add(new HeloTailRotor());
 
         return buildHeliArr;
@@ -415,20 +415,17 @@ public class Helicopter extends Movable implements Steerable {
         cn1ReverseContainerTranslate(g, containerOrigin);
 
         // draw axis for debugging
-/*        g.setColor(ColorUtil.LTGRAY);
+        g.setColor(ColorUtil.LTGRAY);
         g.drawLine(-worldSize.getWidth()/2, 0, worldSize.getWidth()/2, 0);
-        g.drawLine(0, -worldSize.getHeight()/2, 0, worldSize.getHeight()/2);*/
+        g.drawLine(0, -worldSize.getHeight()/2, 0, worldSize.getHeight()/2);
 
         for (GameObject go : heloParts)
             go.draw(g, containerOrigin, screenOrigin);
-
     }
 
     private double t = 0;
     private double pathSpeed = 1;
     public void updateLocalTransforms() {
-
         heloBlade.updateLocalTransforms(rotationSpeed);
-
     }
 }

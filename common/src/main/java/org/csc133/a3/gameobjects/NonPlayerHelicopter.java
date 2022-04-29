@@ -7,21 +7,21 @@ import org.csc133.a3.GameWorld;
 import org.csc133.a3.interfaces.Strategy;
 
 public class NonPlayerHelicopter extends Helicopter{
-    private static int HeliColor = ColorUtil.GREEN;
+    private static final int HELICOLOR = ColorUtil.GREEN;
     private static NonPlayerHelicopter instance;
 
-    private NonPlayerHelicopter(Dimension worldSize){
-        super(worldSize);
+    private NonPlayerHelicopter(Dimension worldSize, int initFuel) {
+        super(worldSize, HELICOLOR, initFuel);
         this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.1);
     }
 
     public static NonPlayerHelicopter getInstance() {
         if(instance == null) {
             Dimension worldSize    = GameWorld.getInstance().getDimension();
-/*            int initFuel         = GameWorld.getInstance().getFuel();
-            Transform startPoint = GameWorld.getInstance().getStartingPoint();*/
+            int initFuel         = GameWorld.getInstance().getInitFuel();
+            //Transform startPoint = GameWorld.getInstance().getStartingPoint();
 
-            instance = new NonPlayerHelicopter(worldSize);
+            instance = new NonPlayerHelicopter(worldSize, initFuel);
         }
         return instance;
     }
@@ -32,7 +32,7 @@ public class NonPlayerHelicopter extends Helicopter{
     }
 
     private double t = 0;
-    private void travel() {
+    public void travel() {
         Point2D currentPoint = new Point2D(myTranslation.getTranslateX(), myTranslation.getTranslateY());
         Point2D nextPoint = bc.evaluateCurve(t);
 

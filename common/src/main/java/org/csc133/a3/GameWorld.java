@@ -1,10 +1,8 @@
 package org.csc133.a3;
 
-import com.codename1.ui.Dialog;
+import com.codename1.charts.util.ColorUtil;
 import com.codename1.ui.Display;
-import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
-import com.codename1.ui.geom.Point;
 import org.csc133.a3.gameobjects.*;
 import com.codename1.util.MathUtil;
 
@@ -21,7 +19,7 @@ public class GameWorld {
 
     // Variables
     //
-    private int fuel;
+    private int initFuel;
     private int ticks;
     private int randomTicks;
     private String winLossText;
@@ -36,12 +34,14 @@ public class GameWorld {
     // Objects
     //
     private Building building;
-    private Helicopter helicopter;
+    //private Helicopter helicopter;
     private Helipad helipad;
     private River river;
     private BezierCurve bc;
 
+    // test
     private Helicopter testObject;
+
     // ArrayLists
     //
     private ArrayList<Fire> fireCollection;
@@ -70,19 +70,19 @@ public class GameWorld {
     public void init() {
         ticks = 0;
         this.r = new Random();
-        fuel = MAX_FUEL;
+        initFuel = MAX_FUEL;
         winLossText = "";
         river = new River(worldSize);
         helipad = new Helipad(worldSize);
         //helicopter = new Helicopter(worldSize, helipad);
-        helicopter = new Helicopter(worldSize);
+        //helicopter = new Helicopter(worldSize, ColorUtil.YELLOW);
         fireCollection = new ArrayList<>();
         buildingCollection = new ArrayList<>();
 
         //testing
         bc = new BezierCurve(worldSize);
-        testObject = new Helicopter(worldSize);
-        testObject.translate(bc.getStartControlPoint().getX(), bc.getStartControlPoint().getY());
+        testObject = new Helicopter(worldSize, ColorUtil.BLUE, initFuel);
+        testObject.translate(bc.getStartControlPoint().getX()-200, bc.getStartControlPoint().getY()+50);
         testObject.setPath(bc);
 
         building0Dmg = 0;
@@ -130,7 +130,7 @@ public class GameWorld {
             if (i >= MAX_BUILDING)
                 i = 0;
         }
-        gameObjectCollection.add(helicopter);
+        //gameObjectCollection.add(helicopter);
 
         gameObjectCollection.add(PlayerHelicopter.getInstance());
         gameObjectCollection.add(NonPlayerHelicopter.getInstance());
@@ -143,7 +143,7 @@ public class GameWorld {
     void tick() {
         ticks++;
 
-        updateLocalTransforms();
+        //updateLocalTransforms();
         PlayerHelicopter.getInstance().updateLocalTransforms();
         NonPlayerHelicopter.getInstance().updateLocalTransforms();
         testObject.updateLocalTransforms();
@@ -194,9 +194,9 @@ public class GameWorld {
             }
         }
 
-        helicopter.move(3);
+        move(5);
         //helicopter.checkDrinkable(river);
-        helicopter.fuel();
+        //helicopter.fuel();
 
         // GameClear/GameOver screen
         // Set some tick delay preventing gameWorld init() bug
@@ -211,14 +211,14 @@ public class GameWorld {
         return worldSize;
     }
 
-    public int getFuel() {
-        return fuel;
+    public int getInitFuel() {
+        return initFuel;
     }
 
     public int getDisplayHeading() {
         double displayHeading;
         //double temp = 90 + Math.toDegrees(helicopter.getDisplayAngle());
-        double temp = helicopter.getDisplayAngle();
+        double temp = PlayerHelicopter.getInstance().getDisplayAngle();
         displayHeading = temp % 360;
         if (displayHeading < 0)
             displayHeading = displayHeading + 360;
@@ -226,7 +226,7 @@ public class GameWorld {
     }
 
     public int getCurrentSpeed() {
-        return helicopter.getSpeed();
+        return PlayerHelicopter.getInstance().getSpeed();
     }
 
     public int getCurrentFireNo() {
@@ -280,46 +280,46 @@ public class GameWorld {
         return (int)totalLoss;
     }
 
-    public void setFuel(int f) {
-        fuel -= f;
+    public void setInitFuel(int f) {
+        initFuel -= f;
     }
 
     // Action controller
     //
     public void accelerate() {
-        helicopter.accelerate();
+        PlayerHelicopter.getInstance().accelerate();
     }
 
     public void decelerate() {
-        helicopter.decelerate();
+        PlayerHelicopter.getInstance().decelerate();
     }
 
     public void changeHeadingLeft() {
-        helicopter.steerLeft();
+        PlayerHelicopter.getInstance().steerLeft();
     }
 
     public void changeHeadingRight() {
-        helicopter.steerRight();
+        PlayerHelicopter.getInstance().steerRight();
     }
 
-/*    private void move(long elapsedTimeInMillis) {
-        Helicopter.move(elapsedTimeInMillis);
-    }*/
+    private void move(long elapsedTimeInMillis) {
+        PlayerHelicopter.getInstance().move(elapsedTimeInMillis);
+    }
 
     public void drink() {
-        helicopter.drink();
+//        helicopter.drink();
     }
 
     public void fight() {
         for (GameObject go: gameObjectCollection) {
             if (go instanceof Fire) {
                 Fire f = (Fire) go;
-                helicopter.fight(f);
+                PlayerHelicopter.getInstance().fight(f);
             }
         }
         // In case player drop the water after all fires arraylist is empty
         //
-        helicopter.miss();
+        PlayerHelicopter.getInstance().miss();
     }
 
 /*    private boolean checkWinCondition() {
@@ -337,7 +337,7 @@ public class GameWorld {
     }*/
 
     private boolean checkRanOutFuel() {
-        return fuel <= 0;
+        return initFuel <= 0;
     }
 
     private boolean checkBuildingDestroy() {
@@ -373,7 +373,7 @@ public class GameWorld {
     }
 
     public void updateLocalTransforms() {
-        helicopter.updateLocalTransforms();
+        PlayerHelicopter.getInstance().updateLocalTransforms();
     }
 
 /*    public Transform getStartingPoint() {

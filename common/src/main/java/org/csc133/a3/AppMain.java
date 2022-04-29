@@ -1,3 +1,12 @@
+/***************************************************************************
+ * Jeffrey H. Tan                                                          *
+ * 2022 Spring CSC 133-04 Professor Posnett                                *
+ * Project: Hornets HDF                                                    *
+ * Simple 2D top-down video game.                                          *
+ * Player controls a helicopter to collect water to fight the fire.        *
+ * Program with codename one API,                                          *
+ * cross-platform app development using Java. (PC, android, IOS)           *
+ ***************************************************************************/
 package org.csc133.a3;
 
 import com.codename1.system.Lifecycle;
