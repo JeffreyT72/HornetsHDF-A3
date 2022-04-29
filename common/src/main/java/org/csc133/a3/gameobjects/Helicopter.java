@@ -1,9 +1,13 @@
 package org.csc133.a3.gameobjects;
 
 import com.codename1.charts.util.ColorUtil;
+import com.codename1.ui.Font;
 import com.codename1.ui.Graphics;
+import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
+import com.codename1.ui.geom.Point2D;
+import com.codename1.util.MathUtil;
 import org.csc133.a3.gameobjects.parts.Arc;
 import org.csc133.a3.gameobjects.parts.Rectangle;
 import org.csc133.a3.gameobjects.parts.Trapezoid;
@@ -11,14 +15,16 @@ import org.csc133.a3.interfaces.Steerable;
 
 import java.util.ArrayList;
 
+import static com.codename1.ui.CN.*;
+
 //-----------------------------------------------------------------------------
 public class Helicopter extends Movable implements Steerable {
     // Variables
-    private Point location;
-    private int x, y, headingX, headingY;
+    //private Point location;
+    //private int x, y, headingX, headingY;
     private int water;
-    private boolean isOverRiver;    // Indicate the helicopter is in river area
-    private int drawX, drawY;
+    private boolean isOverRiver;
+    //private int drawX, drawY;
 
     // Constants
     private final int SIZE = 30;
@@ -29,7 +35,7 @@ public class Helicopter extends Movable implements Steerable {
     private final int MAX_WATER = 1000;
     private final int MIN_WATER = 0;
 
-    public Helicopter(Dimension worldSize, Helipad helipad) {
+/*    public Helicopter(Dimension worldSize, Helipad helipad) {
         this.worldSize = worldSize;
         setColor(ColorUtil.YELLOW);
         this.water = MIN_WATER;
@@ -44,7 +50,7 @@ public class Helicopter extends Movable implements Steerable {
         headingY = (int) (location.getY() + (currentSpeed + Heli_LENGTH)
                 * Math.sin(heading));
         this.dimension = new Dimension(SIZE, SIZE);
-    }
+    }*/
 
     // Getter
 /*    public Point getLocation() {
@@ -62,23 +68,23 @@ public class Helicopter extends Movable implements Steerable {
             currentSpeed--;
     }
 
- /*   public void checkDrinkable(River river) {
-        int riverStartX = (int)river.getLocation().getX()
-                - river.getWidth()/2;
-        int riverStartY = (int)river.getLocation().getY()
-                - river.getHeight()/2;
-        int riverEndX = (int)river.getLocation().getX()
-                + river.getWidth()/2;
-        int riverEndY = (int)river.getLocation().getY()
-                + river.getHeight()/2;
+    public void checkIsOnRiver(Transform riverTransform, Dimension riverDimension) {
+        int riverStartX = (int)riverTransform.getTranslateX()
+                - riverDimension.getWidth()/2;
+        int riverStartY = (int)riverTransform.getTranslateY()
+                - riverDimension.getHeight()/2;
+        int riverEndX = (int)riverTransform.getTranslateX()
+                + riverDimension.getWidth()/2;
+        int riverEndY = (int)riverTransform.getTranslateY()
+                + riverDimension.getHeight()/2;
 
-        isOverRiver = getLocation().getX() <= riverEndX &&
-                getLocation().getX() >= riverStartX &&
-                getLocation().getY() <= riverEndY &&
-                getLocation().getY() >= riverStartY;
-    }*/
+        isOverRiver = myTranslation.getTranslateX() <= riverEndX &&
+                myTranslation.getTranslateX() >= riverStartX &&
+                myTranslation.getTranslateY() <= riverEndY &&
+                myTranslation.getTranslateY() >= riverStartY;
+    }
 
-    public void drink() {
+    public void drink(Transform riverTransform, Dimension riverDimension) {
         if (isOverRiver && water < MAX_WATER)
             water += 100;
     }
@@ -166,6 +172,31 @@ public class Helicopter extends Movable implements Steerable {
     private BezierCurve bc;
     public void setPath(BezierCurve bc) {
         this.bc = bc;
+    }
+
+    private double t = 0;
+    private double pathSpeed = 1.5;
+    public void testPath() {
+        Point2D currentPoint = new Point2D(myTranslation.getTranslateX(), myTranslation.getTranslateY());
+        Point2D nextPoint = bc.evaluateCurve(t);
+
+        // Translate from current to next point.
+        //
+        double tx = nextPoint.getX() - currentPoint.getX();
+        double ty = nextPoint.getY() - currentPoint.getY();
+        this.translate(tx, ty);
+
+        // Direction
+        //
+        double theta = 90 - Math.toDegrees(MathUtil.atan2(ty, tx));
+
+        if(t <= 1) {
+            t = t + pathSpeed * 0.003;
+            rotate((float)(getHeading() - theta));
+            setHeading(theta);
+        } else {
+            t = 0;      // back to start point. for testing
+        }
     }
 
     //```````````````````````````````````````````````````````````````````````````````````````
@@ -310,7 +341,7 @@ public class Helicopter extends Movable implements Steerable {
         public boolean hasLandedAt() {
             return false;
         }
-
+        public void drink(Transform riverTransform, Dimension riverDimension) {}
         public void updateLocalTransforms() {}
     }
 
@@ -356,6 +387,9 @@ public class Helicopter extends Movable implements Steerable {
         public void accelearate() {
 
         }
+
+        @Override
+        public void drink(Transform riverTransform, Dimension riverDimension) {}
     }
 
     public void startOrStopEngine() {
@@ -381,7 +415,7 @@ public class Helicopter extends Movable implements Steerable {
         this.dimension = new Dimension(SIZE, SIZE);
         heloState = new Off();
 
-        this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.5);
+        //this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.5);
         this.scale(0.3,0.3);
         this.rotate(0);
 
@@ -421,10 +455,13 @@ public class Helicopter extends Movable implements Steerable {
 
         for (GameObject go : heloParts)
             go.draw(g, containerOrigin, screenOrigin);
+
+        g.setColor(ColorUtil.YELLOW);
+        g.setFont(Font.createSystemFont(FACE_MONOSPACE,
+                STYLE_BOLD, SIZE_LARGE));
+        g.drawString("W : " + water, (int)myTranslation.getTranslateX(), (int)myTranslation.getTranslateY());
     }
 
-    private double t = 0;
-    private double pathSpeed = 1;
     public void updateLocalTransforms() {
         heloBlade.updateLocalTransforms(rotationSpeed);
     }

@@ -107,4 +107,7 @@ public class BezierCurve extends GameObject{
 
     }
 
+    public void setTail(Point2D lastControlPoint) {
+        controlPoints.set(controlPoints.size()-1, lastControlPoint);
+    }
 }

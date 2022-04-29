@@ -1,8 +1,11 @@
 package org.csc133.a3.gameobjects;
 
 import com.codename1.charts.util.ColorUtil;
+import com.codename1.ui.Graphics;
 import com.codename1.ui.geom.Dimension;
+import com.codename1.ui.geom.Point;
 import com.codename1.ui.geom.Point2D;
+import com.codename1.util.MathUtil;
 import org.csc133.a3.GameWorld;
 import org.csc133.a3.interfaces.Strategy;
 
@@ -26,13 +29,15 @@ public class NonPlayerHelicopter extends Helicopter{
         return instance;
     }
 
+    // testing
     private BezierCurve bc;
     public void setPath(BezierCurve bc) {
         this.bc = bc;
     }
 
     private double t = 0;
-    public void travel() {
+    private double pathSpeed = 1.5;
+    public void testPath() {
         Point2D currentPoint = new Point2D(myTranslation.getTranslateX(), myTranslation.getTranslateY());
         Point2D nextPoint = bc.evaluateCurve(t);
 
@@ -40,23 +45,30 @@ public class NonPlayerHelicopter extends Helicopter{
         //
         double tx = nextPoint.getX() - currentPoint.getX();
         double ty = nextPoint.getY() - currentPoint.getY();
+        this.translate(tx, ty);
 
-        // Angle offset accounts for which direction is 0 degrees.
+        // Direction
         //
-        //int theta = (int) (angleFix - Math.toDegrees(Math.atan2(ty, tx)));
-        NonPlayerHelicopter.this.translate(tx, ty);
+        double theta = 90 - Math.toDegrees(MathUtil.atan2(ty, tx));
 
         if(t < 1) {
-            t = t + (1 * 0.003);
-            //rotate(getHeading() - theta);
-            //setHeading(theta);
+            t = t + pathSpeed * 0.003;
+            rotate((float)(getHeading() - theta));
+            setHeading(theta);
         }
     }
 
-    class FlightStrategy implements Strategy {
+    public class FlightPath extends GameObject {
         @Override
-        public void followCurve(){
-            travel();
+        protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
+
+        }
+    }
+
+    public class Avoid extends GameObject {
+        @Override
+        protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
+
         }
     }
 }

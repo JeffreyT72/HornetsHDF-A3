@@ -10,6 +10,7 @@ public class PlayerHelicopter extends Helicopter{
 
     private PlayerHelicopter(Dimension worldSize, int initFuel){
         super(worldSize, HELICOLOR, initFuel);
+        this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.5);
     }
 
     public static PlayerHelicopter getInstance() {

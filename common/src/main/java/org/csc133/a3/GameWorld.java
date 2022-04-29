@@ -2,6 +2,7 @@ package org.csc133.a3;
 
 import com.codename1.charts.util.ColorUtil;
 import com.codename1.ui.Display;
+import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
 import org.csc133.a3.gameobjects.*;
 import com.codename1.util.MathUtil;
@@ -82,7 +83,7 @@ public class GameWorld {
         //testing
         bc = new BezierCurve(worldSize);
         testObject = new Helicopter(worldSize, ColorUtil.BLUE, initFuel);
-        testObject.translate(bc.getStartControlPoint().getX()-200, bc.getStartControlPoint().getY()+50);
+        testObject.translate(bc.getStartControlPoint().getX(), bc.getStartControlPoint().getY());
         testObject.setPath(bc);
 
         building0Dmg = 0;
@@ -143,10 +144,8 @@ public class GameWorld {
     void tick() {
         ticks++;
 
-        //updateLocalTransforms();
-        PlayerHelicopter.getInstance().updateLocalTransforms();
-        NonPlayerHelicopter.getInstance().updateLocalTransforms();
-        testObject.updateLocalTransforms();
+        helicopterTransforms();
+        testObject.testPath();
 
         for (GameObject go: gameObjectCollection) {
             if (go instanceof Fire) {
@@ -195,7 +194,7 @@ public class GameWorld {
         }
 
         move(5);
-        //helicopter.checkDrinkable(river);
+        PlayerHelicopter.getInstance().checkIsOnRiver(river.getTranslation(), river.getDimension());
         //helicopter.fuel();
 
         // GameClear/GameOver screen
@@ -207,10 +206,23 @@ public class GameWorld {
         }*/
     }
 
+    private void helicopterTransforms() {
+        PlayerHelicopter.getInstance().updateLocalTransforms();
+        NonPlayerHelicopter.getInstance().updateLocalTransforms();
+        testObject.updateLocalTransforms();
+    }
+
+    private void checkDrinkable() {
+
+    }
+
     public Dimension getDimension() {
         return worldSize;
     }
 
+    public BezierCurve getBc() {
+        return bc;
+    }
     public int getInitFuel() {
         return initFuel;
     }
@@ -307,7 +319,8 @@ public class GameWorld {
     }
 
     public void drink() {
-//        helicopter.drink();
+        Dimension riverDimension = river.getDimension();
+        PlayerHelicopter.getInstance().drink(river.getTranslation(), riverDimension);
     }
 
     public void fight() {
@@ -376,7 +389,7 @@ public class GameWorld {
         PlayerHelicopter.getInstance().updateLocalTransforms();
     }
 
-/*    public Transform getStartingPoint() {
-        return 0;
-    }*/
+    public Transform getStartingPoint() {
+        return helipad.getTranslation();
+    }
 }

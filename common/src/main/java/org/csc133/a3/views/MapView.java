@@ -6,6 +6,7 @@ import com.codename1.ui.Graphics;
 import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
+import com.codename1.ui.geom.Point2D;
 import com.codename1.ui.layouts.BorderLayout;
 import org.csc133.a3.GameWorld;
 import org.csc133.a3.gameobjects.GameObject;
@@ -19,7 +20,6 @@ public class MapView extends Container {
         this.gw = gw;
         setLayout(new BorderLayout());
     }
-
     // Set up the world to ND transform
     //
     private Transform buildWorldToNDXform(float winWidth, float winHeight,
@@ -45,8 +45,8 @@ public class MapView extends Container {
     private void setupVTM(Graphics g) {
         Transform worldToND, ndToDisplay, theVTM;
         winLeft = winBottom = 0;
-        winRight = this.getWidth();
-        winTop = this.getHeight();
+        winRight = this.getWidth()*2;
+        winTop = this.getHeight()*2;
 
         float winHeight = winTop - winBottom;
         float winWidth = winRight - winLeft;
@@ -64,6 +64,23 @@ public class MapView extends Container {
         gXform.translate(-getAbsoluteX(), -getAbsoluteY());
         g.setTransform(gXform);
     }
+
+/*
+    private Transform getInverseVTM() {
+        Transform inverseVTM = Transform.makeIdentity();
+
+        try {
+            getVTM().getInverse(inverseVTM);
+        } catch (Transform.NotInvertibleException e) {
+            e.printStackTrace();
+        }
+        return inverseVTM;
+    }
+
+    private Transform getVTM() {
+        return
+    }
+*/
 
     @Override
     public void laidOut(){
@@ -83,5 +100,15 @@ public class MapView extends Container {
         //
         for(GameObject go:gw.getGameObjectCollection())
             go.draw(g, containerOrigin, screenOrigin);
+    }
+
+    @Override
+    public void pointerPressed(int x, int y) {
+        x = x - getAbsoluteX();
+        y = y - getAbsoluteY();
+
+//        Transform t = getInverseVTM();
+//        Point2D tailLoc =
+//        gw.getBc().setTail(new Point2D(x, y));
     }
 }

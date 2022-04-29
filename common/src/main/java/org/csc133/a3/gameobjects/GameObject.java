@@ -42,23 +42,25 @@ public abstract class GameObject {
     // Getter
     //
     public int getWidth() {
-    return dimension.getWidth();
-}
+        return getDimension().getWidth();
+    }
 
     public int getHeight() {
-        return dimension.getHeight();
+        return getDimension().getHeight();
     }
 
     protected int getColor() {
         return this.color;
     }
 
-    protected Dimension getDimension() {
+    public Dimension getDimension() {
         return this.dimension;
     }
-/*    Point getLocation() {
-        return this.location;
-    }*/
+
+    public Transform getTranslation() {
+        return myTranslation;
+    }
+
     public void rotate(float degrees) {
     myRotation.rotate((float)Math.toRadians(degrees), 0, 0);
 }
@@ -72,19 +74,9 @@ public abstract class GameObject {
     }
 
     public void draw(Graphics g, Point containerOrigin, Point screenOrigin) {
-        Transform gXform = Transform.makeIdentity();
-        g.getTransform(gXform);
-        Transform gOrigXform = gXform.copy();
-
-        // move drawing coordinates back
-        //
-        gXform.translate(screenOrigin.getX(), screenOrigin.getY());
-
+        Transform gXform = preLTTransform(g, screenOrigin);
         localTransforms(gXform);
-
-        // move the drawing coordinates as part of the "local origin" transformations
-        //
-        gXform.translate(-screenOrigin.getX(), -screenOrigin.getY());
+        postLTransform(g, screenOrigin, gXform);
 
         // set the current transform of the graphics context
         //
@@ -104,10 +96,29 @@ public abstract class GameObject {
 
     protected abstract void localDraw(Graphics g, Point containerOrigin, Point screenOrigin);
 
+    protected Transform preLTTransform(Graphics g, Point screenOrigin) {
+        Transform gxForm = Transform.makeIdentity();
+        g.getTransform(gxForm);
+        gOrigXform = gxForm.copy();
+
+        // Move drawing coordinates back
+        //
+        gxForm.translate(screenOrigin.getX(), screenOrigin.getY());
+        return gxForm;
+    }
+
     protected void localTransforms(Transform gxForm) {
         gxForm.translate(myTranslation.getTranslateX(), myTranslation.getTranslateY());
         gxForm.concatenate(myRotation);
         gxForm.scale(myScale.getScaleX(), myScale.getScaleY());
+    }
+
+    void postLTransform(Graphics g, Point screenOrigin, Transform gXform) {
+        // Move the drawing coordinates so that the local origin coincides with
+        // the screen origin post local transforms.
+        //
+        gXform.translate(-screenOrigin.getX(), -screenOrigin.getY());
+        g.setTransform(gXform);
     }
 
     protected void containerTranslate(Graphics g, Point parentOrigin) {
@@ -182,11 +193,19 @@ abstract class Movable extends GameObject {
         return (elapsedTime / 100f) * 4;
     }
 
+    public void setHeading(double theta) {
+        this.heading = theta;
+    }
+
     public int getSpeed() {
         return currentSpeed;
     }
 
     public double getDisplayAngle() {
         return displayAngle;
+    }
+
+    public double getHeading() {
+        return this.heading;
     }
 }
