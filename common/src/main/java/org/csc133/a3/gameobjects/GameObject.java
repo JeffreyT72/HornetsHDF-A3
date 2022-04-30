@@ -8,7 +8,7 @@ import org.csc133.a3.GameWorld;
 
 public abstract class GameObject {
     private int color;
-    //Point location;
+    private int objectId;
     Dimension dimension;
     Dimension worldSize;
     Transform gXform;
@@ -59,6 +59,10 @@ public abstract class GameObject {
 
     public Transform getTranslation() {
         return myTranslation;
+    }
+
+    public int getId() {
+        return this.objectId;
     }
 
     public void rotate(float degrees) {

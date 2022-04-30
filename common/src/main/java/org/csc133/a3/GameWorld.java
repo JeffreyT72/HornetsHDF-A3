@@ -20,7 +20,7 @@ public class GameWorld {
 
     // Variables
     //
-    private int initFuel;
+    private int fuel;
     private int ticks;
     private int randomTicks;
     private String winLossText;
@@ -71,18 +71,16 @@ public class GameWorld {
     public void init() {
         ticks = 0;
         this.r = new Random();
-        initFuel = MAX_FUEL;
+        fuel = MAX_FUEL;
         winLossText = "";
         river = new River(worldSize);
         helipad = new Helipad(worldSize);
-        //helicopter = new Helicopter(worldSize, helipad);
-        //helicopter = new Helicopter(worldSize, ColorUtil.YELLOW);
         fireCollection = new ArrayList<>();
         buildingCollection = new ArrayList<>();
 
         //testing
         bc = new BezierCurve(worldSize);
-        testObject = new Helicopter(worldSize, ColorUtil.BLUE, initFuel);
+        testObject = new Helicopter(worldSize, ColorUtil.BLUE, fuel);
         testObject.translate(bc.getStartControlPoint().getX(), bc.getStartControlPoint().getY());
         testObject.setPath(bc);
 
@@ -195,7 +193,7 @@ public class GameWorld {
 
         move(5);
         PlayerHelicopter.getInstance().checkIsOnRiver(river.getTranslation(), river.getDimension());
-        //helicopter.fuel();
+        PlayerHelicopter.getInstance().fuel();
 
         // GameClear/GameOver screen
         // Set some tick delay preventing gameWorld init() bug
@@ -223,8 +221,8 @@ public class GameWorld {
     public BezierCurve getBc() {
         return bc;
     }
-    public int getInitFuel() {
-        return initFuel;
+    public int getFuel() {
+        return fuel;
     }
 
     public int getDisplayHeading() {
@@ -292,8 +290,8 @@ public class GameWorld {
         return (int)totalLoss;
     }
 
-    public void setInitFuel(int f) {
-        initFuel -= f;
+    public void setFuel(int f) {
+        fuel -= f;
     }
 
     // Action controller
@@ -350,7 +348,7 @@ public class GameWorld {
     }*/
 
     private boolean checkRanOutFuel() {
-        return initFuel <= 0;
+        return fuel <= 0;
     }
 
     private boolean checkBuildingDestroy() {

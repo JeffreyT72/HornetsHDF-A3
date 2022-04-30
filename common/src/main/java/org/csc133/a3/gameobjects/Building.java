@@ -31,31 +31,17 @@ public class Building extends Fixed {
 
     private void buildingSetup(int id) {
         if (id == 0) {              // Top building
-            //setLocation(new Point(worldSize.getWidth()/2, 150));
             this.dimension = new Dimension(1000, 150);
             this.value = (r.nextInt(10) + 1)* 100;
-
             this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.9);
-            this.scale(1,-1);
-            this.rotate(0);
         } else if (id == 1) {       // Left building
-            //setLocation(new Point((int) (worldSize.getWidth()*0.2),
-            //        (int) (worldSize.getHeight()*0.6)));
             this.dimension = new Dimension(200, 600);
             this.value = (r.nextInt(10) + 1)* 100;
-
             this.translate(worldSize.getWidth() * 0.2, worldSize.getHeight() * 0.3);
-            this.scale(1,-1);
-            this.rotate(0);
         } else if (id == 2) {       // Right building
-            //setLocation(new Point((int) (worldSize.getWidth()*0.8),
-            //        (int) (worldSize.getHeight()*0.7)));
             this.dimension = new Dimension(250, 400);
             this.value = (r.nextInt(10) + 1)* 100;
-
             this.translate(worldSize.getWidth() * 0.8, worldSize.getHeight() * 0.3);
-            this.scale(1,-1);
-            this.rotate(0);
         }
     }
     /*
@@ -88,9 +74,9 @@ public class Building extends Fixed {
         g.drawString("V: " + value, textX, textY);
     }
     */
-    public int getId() {
+/*    public int getId() {
         return id;
-    }
+    }*/
 
     public int getSize() {
         return buildingArea;

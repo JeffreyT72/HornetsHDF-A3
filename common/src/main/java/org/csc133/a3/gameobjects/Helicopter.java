@@ -108,7 +108,7 @@ public class Helicopter extends Movable implements Steerable {
     }
 
     public void fuel() {
-        gw.setInitFuel((int)(Math.sqrt(currentSpeed) + 5));
+        gw.setFuel((int)(Math.sqrt(currentSpeed) + 5));
     }
     /*
     @Override
@@ -459,7 +459,9 @@ public class Helicopter extends Movable implements Steerable {
         g.setColor(ColorUtil.YELLOW);
         g.setFont(Font.createSystemFont(FACE_MONOSPACE,
                 STYLE_BOLD, SIZE_LARGE));
-        g.drawString("W : " + water, (int)myTranslation.getTranslateX(), (int)myTranslation.getTranslateY());
+        g.drawString("F  : " + gw.getFuel(), (int)myTranslation.getTranslateX(), (int)myTranslation.getTranslateY());
+        g.drawString("W : " + water, (int)myTranslation.getTranslateX(), (int)myTranslation.getTranslateY()+30);
+
     }
 
     public void updateLocalTransforms() {

@@ -42,11 +42,12 @@ public class MapView extends Container {
 
     // Set up the Viewing Transformation Matrix.
     //
+    Transform theVTM;
     private void setupVTM(Graphics g) {
-        Transform worldToND, ndToDisplay, theVTM;
+        Transform worldToND, ndToDisplay;
         winLeft = winBottom = 0;
-        winRight = this.getWidth()*2;
-        winTop = this.getHeight()*2;
+        winRight = this.getWidth();
+        winTop = this.getHeight();
 
         float winHeight = winTop - winBottom;
         float winWidth = winRight - winLeft;
@@ -65,22 +66,25 @@ public class MapView extends Container {
         g.setTransform(gXform);
     }
 
-/*
     private Transform getInverseVTM() {
         Transform inverseVTM = Transform.makeIdentity();
 
         try {
-            getVTM().getInverse(inverseVTM);
+            theVTM.getInverse(inverseVTM);
         } catch (Transform.NotInvertibleException e) {
             e.printStackTrace();
         }
         return inverseVTM;
     }
 
-    private Transform getVTM() {
-        return
+    private Point2D transformPoint2D(Transform t, Point2D p) {
+        float[] in = new float[2];
+        float[] out = new float[2];
+        in[0] = (float)p.getX();
+        in[1] = (float)p.getY();
+        t.transformPoint(in, out);
+        return new Point2D(out[0], out[1]);
     }
-*/
 
     @Override
     public void laidOut(){
@@ -104,11 +108,9 @@ public class MapView extends Container {
 
     @Override
     public void pointerPressed(int x, int y) {
-        x = x - getAbsoluteX();
-        y = y - getAbsoluteY();
+        x = x - getAbsoluteX() +15;
+        y = y - getAbsoluteY() -15;
 
-//        Transform t = getInverseVTM();
-//        Point2D tailLoc =
-//        gw.getBc().setTail(new Point2D(x, y));
+        gw.getBc().setTail(transformPoint2D(getInverseVTM(), new Point2D(x,y)));
     }
 }

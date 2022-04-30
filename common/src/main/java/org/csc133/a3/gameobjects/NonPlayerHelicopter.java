@@ -7,7 +7,6 @@ import com.codename1.ui.geom.Point;
 import com.codename1.ui.geom.Point2D;
 import com.codename1.util.MathUtil;
 import org.csc133.a3.GameWorld;
-import org.csc133.a3.interfaces.Strategy;
 
 public class NonPlayerHelicopter extends Helicopter{
     private static final int HELICOLOR = ColorUtil.GREEN;
@@ -21,7 +20,7 @@ public class NonPlayerHelicopter extends Helicopter{
     public static NonPlayerHelicopter getInstance() {
         if(instance == null) {
             Dimension worldSize    = GameWorld.getInstance().getDimension();
-            int initFuel         = GameWorld.getInstance().getInitFuel();
+            int initFuel         = GameWorld.getInstance().getFuel();
             //Transform startPoint = GameWorld.getInstance().getStartingPoint();
 
             instance = new NonPlayerHelicopter(worldSize, initFuel);

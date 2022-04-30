@@ -16,7 +16,7 @@ public class PlayerHelicopter extends Helicopter{
     public static PlayerHelicopter getInstance() {
         if(instance == null) {
             Dimension worldSize    = GameWorld.getInstance().getDimension();
-            int initFuel         = GameWorld.getInstance().getInitFuel();
+            int initFuel         = GameWorld.getInstance().getFuel();
             //Transform startPoint = GameWorld.getInstance().getStartingPoint();
 
             instance = new PlayerHelicopter(worldSize, initFuel);

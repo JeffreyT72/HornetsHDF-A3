@@ -141,37 +141,18 @@ public class Fire extends GameObject{
     public void Extinguished() {
         extinguished.fireAction(context);
     }
-    /*
-    @Override
-    public void draw(Graphics g, Point containerOrigin) {
-        g.setColor(getColor());
-        int x = containerOrigin.getX() + (int)location.getX()
-                - dimension.getWidth()/2;
-        int y = containerOrigin.getY() + (int)location.getY()
-                - dimension.getHeight()/2;
-        int w = dimension.getWidth();
-        int h = dimension.getHeight();
 
-        g.fillArc(x, y, w, h, 0, 360);
-        g.setFont(Font.createSystemFont(FACE_MONOSPACE,
-                STYLE_BOLD, SIZE_MEDIUM));
-        int strX = x + dimension.getWidth();
-        int strY = y + dimension.getHeight();
-        g.drawString(String.valueOf(size), strX, strY);
-    }
-    */
-    public void setup(int x, int y, int w, int h) {
-        //this.location = new Point(x + r.nextInt(w), y + r.nextInt(h));
-        translate(x + r.nextInt(w), y + r.nextInt(h));
+    public void setup(int buildingX, int buildingY, int w, int h) {
+        translate(buildingX + r.nextInt(w), buildingY + r.nextInt(h));
     }
 
     @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
         g.fillArc(0, 0, getWidth(), getHeight(), 0, 360);
 
-        // Text (need to transforms)
+        // Text
         g.setFont(Font.createSystemFont(FACE_MONOSPACE,
                 STYLE_BOLD, SIZE_MEDIUM));
-        g.drawString(String.valueOf(size), size/2 + 10, size/2 + 10);
+        g.drawString(String.valueOf(size), getWidth()+10, getHeight()+10);
     }
 }
