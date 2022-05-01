@@ -110,7 +110,19 @@ public class MapView extends Container {
     public void pointerPressed(int x, int y) {
         x = x - getAbsoluteX() +15;
         y = y - getAbsoluteY() -15;
+        Point2D sp = transformPoint2D(getInverseVTM(),new Point2D(x,y));
 
-        gw.getBc().setTail(transformPoint2D(getInverseVTM(), new Point2D(x,y)));
+        if (gw.getSpL().contains(sp) && !gw.getSpL().isSelected()) {
+            gw.getSpL().select(true);
+            gw.getFc().getPrimary().setTail(gw.getSpL().getLocation());
+            gw.getSpR().select(false);
+        }
+
+        if (gw.getSpR().contains(sp) && !gw.getSpR().isSelected()) {
+            gw.getSpR().select(true);
+            gw.getFc().getPrimary().setTail(gw.getSpR().getLocation());
+            gw.getSpL().select(false);
+        }
+
     }
 }

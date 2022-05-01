@@ -38,8 +38,10 @@ public class GameWorld {
     //private Helicopter helicopter;
     private Helipad helipad;
     private River river;
-    private BezierCurve bc;
-
+    //private BezierCurve bc;
+    private FlightControl fc;
+    private SpacePortal spL;
+    private SpacePortal spR;
     // test
     private Helicopter testObject;
 
@@ -79,10 +81,16 @@ public class GameWorld {
         buildingCollection = new ArrayList<>();
 
         //testing
-        bc = new BezierCurve(worldSize);
+        //bc = new BezierCurve(worldSize);
+        spL = new SpacePortal();
+        spR = new SpacePortal();
+        spL.translate(300, 800);
+        spR.translate(1700, 800);
         testObject = new Helicopter(worldSize, ColorUtil.BLUE, fuel);
-        testObject.translate(bc.getStartControlPoint().getX(), bc.getStartControlPoint().getY());
-        testObject.setPath(bc);
+        fc = new FlightControl(testObject);
+        testObject.translate(fc.getPrimary().getStartControlPoint().getX(),
+                                fc.getPrimary().getStartControlPoint().getY());
+        testObject.setFlightControl(fc);
 
         building0Dmg = 0;
         building1Dmg = 0;
@@ -133,7 +141,10 @@ public class GameWorld {
 
         gameObjectCollection.add(PlayerHelicopter.getInstance());
         gameObjectCollection.add(NonPlayerHelicopter.getInstance());
-        gameObjectCollection.add(bc);
+        gameObjectCollection.add(fc.getPrimary());
+        gameObjectCollection.add(fc.getCorrection());
+        gameObjectCollection.add(spL);
+        gameObjectCollection.add(spR);
 
         for (Building b: buildingCollection)
             totalValue += b.getValue();
@@ -144,6 +155,7 @@ public class GameWorld {
 
         helicopterTransforms();
         testObject.testPath();
+        //NonPlayerHelicopter.getInstance().testPath();
 
         for (GameObject go: gameObjectCollection) {
             if (go instanceof Fire) {
@@ -218,9 +230,15 @@ public class GameWorld {
         return worldSize;
     }
 
-    public BezierCurve getBc() {
+    /*public BezierCurve getBc() {
         return bc;
+    }*/
+    public FlightControl getFc() {
+        return fc;
     }
+    public SpacePortal getSpL() {return spL;}
+    public SpacePortal getSpR() {return spR;}
+
     public int getFuel() {
         return fuel;
     }

@@ -11,17 +11,43 @@ import com.codename1.util.MathUtil;
 import java.util.ArrayList;
 
 public class BezierCurve extends GameObject{
-    ArrayList<Point2D> controlPoints;
+    private ArrayList<Point2D> controlPoints;
+    final static int POINT_SIZE = 30;
+
+    public void setControlPoints(ArrayList<Point2D> controlPoints) {
+        this.controlPoints = controlPoints;
+    }
 
     public BezierCurve(ArrayList<Point2D> controlPoints) {
         this.controlPoints = controlPoints;
     }
 
-    public BezierCurve(Dimension worldSize) {
-/*        Transform defaultLocation = Transform.makeIdentity();
+/*    public BezierCurve(Helicopter heli, Dimension worldSize) {
+        Transform defaultLocation = Transform.makeIdentity();
         defaultLocation.translate(worldSize.getWidth() * 0.85f,
-                worldSize.getHeight() * 0.15f);*/
+                worldSize.getHeight() * 0.15f);
         this.worldSize = worldSize;
+        this.dimension = new Dimension(30, 30);
+
+        controlPoints = new ArrayList<>();
+        // point start from bottom left corner
+        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.1));
+
+        //controlPoints.add(new Point2D(30,30));
+        controlPoints.add(new Point2D(30,worldSize.getHeight()/2));
+        //controlPoints.add(new Point2D(30,worldSize.getHeight()-30));
+        //controlPoints.add(new Point2D(worldSize.getWidth()/2,30));
+        //controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight()/2));
+        //controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight()-30));
+        //controlPoints.add(new Point2D(worldSize.getWidth()-30,30));
+        controlPoints.add(new Point2D(worldSize.getWidth()-30,worldSize.getHeight()/2));
+        //controlPoints.add(new Point2D(worldSize.getWidth()-30,worldSize.getHeight()-30));
+
+        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight()-30));
+    }
+*/
+    public BezierCurve() {
+        //this.worldSize = getDimension();
         this.dimension = new Dimension(30, 30);
 
         controlPoints = new ArrayList<>();
@@ -63,7 +89,7 @@ public class BezierCurve extends GameObject{
         final double smallFloatIncrement = 0.06;
         g.setColor(ColorUtil.GRAY);
         for (Point2D p : controlPoints)
-            g.fillArc((int)p.getX()-15, (int)p.getY()-15, 30, 30, 0, 360);
+            g.fillArc((int)p.getX()-POINT_SIZE/2, (int)p.getY()-POINT_SIZE/2, POINT_SIZE, POINT_SIZE, 0, 360);
 
         g.setColor(ColorUtil.GREEN);
         Point2D currentPoint = controlPoints.get(0);
@@ -104,7 +130,6 @@ public class BezierCurve extends GameObject{
     @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
         drawBezierCurve(g, controlPoints);
-
     }
 
     public void setTail(Point2D lastControlPoint) {

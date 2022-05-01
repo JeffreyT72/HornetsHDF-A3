@@ -30,12 +30,14 @@ public class NonPlayerHelicopter extends Helicopter{
 
     // testing
     private BezierCurve bc;
-    public void setPath(BezierCurve bc) {
+    public void setFlightControl(BezierCurve bc) {
         this.bc = bc;
     }
 
     private double t = 0;
     private double pathSpeed = 1.5;
+
+    @Override
     public void testPath() {
         Point2D currentPoint = new Point2D(myTranslation.getTranslateX(), myTranslation.getTranslateY());
         Point2D nextPoint = bc.evaluateCurve(t);

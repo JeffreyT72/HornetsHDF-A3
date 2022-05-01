@@ -1,10 +1,13 @@
 package org.csc133.a3.gameobjects;
 
+import com.codename1.charts.util.ColorUtil;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
+import com.codename1.ui.geom.Point2D;
 import org.csc133.a3.GameWorld;
+import org.csc133.a3.interfaces.Selectable;
 
 public abstract class GameObject {
     private int color;
@@ -22,7 +25,7 @@ public abstract class GameObject {
 
     public GameObject() {
         gw = GameWorld.getInstance();
-        this.worldSize = worldSize;
+        this.worldSize = gw.getDimension();
         myTranslation = Transform.makeIdentity();
         myRotation = Transform.makeIdentity();
         myScale = Transform.makeIdentity();
@@ -57,12 +60,20 @@ public abstract class GameObject {
         return this.dimension;
     }
 
+    public Point2D getLocation() {
+        return new Point2D(myTranslation.getTranslateX(), myTranslation.getTranslateY());
+    }
+
     public Transform getTranslation() {
         return myTranslation;
     }
 
     public int getId() {
         return this.objectId;
+    }
+
+    public Dimension getWorldSize() {
+        return this.worldSize;
     }
 
     public void rotate(float degrees) {
@@ -213,3 +224,4 @@ abstract class Movable extends GameObject {
         return this.heading;
     }
 }
+

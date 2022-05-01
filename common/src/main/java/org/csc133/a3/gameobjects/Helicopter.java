@@ -169,34 +169,16 @@ public class Helicopter extends Movable implements Steerable {
     final static int SKID_HEIGHT = 400;
 
     // testing
-    private BezierCurve bc;
-    public void setPath(BezierCurve bc) {
-        this.bc = bc;
+    private FlightControl fc;
+    public void setFlightControl(FlightControl fc) {
+        this.fc = fc;
     }
 
-    private double t = 0;
+    //private double t = 0;
     private double pathSpeed = 1.5;
     public void testPath() {
-        Point2D currentPoint = new Point2D(myTranslation.getTranslateX(), myTranslation.getTranslateY());
-        Point2D nextPoint = bc.evaluateCurve(t);
-
-        // Translate from current to next point.
-        //
-        double tx = nextPoint.getX() - currentPoint.getX();
-        double ty = nextPoint.getY() - currentPoint.getY();
-        this.translate(tx, ty);
-
-        // Direction
-        //
-        double theta = 90 - Math.toDegrees(MathUtil.atan2(ty, tx));
-
-        if(t <= 1) {
-            t = t + pathSpeed * 0.003;
-            rotate((float)(getHeading() - theta));
-            setHeading(theta);
-        } else {
-            t = 0;      // back to start point. for testing
-        }
+        fc.moveAlongPath(new Point2D(   myTranslation.getTranslateX(),
+                                        myTranslation.getTranslateY()));
     }
 
     //```````````````````````````````````````````````````````````````````````````````````````
@@ -449,9 +431,9 @@ public class Helicopter extends Movable implements Steerable {
         cn1ReverseContainerTranslate(g, containerOrigin);
 
         // draw axis for debugging
-        g.setColor(ColorUtil.LTGRAY);
-        g.drawLine(-worldSize.getWidth()/2, 0, worldSize.getWidth()/2, 0);
-        g.drawLine(0, -worldSize.getHeight()/2, 0, worldSize.getHeight()/2);
+//        g.setColor(ColorUtil.LTGRAY);
+//        g.drawLine(-worldSize.getWidth()/2, 0, worldSize.getWidth()/2, 0);
+//        g.drawLine(0, -worldSize.getHeight()/2, 0, worldSize.getHeight()/2);
 
         for (GameObject go : heloParts)
             go.draw(g, containerOrigin, screenOrigin);
