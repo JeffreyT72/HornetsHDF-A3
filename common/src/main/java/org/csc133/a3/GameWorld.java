@@ -86,7 +86,7 @@ public class GameWorld {
         spR = new SpacePortal();
         spL.translate(300, 800);
         spR.translate(1700, 800);
-        testObject = new Helicopter(worldSize, ColorUtil.BLUE, fuel);
+        testObject = new Helicopter(worldSize, ColorUtil.BLUE, fuel, helipad.getTranslation());
         fc = new FlightControl(testObject);
         testObject.translate(fc.getPrimary().getStartControlPoint().getX(),
                                 fc.getPrimary().getStartControlPoint().getY());
@@ -222,10 +222,6 @@ public class GameWorld {
         testObject.updateLocalTransforms();
     }
 
-    private void checkDrinkable() {
-
-    }
-
     public Dimension getDimension() {
         return worldSize;
     }
@@ -335,8 +331,9 @@ public class GameWorld {
     }
 
     public void drink() {
-        Dimension riverDimension = river.getDimension();
-        PlayerHelicopter.getInstance().drink(river.getTranslation(), riverDimension);
+        //Dimension riverDimension = river.getDimension();
+        //PlayerHelicopter.getInstance().drink(river.getTranslation(), river.getDimension());
+        PlayerHelicopter.getInstance().drink();
     }
 
     public void fight() {
@@ -405,7 +402,7 @@ public class GameWorld {
         PlayerHelicopter.getInstance().updateLocalTransforms();
     }
 
-    public Transform getStartingPoint() {
+    public Transform getHelipadLocation() {
         return helipad.getTranslation();
     }
 }

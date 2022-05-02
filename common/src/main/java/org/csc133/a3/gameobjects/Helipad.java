@@ -6,7 +6,7 @@ import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
 
 //-----------------------------------------------------------------------------
-public class Helipad extends Fixed{
+public class Helipad extends Fixed {
     // Constants
     private final int DISTANCE = 10;
     private final int SIZE = 200;

@@ -2,6 +2,7 @@ package org.csc133.a3.gameobjects;
 
 import com.codename1.charts.util.ColorUtil;
 import com.codename1.ui.Graphics;
+import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
 import com.codename1.ui.geom.Point2D;
@@ -12,18 +13,18 @@ public class NonPlayerHelicopter extends Helicopter{
     private static final int HELICOLOR = ColorUtil.GREEN;
     private static NonPlayerHelicopter instance;
 
-    private NonPlayerHelicopter(Dimension worldSize, int initFuel) {
-        super(worldSize, HELICOLOR, initFuel);
+    private NonPlayerHelicopter(Dimension worldSize, int initFuel, Transform helipadLocation) {
+        super(worldSize, HELICOLOR, initFuel, helipadLocation);
         this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.1);
     }
 
     public static NonPlayerHelicopter getInstance() {
         if(instance == null) {
-            Dimension worldSize    = GameWorld.getInstance().getDimension();
-            int initFuel         = GameWorld.getInstance().getFuel();
-            //Transform startPoint = GameWorld.getInstance().getStartingPoint();
+            Dimension worldSize         = GameWorld.getInstance().getDimension();
+            int initFuel                = GameWorld.getInstance().getFuel();
+            Transform helipadLocation   = GameWorld.getInstance().getHelipadLocation();
 
-            instance = new NonPlayerHelicopter(worldSize, initFuel);
+            instance = new NonPlayerHelicopter(worldSize, initFuel, helipadLocation);
         }
         return instance;
     }

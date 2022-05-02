@@ -20,21 +20,28 @@ import static com.codename1.ui.CN.*;
 //-----------------------------------------------------------------------------
 public class Helicopter extends Movable implements Steerable {
     // Variables
-    //private Point location;
-    //private int x, y, headingX, headingY;
     private int water;
     private boolean isOverRiver;
-    //private int drawX, drawY;
 
     // Constants
     private final int SIZE = 30;
     private final int SANGLE = -90;         // Start angle, heading front
-    private final int Heli_LENGTH = 50;     // Length of the helicopter line
     private final int MAX_SPEED = 10;
     private final int MIN_SPEED = 0;
     private final int MAX_WATER = 1000;
     private final int MIN_WATER = 0;
-
+    // Helicopter parts
+    final static int BUBBLE_RADIUS = 125;
+    final static int ENGINE_BLOCK_WIDTH = 250;
+    final static int ENGINE_BLOCK_HEIGHT = 100;
+    final static int BLADE_LENGTH = BUBBLE_RADIUS * 5;
+    final static int BLADE_WIDTH = 25;
+    final static int BLADE_STARTING_ANGLE = 45;
+    static double rotationSpeed = 30d;
+    final static int JOINT_WIDTH = 30;
+    final static int JOINT_HEIGHT = 10;
+    final static int SKID_WIDTH = 30;
+    final static int SKID_HEIGHT = 400;
 /*    public Helicopter(Dimension worldSize, Helipad helipad) {
         this.worldSize = worldSize;
         setColor(ColorUtil.YELLOW);
@@ -50,11 +57,6 @@ public class Helicopter extends Movable implements Steerable {
         headingY = (int) (location.getY() + (currentSpeed + Heli_LENGTH)
                 * Math.sin(heading));
         this.dimension = new Dimension(SIZE, SIZE);
-    }*/
-
-    // Getter
-/*    public Point getLocation() {
-        return this.location;
     }*/
 
     public void accelerate() {
@@ -84,7 +86,7 @@ public class Helicopter extends Movable implements Steerable {
                 myTranslation.getTranslateY() >= riverStartY;
     }
 
-    public void drink(Transform riverTransform, Dimension riverDimension) {
+    public void drink() {
         if (isOverRiver && water < MAX_WATER)
             water += 100;
     }
@@ -155,18 +157,6 @@ public class Helicopter extends Movable implements Steerable {
         heading -= 15;
         this.rotate(-15);
     }
-
-    final static int BUBBLE_RADIUS = 125;
-    final static int ENGINE_BLOCK_WIDTH = 250;
-    final static int ENGINE_BLOCK_HEIGHT = 100;
-    final static int BLADE_LENGTH = BUBBLE_RADIUS * 5;
-    final static int BLADE_WIDTH = 25;
-    final static int BLADE_STARTING_ANGLE = 45;
-    static double rotationSpeed = 30d;
-    final static int JOINT_WIDTH = 30;
-    final static int JOINT_HEIGHT = 10;
-    final static int SKID_WIDTH = 30;
-    final static int SKID_HEIGHT = 400;
 
     // testing
     private FlightControl fc;
@@ -303,7 +293,7 @@ public class Helicopter extends Movable implements Steerable {
     //```````````````````````````````````````````````````````````````````````````````````````
     // Helicopter State Pattern
     //
-    HeloState heloState;
+    private HeloState heloState;
 
     private void chageState(HeloState heloState) {
         this.heloState = heloState;
@@ -384,7 +374,7 @@ public class Helicopter extends Movable implements Steerable {
     private int color;
     private int fuel;
 
-    public Helicopter(Dimension worldSize, int HeliColor, int initFuel) {
+    public Helicopter(Dimension worldSize, int HeliColor, int initFuel, Transform helipadLocation) {
         this.worldSize = worldSize;
         this.color = HeliColor;
         setColor(HeliColor);
@@ -392,15 +382,14 @@ public class Helicopter extends Movable implements Steerable {
         this.water = MIN_WATER;
         this.isOverRiver = false;
         this.currentSpeed = 0;
-        heading = Math.toRadians(SANGLE);
-        displayAngle = 0;
         this.dimension = new Dimension(SIZE, SIZE);
-        heloState = new Off();
+        this.heading = Math.toRadians(SANGLE);
+        this.displayAngle = 0;
 
-        //this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.5);
+        this.translate(helipadLocation.getTranslateX(), helipadLocation.getTranslateY());
         this.scale(0.3,0.3);
-        this.rotate(0);
 
+        heloState = new Off();
         heloParts = new ArrayList<>();
         heloParts = buildHeli();
     }
