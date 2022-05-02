@@ -7,7 +7,6 @@ import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
 import com.codename1.ui.geom.Point2D;
-import com.codename1.util.MathUtil;
 import org.csc133.a3.gameobjects.parts.Arc;
 import org.csc133.a3.gameobjects.parts.Rectangle;
 import org.csc133.a3.gameobjects.parts.Trapezoid;
@@ -37,7 +36,7 @@ public class Helicopter extends Movable implements Steerable {
     final static int BLADE_LENGTH = BUBBLE_RADIUS * 5;
     final static int BLADE_WIDTH = 25;
     final static int BLADE_STARTING_ANGLE = 45;
-    static double rotationSpeed = 30d;
+    static double rotationSpeed = 0d;
     final static int JOINT_WIDTH = 30;
     final static int JOINT_HEIGHT = 10;
     final static int SKID_WIDTH = 30;
@@ -58,17 +57,6 @@ public class Helicopter extends Movable implements Steerable {
                 * Math.sin(heading));
         this.dimension = new Dimension(SIZE, SIZE);
     }*/
-
-    public void accelerate() {
-        heloState.accelerate();
-        if (currentSpeed < MAX_SPEED)
-            currentSpeed++;
-    }
-
-    public void decelerate() {
-        if (currentSpeed > MIN_SPEED)
-            currentSpeed--;
-    }
 
     public void checkIsOnRiver(Transform riverTransform, Dimension riverDimension) {
         int riverStartX = (int)riverTransform.getTranslateX()
@@ -144,18 +132,22 @@ public class Helicopter extends Movable implements Steerable {
     }
     */
 
+    public void accelerate() {
+        heloState.accelerate();
+    }
+
+    public void decelerate() {
+        heloState.decelerate();
+    }
+
     @Override
     public void steerLeft() {
-        displayAngle -= 15;
-        heading += 15;
-        this.rotate(15);
+        heloState.steerLeft();
     }
 
     @Override
     public void steerRight() {
-        displayAngle += 15;
-        heading -= 15;
-        this.rotate(-15);
+        heloState.steerRight();
     }
 
     // testing
@@ -295,7 +287,7 @@ public class Helicopter extends Movable implements Steerable {
     //
     private HeloState heloState;
 
-    private void chageState(HeloState heloState) {
+    private void changeState(HeloState heloState) {
         this.heloState = heloState;
     }
 
@@ -306,14 +298,23 @@ public class Helicopter extends Movable implements Steerable {
         }
 
         public abstract void startOrStopEngine();
+
         public void accelerate() {}
+
         public void decelerate() {}
+
         public void steerLeft() {}
+
         public void steerRight() {}
+
         public boolean hasLandedAt() {
             return false;
         }
+
+        public void fuelConsume() {}
+
         public void drink(Transform riverTransform, Dimension riverDimension) {}
+
         public void updateLocalTransforms() {}
     }
 
@@ -322,7 +323,7 @@ public class Helicopter extends Movable implements Steerable {
 
         @Override
         public void startOrStopEngine() {
-            getHelo().chageState(new Starting());
+            getHelo().changeState(new Starting());
         }
 
         @Override
@@ -336,7 +337,16 @@ public class Helicopter extends Movable implements Steerable {
     private class Starting extends HeloState {
         @Override
         public void startOrStopEngine() {
-            getHelo().chageState(new Stopping());
+            getHelo().changeState(new Stopping());
+        }
+
+        @Override
+        public void updateLocalTransforms() {
+            heloBlade.updateLocalTransforms(rotationSpeed += 1);
+            if (rotationSpeed >= 30) {
+                getHelo().changeState(new Ready());
+                //gw.getInstance().initiateChopper();
+            }
         }
     }
 
@@ -344,7 +354,18 @@ public class Helicopter extends Movable implements Steerable {
     private class Stopping extends HeloState {
         @Override
         public void startOrStopEngine() {
-            getHelo().chageState(new Starting());
+            getHelo().changeState(new Starting());
+        }
+
+        @Override
+        public void updateLocalTransforms() {
+            heloBlade.updateLocalTransforms(rotationSpeed -= 1);
+            if (rotationSpeed <= 0) {
+                // prevent the blade go to other direction
+                rotationSpeed = 0;
+                getHelo().changeState(new Off());
+                //gw.getInstance().initiateChopper();
+            }
         }
     }
     //```````````````````````````````````````````````````````````````````````````````````````
@@ -352,16 +373,43 @@ public class Helicopter extends Movable implements Steerable {
         @Override
         public void startOrStopEngine() {
             // conditions to stop engine
-            if (1 > 2)
-                getHelo().chageState(new Stopping());
+            if (1>2)
+                getHelo().changeState(new Stopping());
         }
 
-        public void accelearate() {
+        @Override
+        public void accelerate() {
+            if (currentSpeed < MAX_SPEED)
+                currentSpeed++;
+        }
 
+        @Override
+        public void decelerate() {
+            if (currentSpeed > MIN_SPEED)
+                currentSpeed--;
+        }
+
+        @Override
+        public void steerLeft() {
+            displayAngle -= 15;
+            heading += 15;
+            getHelo().rotate(15);
+        }
+
+        @Override
+        public void steerRight() {
+            displayAngle += 15;
+            heading -= 15;
+            getHelo().rotate(-15);
         }
 
         @Override
         public void drink(Transform riverTransform, Dimension riverDimension) {}
+
+        @Override
+        public void updateLocalTransforms() {
+            heloBlade.updateLocalTransforms(rotationSpeed = 30d);
+        }
     }
 
     public void startOrStopEngine() {
@@ -436,6 +484,6 @@ public class Helicopter extends Movable implements Steerable {
     }
 
     public void updateLocalTransforms() {
-        heloBlade.updateLocalTransforms(rotationSpeed);
+        heloState.updateLocalTransforms();
     }
 }

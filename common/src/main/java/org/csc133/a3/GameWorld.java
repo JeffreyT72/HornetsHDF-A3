@@ -405,4 +405,8 @@ public class GameWorld {
     public Transform getHelipadLocation() {
         return helipad.getTranslation();
     }
+
+    public void engineStartStop() {
+        PlayerHelicopter.getInstance().startOrStopEngine();
+    }
 }

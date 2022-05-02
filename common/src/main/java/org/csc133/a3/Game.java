@@ -3,7 +3,6 @@ package org.csc133.a3;
 import com.codename1.charts.util.ColorUtil;
 import com.codename1.ui.Form;
 import com.codename1.ui.Graphics;
-import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.util.UITimer;
 import org.csc133.a3.commands.*;
@@ -30,15 +29,6 @@ public class Game extends Form implements Runnable {
         getToolbar().hideToolbar();
 
         setupLayout();
-
-//        ActionListener AccelerateCommand    = new AccelerateCommand(gw);
-//        ActionListener BrakeCommand         = new BrakeCommand(gw);
-//        ActionListener TurnLeftCommand      = new TurnLeftCommand(gw);
-//        ActionListener TurnRightCommand     = new TurnRightCommand(gw);
-//        ActionListener DrinkCommand         = new DrinkCommand(gw);
-//        ActionListener FightCommand         = new FightCommand(gw);
-//        ActionListener ExitCommand          = new ExitCommand(gw);
-
         // Add all keys listener
         addKeyListener(-91, new AccelerateCommand(gw));
         addKeyListener(-92, new BrakeCommand(gw));
@@ -47,6 +37,8 @@ public class Game extends Form implements Runnable {
         addKeyListener('d', new DrinkCommand(gw));
         addKeyListener('f', new FightCommand(gw));
         addKeyListener('Q', new ExitCommand(gw));
+        addKeyListener('s', new EngineStartStopCommand(gw));
+
 
         // Timer, 50ms for each tick
         //
