@@ -22,44 +22,24 @@ public class BezierCurve extends GameObject{
         this.controlPoints = controlPoints;
     }
 
-/*    public BezierCurve(Helicopter heli, Dimension worldSize) {
-        Transform defaultLocation = Transform.makeIdentity();
-        defaultLocation.translate(worldSize.getWidth() * 0.85f,
-                worldSize.getHeight() * 0.15f);
-        this.worldSize = worldSize;
-        this.dimension = new Dimension(30, 30);
-
-        controlPoints = new ArrayList<>();
-        // point start from bottom left corner
-        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.1));
-
-        //controlPoints.add(new Point2D(30,30));
-        controlPoints.add(new Point2D(30,worldSize.getHeight()/2));
-        //controlPoints.add(new Point2D(30,worldSize.getHeight()-30));
-        //controlPoints.add(new Point2D(worldSize.getWidth()/2,30));
-        //controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight()/2));
-        //controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight()-30));
-        //controlPoints.add(new Point2D(worldSize.getWidth()-30,30));
-        controlPoints.add(new Point2D(worldSize.getWidth()-30,worldSize.getHeight()/2));
-        //controlPoints.add(new Point2D(worldSize.getWidth()-30,worldSize.getHeight()-30));
-
-        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight()-30));
-    }
-*/
     public BezierCurve() {
-        //this.worldSize = getDimension();
         this.dimension = new Dimension(30, 30);
 
         controlPoints = new ArrayList<>();
         // point start from bottom left corner
         controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.1));
 
+        // left - bottom, mid, top
         //controlPoints.add(new Point2D(30,30));
         controlPoints.add(new Point2D(30,worldSize.getHeight()/2));
         //controlPoints.add(new Point2D(30,worldSize.getHeight()-30));
+
+        // mid - bottom, mid, top
         //controlPoints.add(new Point2D(worldSize.getWidth()/2,30));
         //controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight()/2));
         //controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight()-30));
+
+        // right - bottom mid, top
         //controlPoints.add(new Point2D(worldSize.getWidth()-30,30));
         controlPoints.add(new Point2D(worldSize.getWidth()-30,worldSize.getHeight()/2));
         //controlPoints.add(new Point2D(worldSize.getWidth()-30,worldSize.getHeight()-30));

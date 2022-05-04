@@ -181,11 +181,11 @@ public class GameWorld {
         for (Fire f: fireCollection) {
             int buildingId = f.getBuildingId();
             if (buildingId == 0) {
-                building0Dmg += Math.PI * MathUtil.pow(f.getSize()/2, 2);
+                building0Dmg += Math.PI * MathUtil.pow(f.getFireSize()/2, 2);
             } else if (buildingId == 1) {
-                building1Dmg += Math.PI * MathUtil.pow(f.getSize()/2, 2);
+                building1Dmg += Math.PI * MathUtil.pow(f.getFireSize()/2, 2);
             } else if (buildingId == 2) {
-                building2Dmg += Math.PI * MathUtil.pow(f.getSize()/2, 2);
+                building2Dmg += Math.PI * MathUtil.pow(f.getFireSize()/2, 2);
             }
         }
 
@@ -202,7 +202,7 @@ public class GameWorld {
             }
         }
 
-        move(5);
+        move(10);
         PlayerHelicopter.getInstance().checkIsOnRiver(river.getTranslation(), river.getDimension());
         PlayerHelicopter.getInstance().fuel();
 
@@ -259,7 +259,7 @@ public class GameWorld {
     public int getTotalFireSize() {
         int totalFireSize = 0;
         for (Fire f: fireCollection) {
-            totalFireSize += f.getSize();
+            totalFireSize += f.getFireSize();
         }
         return totalFireSize;
     }
@@ -267,7 +267,7 @@ public class GameWorld {
     public int getTotalFireArea() {
         int totalFireArea = 0;
         for (Fire f: fireCollection) {
-            totalFireArea += Math.PI * MathUtil.pow(f.getSize()/2, 2);
+            totalFireArea += Math.PI * MathUtil.pow(f.getFireSize()/2, 2);
         }
         return totalFireArea;
     }
@@ -401,9 +401,9 @@ public class GameWorld {
         this.worldSize = worldSize;
     }
 
-    public void updateLocalTransforms() {
-        PlayerHelicopter.getInstance().updateLocalTransforms();
-    }
+//    public void updateLocalTransforms() {
+//        PlayerHelicopter.getInstance().updateLocalTransforms();
+//    }
 
     public Transform getHelipadLocation() {
         return helipad.getTranslation();

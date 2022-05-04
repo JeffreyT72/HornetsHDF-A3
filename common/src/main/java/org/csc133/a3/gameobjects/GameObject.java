@@ -88,27 +88,6 @@ public abstract class GameObject {
         myTranslation.translate((float)tx, (float)ty);
     }
 
-    public void draw(Graphics g, Point containerOrigin, Point screenOrigin) {
-        Transform gXform = preLTTransform(g, screenOrigin);
-        localTransforms(gXform);
-        postLTransform(g, screenOrigin, gXform);
-
-        // set the current transform of the graphics context
-        //
-        g.setTransform(gXform);
-
-        cn1ForwardPrimitiveTranslate(g, dimension);
-        containerTranslate(g, containerOrigin);
-
-        g.setColor(color);
-        localDraw(g, containerOrigin, screenOrigin);
-
-        // restore the original xform in g
-        //
-        //g.resetAffine();
-        g.setTransform(gOrigXform);
-    }
-
     protected abstract void localDraw(Graphics g, Point containerOrigin, Point screenOrigin);
 
     protected Transform preLTTransform(Graphics g, Point screenOrigin) {
@@ -163,6 +142,27 @@ public abstract class GameObject {
         gxForm.translate(pDimension.getWidth()/2, pDimension.getHeight()/2);
         g.setTransform(gxForm);
     }
+
+    public void draw(Graphics g, Point containerOrigin, Point screenOrigin) {
+        Transform gXform = preLTTransform(g, screenOrigin);
+        localTransforms(gXform);
+        postLTransform(g, screenOrigin, gXform);
+
+        // set the current transform of the graphics context
+        //
+        //g.setTransform(gXform);
+
+        cn1ForwardPrimitiveTranslate(g, dimension);
+        containerTranslate(g, containerOrigin);
+
+        g.setColor(color);
+        localDraw(g, containerOrigin, screenOrigin);
+
+        // restore the original xform in g
+        //
+        //g.resetAffine();
+        g.setTransform(gOrigXform);
+    }
 }
 
 abstract class Fixed extends GameObject {
@@ -194,18 +194,11 @@ abstract class Movable extends GameObject {
     }
 
     public void move(long elapsedTimeInMillis) {
-        double speedMultiplier = calcSpeedMultiplier(elapsedTimeInMillis);
+        double speedMultiplier = (elapsedTimeInMillis / 100d) * 5;
         double angle = Math.toRadians(heading + 90);
 
-        // The speed is multiplied by SPEED_MULTIPLIER to indirectly reduce
-        // the fuel cost of the helicopter's movement.
-        //
         this.translate(currentSpeed * speedMultiplier * Math.cos(angle),
                 currentSpeed * speedMultiplier * Math.sin(angle));
-    }
-
-    private double calcSpeedMultiplier(long elapsedTime) {
-        return (elapsedTime / 100f) * 4;
     }
 
     public void setHeading(double theta) {

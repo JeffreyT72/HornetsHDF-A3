@@ -69,7 +69,6 @@ public class Traversal extends BezierCurve {
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
         if (active)
             super.localDraw(g, containerOrigin, screenOrigin);
-            //drawBezierCurve(g, controlPoints);
     }
 
     @Override

@@ -37,14 +37,17 @@ public class Building extends Fixed {
             this.dimension = new Dimension(1000, 150);
             this.value = (r.nextInt(10) + 1)* 100;
             this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.9);
+            this.scale(1,-1);
         } else if (id == 1) {       // Left building
             this.dimension = new Dimension(200, 600);
             this.value = (r.nextInt(10) + 1)* 100;
             this.translate(worldSize.getWidth() * 0.2, worldSize.getHeight() * 0.3);
+            this.scale(1,-1);
         } else if (id == 2) {       // Right building
             this.dimension = new Dimension(250, 400);
             this.value = (r.nextInt(10) + 1)* 100;
             this.translate(worldSize.getWidth() * 0.8, worldSize.getHeight() * 0.3);
+            this.scale(1,-1);
         }
     }
     /*
@@ -122,7 +125,6 @@ public class Building extends Fixed {
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
         g.drawRect(0, 0, getWidth(), getHeight(), THICKNESS);
 
-        g.scale(1,-1);
         // Text
         g.setFont(Font.createSystemFont(FACE_MONOSPACE,
                 STYLE_BOLD, SIZE_MEDIUM));

@@ -52,9 +52,7 @@ public class Fire extends GameObject implements Selectable {
         selected = false;
         myRadius = dimension.getWidth()/2;
 
-        //this.translate(worldSize.getWidth(), worldSize.getHeight());
         scale(1,-1);
-        rotate(0);
 
         // set fire object into unStarted state
         //
@@ -63,12 +61,8 @@ public class Fire extends GameObject implements Selectable {
 
     // Getter
     //
-    public int getWidth() {
-        return dimension.getWidth();
-    }
-
-    public int getHeight() {
-        return dimension.getHeight();
+    public int getFireSize() {
+        return this.size;
     }
 
     boolean getIsOverFire() {
@@ -77,10 +71,6 @@ public class Fire extends GameObject implements Selectable {
 
     public boolean getWasExtinguished() {
         return this.wasExtinguished;
-    }
-
-    public int getSize() {
-        return this.size;
     }
 
     public boolean getIsBurning() {

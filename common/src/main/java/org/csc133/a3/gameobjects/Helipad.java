@@ -20,26 +20,6 @@ public class Helipad extends Fixed {
         translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.1);
     }
 
-    /*
-    @Override
-    public void draw(Graphics g, Point containerOrigin) {
-        g.setColor(getColor());
-
-        int x = containerOrigin.getX() + (int)getLocation().getX()
-                - dimension.getWidth()/2;
-        int y = containerOrigin.getY() + (int)getLocation().getY()
-                - dimension.getHeight()/2;
-        int w = dimension.getWidth();
-        int h = dimension.getHeight();
-        int circleX = x + DISTANCE;
-        int circleY = y + DISTANCE;
-        int circleW = w - DISTANCE*2;
-        int circleH = h - DISTANCE*2;
-
-        g.drawRect(x, y, w, h, 2);
-        g.drawArc(circleX, circleY, circleW, circleH, 0, 360);
-    }
-    */
     @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
         g.drawRect(0, 0, getWidth(), getHeight(), THICKNESS);

@@ -2,7 +2,7 @@ C:\Users\jeffr\Desktop\Csc 133\HornetsHDF-A3\common\src\main\java\org\csc133\a3\
 C:\Users\jeffr\Desktop\Csc 133\HornetsHDF-A3\common\src\main\java\org\csc133\a3\gameobjects\Helipad.java
 C:\Users\jeffr\Desktop\Csc 133\HornetsHDF-A3\common\src\main\java\org\csc133\a3\commands\FightCommand.java
 C:\Users\jeffr\Desktop\Csc 133\HornetsHDF-A3\common\src\main\java\org\csc133\a3\gameobjects\GameObjectCollection.java
-C:\Users\jeffr\Desktop\Csc 133\HornetsHDF-A3\common\src\main\java\org\csc133\a3\gameobjects\SpacePortal.java
+C:\Users\jeffr\Desktop\Csc 133\HornetsHDF-A3\common\src\main\java\org\csc133\a3\commands\EngineStartStopCommand.java
 C:\Users\jeffr\Desktop\Csc 133\HornetsHDF-A3\common\src\main\java\org\csc133\a3\AppMain.java
 C:\Users\jeffr\Desktop\Csc 133\HornetsHDF-A3\common\src\main\java\org\csc133\a3\gameobjects\parts\Arc.java
 C:\Users\jeffr\Desktop\Csc 133\HornetsHDF-A3\common\src\main\java\org\csc133\a3\interfaces\Strategy.java

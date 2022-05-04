@@ -34,8 +34,8 @@ public class ControlCluster extends Container {
         startStopEngineBtn = this.buttonMaker(new EngineStartStopCommand(gw), " Start/Stop Engine");
 
         this.setLayout(new BorderLayout());
-        //this.getAllStyles().setBgColor(ColorUtil.WHITE);
-        //this.getAllStyles().setBgTransparency(255);
+        this.getAllStyles().setBgColor(ColorUtil.WHITE);
+        this.getAllStyles().setBgTransparency(255);
         createEastBtn();
         createWestBtn();
         createMidBtn();
@@ -76,8 +76,8 @@ public class ControlCluster extends Container {
                 Font.FACE_PROPORTIONAL,
                 Font.STYLE_BOLD,
                 Font.SIZE_MEDIUM));
-        //btnStyle.setFgColor(ColorUtil.BLUE);
-        //btnStyle.setBgColor(ColorUtil.WHITE);
+        btnStyle.setFgColor(ColorUtil.BLUE);
+        btnStyle.setBgColor(ColorUtil.WHITE);
         btnStyle.setBgTransparency(255);
         return button;
     }
