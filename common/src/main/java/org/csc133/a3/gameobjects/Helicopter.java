@@ -293,7 +293,7 @@ public class Helicopter extends Movable implements Steerable {
 
     //```````````````````````````````````````````````````````````````````````````````````````
     private abstract class HeloState {
-        protected Helicopter getHelo() {
+        protected Helicopter getHelicopter() {
             return Helicopter.this;
         }
 
@@ -323,7 +323,7 @@ public class Helicopter extends Movable implements Steerable {
 
         @Override
         public void startOrStopEngine() {
-            getHelo().changeState(new Starting());
+            getHelicopter().changeState(new Starting());
         }
 
         @Override
@@ -337,14 +337,14 @@ public class Helicopter extends Movable implements Steerable {
     private class Starting extends HeloState {
         @Override
         public void startOrStopEngine() {
-            getHelo().changeState(new Stopping());
+            getHelicopter().changeState(new Stopping());
         }
 
         @Override
         public void updateLocalTransforms() {
             heloBlade.updateLocalTransforms(rotationSpeed += 1);
             if (rotationSpeed >= 30) {
-                getHelo().changeState(new Ready());
+                getHelicopter().changeState(new Ready());
                 //gw.getInstance().initiateChopper();
             }
         }
@@ -354,7 +354,7 @@ public class Helicopter extends Movable implements Steerable {
     private class Stopping extends HeloState {
         @Override
         public void startOrStopEngine() {
-            getHelo().changeState(new Starting());
+            getHelicopter().changeState(new Starting());
         }
 
         @Override
@@ -363,7 +363,7 @@ public class Helicopter extends Movable implements Steerable {
             if (rotationSpeed <= 0) {
                 // prevent the blade go to other direction
                 rotationSpeed = 0;
-                getHelo().changeState(new Off());
+                getHelicopter().changeState(new Off());
                 //gw.getInstance().initiateChopper();
             }
         }
@@ -374,7 +374,7 @@ public class Helicopter extends Movable implements Steerable {
         public void startOrStopEngine() {
             // conditions to stop engine
             if (1>2)
-                getHelo().changeState(new Stopping());
+                getHelicopter().changeState(new Stopping());
         }
 
         @Override
@@ -393,14 +393,14 @@ public class Helicopter extends Movable implements Steerable {
         public void steerLeft() {
             displayAngle -= 15;
             heading += 15;
-            getHelo().rotate(15);
+            getHelicopter().rotate(15);
         }
 
         @Override
         public void steerRight() {
             displayAngle += 15;
             heading -= 15;
-            getHelo().rotate(-15);
+            getHelicopter().rotate(-15);
         }
 
         @Override
@@ -465,7 +465,7 @@ public class Helicopter extends Movable implements Steerable {
     @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
         cn1ReversePrimitiveTranslate(g, getDimension());
-        cn1ReverseContainerTranslate(g, containerOrigin);
+        //cn1ReverseContainerTranslate(g, containerOrigin);
 
         // draw axis for debugging
 //        g.setColor(ColorUtil.LTGRAY);

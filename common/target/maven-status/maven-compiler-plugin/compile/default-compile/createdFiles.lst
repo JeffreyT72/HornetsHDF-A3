@@ -1,6 +1,7 @@
 org\csc133\a3\gameobjects\SpacePortal.class
 org\csc133\a3\gameobjects\NonPlayerHelicopter.class
 org\csc133\a3\gameobjects\FlightControl.class
+org\csc133\a3\commands\EngineStartStopCommand.class
 org\csc133\a3\gameobjects\BezierCurve.class
 org\csc133\a3\interfaces\Strategy.class
 org\csc133\a3\interfaces\Selectable.class

@@ -1,11 +1,14 @@
 package org.csc133.a3.gameobjects;
 
 import com.codename1.charts.util.ColorUtil;
+import com.codename1.ui.Font;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
 
 import java.util.Random;
+
+import static com.codename1.ui.CN.*;
 
 public class Building extends Fixed {
     private Random r;
@@ -118,6 +121,17 @@ public class Building extends Fixed {
     @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
         g.drawRect(0, 0, getWidth(), getHeight(), THICKNESS);
+
+        g.scale(1,-1);
+        // Text
+        g.setFont(Font.createSystemFont(FACE_MONOSPACE,
+                STYLE_BOLD, SIZE_MEDIUM));
+        if (damage <= 100)
+            g.drawString("D: " + damage + "%", getWidth(), getHeight());
+        else
+            g.drawString("D: 100%", getWidth(), getHeight());
+
+        g.drawString("V: " + value, getWidth(), getHeight()-30);
     }
 
     public void rotate(float degrees) {

@@ -19,6 +19,7 @@ public class ControlCluster extends Container {
     private Button rightBtn;
     private Button fightBtn;
     private Button exitBtn;
+    private Button startStopEngineBtn;
 
     public ControlCluster() {
         this.gw = GameWorld.getInstance();
@@ -30,13 +31,14 @@ public class ControlCluster extends Container {
         rightBtn = this.buttonMaker(new TurnRightCommand(gw), "Right");
         fightBtn = this.buttonMaker(new FightCommand(gw), "Fight");
         exitBtn = this.buttonMaker(new ExitCommand(gw), "Exit");
+        startStopEngineBtn = this.buttonMaker(new EngineStartStopCommand(gw), " Start/Stop Engine");
 
         this.setLayout(new BorderLayout());
         //this.getAllStyles().setBgColor(ColorUtil.WHITE);
         //this.getAllStyles().setBgTransparency(255);
         createEastBtn();
         createWestBtn();
-        this.add(BorderLayout.CENTER, exitBtn);
+        createMidBtn();
     }
 
     private void createEastBtn() {
@@ -55,6 +57,12 @@ public class ControlCluster extends Container {
         this.add(BorderLayout.WEST, westBtn);
     }
 
+    private void createMidBtn() {
+        Container midBtn = new Container(new BorderLayout());
+        midBtn.add(BorderLayout.WEST, startStopEngineBtn);
+        midBtn.add(BorderLayout.CENTER, exitBtn);
+        this.add(BorderLayout.CENTER, midBtn);
+    }
     private Button buttonMaker(Command command, String text) {
         // Create button and set button command
         //

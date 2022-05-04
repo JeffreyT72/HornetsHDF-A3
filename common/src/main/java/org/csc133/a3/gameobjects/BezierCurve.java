@@ -87,7 +87,7 @@ public class BezierCurve extends GameObject{
 
     private void drawBezierCurve(Graphics g, ArrayList<Point2D> controlPoints) {
         final double smallFloatIncrement = 0.06;
-        g.setColor(ColorUtil.GRAY);
+        g.setColor(ColorUtil.GREEN);
         for (Point2D p : controlPoints)
             g.fillArc((int)p.getX()-POINT_SIZE/2, (int)p.getY()-POINT_SIZE/2, POINT_SIZE, POINT_SIZE, 0, 360);
 

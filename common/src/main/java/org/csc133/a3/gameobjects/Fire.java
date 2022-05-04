@@ -5,15 +5,17 @@ import com.codename1.ui.Font;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
+import com.codename1.ui.geom.Point2D;
 import org.csc133.a3.interfaces.FireState;
 import org.csc133.a3.StateContext;
+import org.csc133.a3.interfaces.Selectable;
 
 import java.util.Random;
 
 import static com.codename1.ui.CN.*;
 
 //-----------------------------------------------------------------------------
-public class Fire extends GameObject{
+public class Fire extends GameObject implements Selectable {
     private Random  r;  // for grow() function
 
     // Variable
@@ -23,6 +25,9 @@ public class Fire extends GameObject{
     private boolean wasExtinguished;  // set true when fire was extinguished
     private boolean startBurning;
     private boolean isOverFire;       // set true when helicopter is over fire
+
+    private boolean selected;
+    private int myRadius;
 
     // Constant
     private final int MIN_SIZE = 8;
@@ -43,6 +48,9 @@ public class Fire extends GameObject{
         this.r = new Random();
         this.size = MIN_SIZE + r.nextInt(10);
         this.dimension = new Dimension(size, size);
+
+        selected = false;
+        myRadius = dimension.getWidth()/2;
 
         //this.translate(worldSize.getWidth(), worldSize.getHeight());
         scale(1,-1);
@@ -96,7 +104,20 @@ public class Fire extends GameObject{
         increaseRate = 1 + r.nextInt(2);
         size += increaseRate;
         this.dimension = new Dimension(size, size);
+        myRadius = dimension.getWidth()/2;
         //scale(increaseRate, increaseRate);
+    }
+
+    public void checkIsSelected(Point2D sp) {
+        if (this.contains(sp) && !this.isSelected()) {
+            this.select(true);
+            gw.getFc().getPrimary().setTail(this.getLocation());
+            //gw.getSpL().select(false);
+        }
+        for (Fire f: gw.getFireCollection()) {
+            if (!this.contains(sp) && this.isSelected())
+                f.select(false);
+        }
     }
 
 /*    public void isOverFire(Helicopter helicopter) {
@@ -144,6 +165,27 @@ public class Fire extends GameObject{
 
     public void setup(int buildingX, int buildingY, int w, int h) {
         translate(buildingX + r.nextInt(w), buildingY + r.nextInt(h));
+    }
+
+    private double distanceBetween(Point2D a, Point2D b) {
+        double dx = a.getX() - b.getX();
+        double dy = a.getY() - b.getY();
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    @Override
+    public boolean contains(Point2D p) {
+        return distanceBetween(getLocation(), p) <= myRadius;
+    }
+
+    @Override
+    public void select(boolean selected) {
+        this.selected = selected;
+    }
+
+    @Override
+    public boolean isSelected() {
+        return selected;
     }
 
     @Override

@@ -35,13 +35,12 @@ public class GameWorld {
     // Objects
     //
     private Building building;
-    //private Helicopter helicopter;
     private Helipad helipad;
     private River river;
     //private BezierCurve bc;
     private FlightControl fc;
-    private SpacePortal spL;
-    private SpacePortal spR;
+    //private SpacePortal spL;
+    //private SpacePortal spR;
     // test
     private Helicopter testObject;
 
@@ -82,10 +81,10 @@ public class GameWorld {
 
         //testing
         //bc = new BezierCurve(worldSize);
-        spL = new SpacePortal();
-        spR = new SpacePortal();
-        spL.translate(300, 800);
-        spR.translate(1700, 800);
+        //spL = new SpacePortal();
+        //spR = new SpacePortal();
+        //spL.translate(300, 800);
+        //spR.translate(1700, 800);
         testObject = new Helicopter(worldSize, ColorUtil.BLUE, fuel, helipad.getTranslation());
         fc = new FlightControl(testObject);
         testObject.translate(fc.getPrimary().getStartControlPoint().getX(),
@@ -143,8 +142,8 @@ public class GameWorld {
         gameObjectCollection.add(NonPlayerHelicopter.getInstance());
         gameObjectCollection.add(fc.getPrimary());
         gameObjectCollection.add(fc.getCorrection());
-        gameObjectCollection.add(spL);
-        gameObjectCollection.add(spR);
+        //gameObjectCollection.add(spL);
+        //gameObjectCollection.add(spR);
 
         for (Building b: buildingCollection)
             totalValue += b.getValue();
@@ -232,8 +231,8 @@ public class GameWorld {
     public FlightControl getFc() {
         return fc;
     }
-    public SpacePortal getSpL() {return spL;}
-    public SpacePortal getSpR() {return spR;}
+/*    public SpacePortal getSpL() {return spL;}
+    public SpacePortal getSpR() {return spR;}*/
 
     public int getFuel() {
         return fuel;
@@ -392,6 +391,10 @@ public class GameWorld {
 
     public ArrayList<GameObject> getGameObjectCollection() {
         return gameObjectCollection;
+    }
+
+    public ArrayList<Fire> getFireCollection() {
+        return fireCollection;
     }
 
     public void setDimension(Dimension worldSize) {
