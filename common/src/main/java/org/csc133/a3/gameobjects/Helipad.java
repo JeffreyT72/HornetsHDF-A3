@@ -23,6 +23,8 @@ public class Helipad extends Fixed {
     @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
         g.drawRect(0, 0, getWidth(), getHeight(), THICKNESS);
-        g.drawArc(DISTANCE, DISTANCE, getWidth()-DISTANCE*2, getHeight()-DISTANCE*2, 0, 360);
+        g.drawArc(DISTANCE, DISTANCE,
+                getWidth()-DISTANCE*2, getHeight()-DISTANCE*2,
+                0, 360);
     }
 }

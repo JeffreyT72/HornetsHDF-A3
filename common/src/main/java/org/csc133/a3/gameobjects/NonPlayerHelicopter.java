@@ -8,6 +8,7 @@ import com.codename1.ui.geom.Point;
 import com.codename1.ui.geom.Point2D;
 import com.codename1.util.MathUtil;
 import org.csc133.a3.GameWorld;
+import org.csc133.a3.interfaces.Strategy;
 
 public class NonPlayerHelicopter extends Helicopter{
     private static final int HELICOLOR = ColorUtil.GREEN;
@@ -60,16 +61,32 @@ public class NonPlayerHelicopter extends Helicopter{
         }
     }
 
-    public class FlightPath extends GameObject {
-        @Override
-        protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
-
-        }
+    private boolean arrived() {
+        if (t >= 1)
+            return true;
+        else
+            return false;
     }
 
-    public class Avoid extends GameObject {
+    public class FlightPath implements Strategy {
         @Override
-        protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
+        public void followCurve() {
+            if (arrived())
+                action();
+            else
+                testPath();
+        }
+
+        private void action() {
+
+        }
+
+    }
+
+    public class Avoid implements Strategy {
+
+        @Override
+        public void followCurve() {
 
         }
     }

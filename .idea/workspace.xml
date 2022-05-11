@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="Fixed building text. Refactoring before check in. TODO: getHelipadLocation bug. Fire.">
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/FlightPath.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/BezierCurve.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/BezierCurve.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/Helicopter.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/Helicopter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/Helipad.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/Helipad.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/NonPlayerHelicopter.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a3/gameobjects/NonPlayerHelicopter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/target/HornetsHDF-A3-common-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/HornetsHDF-A3-common-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/GameObject.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/GameObject.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Movable.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a3/gameobjects/Movable.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/target/codenameone/simulator.properties" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/codenameone/simulator.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/target/compliance-check.jar" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/compliance-check.jar" afterDir="false" />
     </list>
