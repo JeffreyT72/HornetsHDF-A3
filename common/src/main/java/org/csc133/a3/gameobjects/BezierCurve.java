@@ -25,13 +25,13 @@ public class BezierCurve extends GameObject{
     public BezierCurve() {
         this.dimension = new Dimension(30, 30);
 
-        controlPoints = new ArrayList<>();
+            //controlPoints = new ArrayList<>();
         // point start from bottom left corner
-        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.1));
+            //controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.1));
 
         // left - bottom, mid, top
         //controlPoints.add(new Point2D(30,30));
-        controlPoints.add(new Point2D(30,worldSize.getHeight()/2));
+            //controlPoints.add(new Point2D(30,worldSize.getHeight()/2));
         //controlPoints.add(new Point2D(30,worldSize.getHeight()-30));
 
         // mid - bottom, mid, top
@@ -41,10 +41,20 @@ public class BezierCurve extends GameObject{
 
         // right - bottom mid, top
         //controlPoints.add(new Point2D(worldSize.getWidth()-30,30));
-        controlPoints.add(new Point2D(worldSize.getWidth()-30,worldSize.getHeight()/2));
+            //controlPoints.add(new Point2D(worldSize.getWidth()-30,worldSize.getHeight()/2));
         //controlPoints.add(new Point2D(worldSize.getWidth()-30,worldSize.getHeight()-30));
 
-        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight()-30));
+            //controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight()-30));
+
+        pathToRiver();
+    }
+
+    private void pathToRiver() {
+        controlPoints = new ArrayList<>();
+        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.1));
+        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.5));
+        controlPoints.add(new Point2D(-100,worldSize.getHeight() * 0.7));
+        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.7));
     }
 
     public Point2D getStartControlPoint() {

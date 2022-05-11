@@ -417,6 +417,7 @@ public class Helicopter extends Movable implements Steerable {
     @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
         cn1ReversePrimitiveTranslate(g, getDimension());
+        cn1ReverseContainerTranslate(g, containerOrigin);
 
         // draw axis for debugging
 //        g.setColor(ColorUtil.LTGRAY);
