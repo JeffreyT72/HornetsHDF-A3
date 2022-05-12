@@ -13,10 +13,15 @@ import org.csc133.a3.interfaces.Strategy;
 public class NonPlayerHelicopter extends Helicopter{
     private static final int HELICOLOR = ColorUtil.GREEN;
     private static NonPlayerHelicopter instance;
+    private Strategy strategy;
+    private final FlightPath flightPath;
+    // testing
+    private FlightControl fc;
 
     private NonPlayerHelicopter(Dimension worldSize, int initFuel, Transform helipadLocation) {
         super(worldSize, HELICOLOR, initFuel, helipadLocation);
         //this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.1);
+        flightPath = GameWorld.getInstance().getFlightPath();
     }
 
     public static NonPlayerHelicopter getInstance() {
@@ -31,36 +36,31 @@ public class NonPlayerHelicopter extends Helicopter{
     }
 
     // testing
-    private BezierCurve bc;
-    public void setFlightControl(BezierCurve bc) {
-        this.bc = bc;
+//    private BezierCurve bc;
+//    public void setFlightControl(BezierCurve bc) {
+//        this.bc = bc;
+//    }
+    public void setFlightControl(FlightControl fc) {
+        this.fc = fc;
     }
-
+    private void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
+    }
     private double t = 0;
     private double pathSpeed = 1.5;
 
     @Override
     public void testPath() {
-        Point2D currentPoint = new Point2D(myTranslation.getTranslateX(), myTranslation.getTranslateY());
-        Point2D nextPoint = bc.evaluateCurve(t);
-
-        // Translate from current to next point.
-        //
-        double tx = nextPoint.getX() - currentPoint.getX();
-        double ty = nextPoint.getY() - currentPoint.getY();
-        this.translate(tx, ty);
-
-        // Direction
-        //
-        double theta = 90 - Math.toDegrees(MathUtil.atan2(ty, tx));
-
-        if(t < 1) {
-            t = t + pathSpeed * 0.003;
-            rotate((float)(getHeading() - theta));
-            setHeading(theta);
-        }
+        fc.moveAlongPath(new Point2D(   myTranslation.getTranslateX(),
+                myTranslation.getTranslateY()));
     }
 
+    public void startNPH() {
+        if (getSpeed() < 9) {
+            accelerate();
+        }
+        strategy.followCurve();
+    }
     private boolean arrived() {
         if (t >= 1)
             return true;
@@ -68,7 +68,7 @@ public class NonPlayerHelicopter extends Helicopter{
             return false;
     }
 
-    public class FlightPath implements Strategy {
+    public class FlightPathStrategy implements Strategy {
         @Override
         public void followCurve() {
             if (arrived())
@@ -81,6 +81,22 @@ public class NonPlayerHelicopter extends Helicopter{
 
         }
 
+        private void testPath() {
+            Point2D currentPoint = new Point2D(getTranslation().getTranslateX(), getTranslation().getTranslateY());
+            Point2D nextPoint = flightPath.getPathFromFire().evaluateCurve(t);
+
+            double tx = nextPoint.getX() - currentPoint.getX();
+            double ty = nextPoint.getY() - currentPoint.getY();
+
+            int theta = (int) (90 - Math.toDegrees(Math.atan2(ty, tx)));
+            NonPlayerHelicopter.this.translate(tx, ty);
+
+            if(!arrived()) {
+                t = t + getSpeed() * 0.003;
+                rotate((float) (getHeading() - theta));
+                setHeading(theta);
+            }
+        }
     }
 
     public class Avoid implements Strategy {

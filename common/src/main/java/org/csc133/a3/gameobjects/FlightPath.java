@@ -2,6 +2,7 @@ package org.csc133.a3.gameobjects;
 
 import com.codename1.charts.util.ColorUtil;
 import com.codename1.ui.Graphics;
+import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
 import com.codename1.ui.geom.Point2D;
@@ -16,7 +17,7 @@ public class FlightPath extends GameObject{
     private ArrayList<Point2D> controlPoints;
 //    private final Dimension worldSize;
 
-    public FlightPath() {
+    public FlightPath(Transform translation, Dimension worldSize) {
         // Init path from helipad to river
 //        controlPoints = new ArrayList<>();
 //        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.1));
@@ -45,6 +46,12 @@ public class FlightPath extends GameObject{
         controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.7));
         return controlPoints;
     }
+
+    public BezierCurve getPathFromFire() {
+        //recreatePath();
+        return helipadToRiver;
+    }
+
     @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
 

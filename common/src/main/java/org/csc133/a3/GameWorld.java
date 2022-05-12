@@ -43,6 +43,7 @@ public class GameWorld {
     //private SpacePortal spR;
     // test
     private Helicopter testObject;
+    private FlightPath flightPath;
 
     // ArrayLists
     //
@@ -83,6 +84,7 @@ public class GameWorld {
         //bc = new BezierCurve(worldSize);
         testObject = new Helicopter(worldSize, ColorUtil.BLUE, fuel, helipad.getTranslation());
         fc = new FlightControl(testObject);
+        flightPath = new FlightPath(helipad.getTranslation(), worldSize);
         testObject.translate(fc.getPrimary().getStartControlPoint().getX(),
                                 fc.getPrimary().getStartControlPoint().getY());
         testObject.setFlightControl(fc);
@@ -132,14 +134,11 @@ public class GameWorld {
             if (i >= MAX_BUILDING)
                 i = 0;
         }
-        //gameObjectCollection.add(helicopter);
 
         gameObjectCollection.add(PlayerHelicopter.getInstance());
         gameObjectCollection.add(NonPlayerHelicopter.getInstance());
         gameObjectCollection.add(fc.getPrimary());
         gameObjectCollection.add(fc.getCorrection());
-        //gameObjectCollection.add(spL);
-        //gameObjectCollection.add(spR);
 
         for (Building b: buildingCollection)
             totalValue += b.getValue();
@@ -150,7 +149,7 @@ public class GameWorld {
 
         helicopterTransforms();
         testObject.testPath();
-        //NonPlayerHelicopter.getInstance().testPath();
+        NonPlayerHelicopter.getInstance().startNPH();
 
         for (GameObject go: gameObjectCollection) {
             if (go instanceof Fire) {
@@ -407,5 +406,9 @@ public class GameWorld {
 
     public void engineStartStop() {
         PlayerHelicopter.getInstance().startOrStopEngine();
+    }
+
+    public FlightPath getFlightPath() {
+        return flightPath;
     }
 }
