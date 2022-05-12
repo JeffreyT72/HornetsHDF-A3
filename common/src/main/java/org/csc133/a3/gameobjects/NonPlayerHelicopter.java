@@ -16,7 +16,7 @@ public class NonPlayerHelicopter extends Helicopter{
 
     private NonPlayerHelicopter(Dimension worldSize, int initFuel, Transform helipadLocation) {
         super(worldSize, HELICOLOR, initFuel, helipadLocation);
-        this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.1);
+        //this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.1);
     }
 
     public static NonPlayerHelicopter getInstance() {

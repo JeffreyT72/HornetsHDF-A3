@@ -1,10 +1,2 @@
-org\csc133\a3\gameobjects\NonPlayerHelicopter.class
-org\csc133\a3\gameobjects\FlightControl.class
-org\csc133\a3\gameobjects\Helicopter$HelicopterState.class
-org\csc133\a3\commands\EngineStartStopCommand.class
-org\csc133\a3\gameobjects\BezierCurve.class
-org\csc133\a3\interfaces\Strategy.class
-org\csc133\a3\interfaces\Selectable.class
-org\csc133\a3\gameobjects\Traversal.class
-org\csc133\a3\gameobjects\NonPlayerHelicopter$Avoid.class
-org\csc133\a3\gameobjects\NonPlayerHelicopter$FlightPath.class
+org/csc133/a3/gameobjects/FlightPath.class
+org/csc133/a3/gameobjects/Helicopter$HelicopterState.class

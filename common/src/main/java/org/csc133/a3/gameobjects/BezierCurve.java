@@ -1,3 +1,4 @@
+/*
 package org.csc133.a3.gameobjects;
 
 import com.codename1.charts.util.ColorUtil;
@@ -19,39 +20,18 @@ public class BezierCurve extends GameObject{
     }
 
     public BezierCurve(ArrayList<Point2D> controlPoints) {
+        this.dimension = new Dimension(30, 30);
         this.controlPoints = controlPoints;
     }
 
     public BezierCurve() {
         this.dimension = new Dimension(30, 30);
-
-            //controlPoints = new ArrayList<>();
-        // point start from bottom left corner
-            //controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.1));
-
-        // left - bottom, mid, top
-        //controlPoints.add(new Point2D(30,30));
-            //controlPoints.add(new Point2D(30,worldSize.getHeight()/2));
-        //controlPoints.add(new Point2D(30,worldSize.getHeight()-30));
-
-        // mid - bottom, mid, top
-        //controlPoints.add(new Point2D(worldSize.getWidth()/2,30));
-        //controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight()/2));
-        //controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight()-30));
-
-        // right - bottom mid, top
-        //controlPoints.add(new Point2D(worldSize.getWidth()-30,30));
-            //controlPoints.add(new Point2D(worldSize.getWidth()-30,worldSize.getHeight()/2));
-        //controlPoints.add(new Point2D(worldSize.getWidth()-30,worldSize.getHeight()-30));
-
-            //controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight()-30));
-
         pathToRiver();
     }
 
     private void pathToRiver() {
         controlPoints = new ArrayList<>();
-        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.1));
+        controlPoints.add(new Point2D(worldSize.getWidth() *0.5,worldSize.getHeight() * 0.1));
         controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.5));
         controlPoints.add(new Point2D(-100,worldSize.getHeight() * 0.7));
         controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.7));
@@ -126,3 +106,4 @@ public class BezierCurve extends GameObject{
         controlPoints.set(controlPoints.size()-1, lastControlPoint);
     }
 }
+*/
