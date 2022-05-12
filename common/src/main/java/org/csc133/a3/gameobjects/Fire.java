@@ -110,16 +110,17 @@ public class Fire extends GameObject implements Selectable {
         }
     }
 
-/*    public void isOverFire(Helicopter helicopter) {
+    public void isOverFire(Helicopter helicopter) {
+
         isOverFire = helicopter.getLocation().getX() >=
-                this.location.getX() - this.size / 2 &&
+                myTranslation.getTranslateX() - this.size / 2 &&
                 helicopter.getLocation().getX() <=
-                        this.location.getX() + this.size / 2 &&
+                        myTranslation.getTranslateX() + this.size / 2 &&
                 helicopter.getLocation().getY() >=
-                        this.location.getY() - this.size / 2 &&
+                        myTranslation.getTranslateY() - this.size / 2 &&
                 helicopter.getLocation().getY() <=
-                        this.location.getY() + this.size / 2;
-    }*/
+                        myTranslation.getTranslateY() + this.size / 2;
+    }
 
     public class UnStarted implements FireState {
         private int size;

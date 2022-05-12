@@ -81,10 +81,6 @@ public class GameWorld {
 
         //testing
         //bc = new BezierCurve(worldSize);
-        //spL = new SpacePortal();
-        //spR = new SpacePortal();
-        //spL.translate(300, 800);
-        //spR.translate(1700, 800);
         testObject = new Helicopter(worldSize, ColorUtil.BLUE, fuel, helipad.getTranslation());
         fc = new FlightControl(testObject);
         testObject.translate(fc.getPrimary().getStartControlPoint().getX(),
@@ -164,7 +160,7 @@ public class GameWorld {
                     if (ticks % randomTicks == 0)
                         f.grow();
                 }
-                //f.isOverFire(helicopter);
+                f.isOverFire(PlayerHelicopter.getInstance());
                 if (f.getWasExtinguished()) {   // If the fire was extinguished,
                     f.Extinguished();           // put fire into extinguished state
                     gameObjectCollectionDelete.add(f);
