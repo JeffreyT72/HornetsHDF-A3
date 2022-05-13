@@ -1,9 +1,0 @@
-<changelist name="Uncommitted_changes_before_Update_at_5_2_22,_3_10_PM_[Default_Changelist]" date="1651529435835" recycled="true" deleted="true">
-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_2_22,_3_10_PM_[Default_Changelist]/shelved.patch" />
-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 5/2/22, 3:10 PM [Default Changelist]" />
-  <binary>
-    <option name="BEFORE_PATH" value="common/target/classes/org/csc133/a3/views/GlassCockpit.class" />
-    <option name="AFTER_PATH" value="common/target/classes/org/csc133/a3/views/GlassCockpit.class" />
-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_5_2_22,_3_10_PM_[Default_Changelist]/GlassCockpit.class" />
-  </binary>
-</changelist>

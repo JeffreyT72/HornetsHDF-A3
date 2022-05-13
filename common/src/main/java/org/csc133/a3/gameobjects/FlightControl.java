@@ -1,3 +1,4 @@
+/*
 package org.csc133.a3.gameobjects;
 
 import com.codename1.ui.geom.Point2D;
@@ -44,3 +45,4 @@ public class FlightControl {
     public Traversal getPrimary() {return primary;}
     public Traversal getCorrection() {return correction;}
 }
+*/

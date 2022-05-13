@@ -1,3 +1,4 @@
+/*
 package org.csc133.a3.gameobjects;
 
 import com.codename1.ui.Graphics;
@@ -5,7 +6,7 @@ import com.codename1.ui.geom.Point;
 import com.codename1.ui.geom.Point2D;
 import com.codename1.util.MathUtil;
 
-public class Traversal extends BezierCurve {
+public class Traversal extends FlightPath.BezierCurve {
     boolean active;
     boolean changed;
     double t;
@@ -59,7 +60,7 @@ public class Traversal extends BezierCurve {
         double theta = 90 - Math.toDegrees(MathUtil.atan2(ty, tx));
 
         if(t <= 1) {
-            t = t + 1 /*heli.getSpeed()*/ * 0.003;
+            t = t + 1 * 0.003;
             heli.rotate((float)(heli.getHeading() - theta));
             heli.setHeading(theta);
         }
@@ -77,3 +78,4 @@ public class Traversal extends BezierCurve {
         changed = true;
     }
 }
+*/

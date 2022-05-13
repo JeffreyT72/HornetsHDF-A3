@@ -1,6 +1,7 @@
 package org.csc133.a3;
 
 import com.codename1.charts.util.ColorUtil;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
@@ -38,7 +39,7 @@ public class GameWorld {
     private Helipad helipad;
     private River river;
     //private BezierCurve bc;
-    private FlightControl fc;
+    //private FlightControl fc;
     //private SpacePortal spL;
     //private SpacePortal spR;
     // test
@@ -83,11 +84,11 @@ public class GameWorld {
         //testing
         //bc = new BezierCurve(worldSize);
         testObject = new Helicopter(worldSize, ColorUtil.BLUE, fuel, helipad.getTranslation());
-        fc = new FlightControl(testObject);
-        flightPath = new FlightPath(helipad.getTranslation(), worldSize);
-        testObject.translate(fc.getPrimary().getStartControlPoint().getX(),
-                                fc.getPrimary().getStartControlPoint().getY());
-        testObject.setFlightControl(fc);
+//        fc = new FlightControl(testObject);
+//        flightPath = new FlightPath(helipad.getTranslation(), worldSize);
+//        testObject.translate(fc.getPrimary().getStartControlPoint().getX(),
+//                                fc.getPrimary().getStartControlPoint().getY());
+//        testObject.setFlightControl(fc);
 
         building0Dmg = 0;
         building1Dmg = 0;
@@ -137,8 +138,8 @@ public class GameWorld {
 
         gameObjectCollection.add(PlayerHelicopter.getInstance());
         gameObjectCollection.add(NonPlayerHelicopter.getInstance());
-        gameObjectCollection.add(fc.getPrimary());
-        gameObjectCollection.add(fc.getCorrection());
+//        gameObjectCollection.add(fc.getPrimary());
+//        gameObjectCollection.add(fc.getCorrection());
 
         for (Building b: buildingCollection)
             totalValue += b.getValue();
@@ -148,7 +149,7 @@ public class GameWorld {
         ticks++;
 
         helicopterTransforms();
-        testObject.testPath();
+        //testObject.testPath();
         NonPlayerHelicopter.getInstance().startNPH();
 
         for (GameObject go: gameObjectCollection) {
@@ -203,17 +204,17 @@ public class GameWorld {
 
         // GameClear/GameOver screen
         // Set some tick delay preventing gameWorld init() bug
-/*        if (!(ticks <= 10)) {
+        if (!(ticks <= 10)) {
             if (checkWinCondition() || checkRanOutFuel()
                     || checkBuildingDestroy())
                 drawDialog();
-        }*/
+        }
     }
 
     private void helicopterTransforms() {
         PlayerHelicopter.getInstance().updateLocalTransforms();
         NonPlayerHelicopter.getInstance().updateLocalTransforms();
-        testObject.updateLocalTransforms();
+        //testObject.updateLocalTransforms();
     }
 
     public Dimension getDimension() {
@@ -223,9 +224,9 @@ public class GameWorld {
     /*public BezierCurve getBc() {
         return bc;
     }*/
-    public FlightControl getFc() {
-        return fc;
-    }
+//    public FlightControl getFc() {
+//        return fc;
+//    }
 /*    public SpacePortal getSpL() {return spL;}
     public SpacePortal getSpR() {return spR;}*/
 
@@ -342,19 +343,19 @@ public class GameWorld {
         PlayerHelicopter.getInstance().miss();
     }
 
-/*    private boolean checkWinCondition() {
-        boolean inHelipad = helicopter.getLocation().getX() >=
-                helipad.getLocation().getX() - helipad.getSize() / 2 &&
-                helicopter.getLocation().getX() <=
-                        helipad.getLocation().getX() + helipad.getSize() / 2 &&
-                helicopter.getLocation().getY() >=
-                        helipad.getLocation().getY() - helipad.getSize() / 2 &&
-                helicopter.getLocation().getY() <=
-                        helipad.getLocation().getY() + helipad.getSize() / 2;
+    private boolean checkWinCondition() {
+        boolean inHelipad = PlayerHelicopter.getInstance().getTranslation().getTranslateX() >=
+                helipad.getTranslation().getTranslateX() - helipad.getDimension().getWidth() / 2 &&
+                PlayerHelicopter.getInstance().getTranslation().getTranslateX() <=
+                        helipad.getTranslation().getTranslateX() + helipad.getDimension().getWidth() / 2 &&
+                PlayerHelicopter.getInstance().getTranslation().getTranslateY() >=
+                        helipad.getTranslation().getTranslateY() - helipad.getDimension().getHeight() / 2 &&
+                PlayerHelicopter.getInstance().getTranslation().getTranslateY() <=
+                        helipad.getTranslation().getTranslateY() + helipad.getDimension().getHeight() / 2;
         return inHelipad &&
-                helicopter.getSpeed() == 0 &&
+                PlayerHelicopter.getInstance().getSpeed() == 0 &&
                 getTotalFireSize() == 0;
-    }*/
+    }
 
     private boolean checkRanOutFuel() {
         return fuel <= 0;
@@ -364,7 +365,7 @@ public class GameWorld {
         return getTotalDmg() > 100;
     }
 
-/*    private void drawDialog() {
+    private void drawDialog() {
         if (checkWinCondition()) {
             winLossText = "You Won!\nScore : " + score() + "\nPlay again?";
         } else if (checkRanOutFuel()) {
@@ -378,7 +379,7 @@ public class GameWorld {
         } else {
             quit();
         }
-    }*/
+    }
 
     public void quit() {
         Display.getInstance().exitApplication();

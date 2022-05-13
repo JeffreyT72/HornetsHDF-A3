@@ -105,7 +105,7 @@ public class Helicopter extends Movable implements Steerable {
     }
 
     // testing
-    private FlightControl fc;
+/*    private FlightControl fc;
     public void setFlightControl(FlightControl fc) {
         this.fc = fc;
     }
@@ -115,7 +115,7 @@ public class Helicopter extends Movable implements Steerable {
     public void testPath() {
         fc.moveAlongPath(new Point2D(   myTranslation.getTranslateX(),
                                         myTranslation.getTranslateY()));
-    }
+    }*/
 
     //```````````````````````````````````````````````````````````````````````````````````````
     private static class HeloBubble extends Arc {

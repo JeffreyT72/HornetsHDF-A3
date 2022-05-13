@@ -1,3 +1,4 @@
+org\csc133\a3\gameobjects\FlightPath$BezierCurve.class
 org\csc133\a3\gameobjects\FlightPath.class
 org\csc133\a3\gameobjects\NonPlayerHelicopter$FlightPathStrategy.class
 org\csc133\a3\gameobjects\Helicopter$HelicopterState.class

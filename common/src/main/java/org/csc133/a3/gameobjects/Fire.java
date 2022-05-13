@@ -101,7 +101,7 @@ public class Fire extends GameObject implements Selectable {
     public void checkIsSelected(Point2D sp) {
         if (this.contains(sp) && !this.isSelected()) {
             this.select(true);
-            gw.getFc().getPrimary().setTail(this.getLocation());
+            //gw.getFc().getPrimary().setTail(this.getLocation());
             //gw.getSpL().select(false);
         }
         for (Fire f: gw.getFireCollection()) {
