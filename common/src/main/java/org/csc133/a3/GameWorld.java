@@ -160,13 +160,12 @@ public class GameWorld {
             if (go instanceof Fire) {
                 Fire f = (Fire) go;
                 if (f.getIsBurning() == true) {     // if fire in burning state
-                    //System.err.println("yes");
                     randomTicks = 7 + r.nextInt(8);
                     if (ticks % randomTicks == 0)
                         f.grow();
                 }
-                f.isOverFire(PlayerHelicopter.getInstance());
-                f.isOverFire(NonPlayerHelicopter.getInstance());
+                f.checkIsOverFire(PlayerHelicopter.getInstance());
+                f.checkIsOverFire(NonPlayerHelicopter.getInstance());
                 if (f.getWasExtinguished()) {   // If the fire was extinguished,
                     gameObjectCollectionDelete.add(f);
                 }
@@ -228,15 +227,6 @@ public class GameWorld {
     public Dimension getDimension() {
         return worldSize;
     }
-
-    /*public BezierCurve getBc() {
-        return bc;
-    }*/
-//    public FlightControl getFc() {
-//        return fc;
-//    }
-/*    public SpacePortal getSpL() {return spL;}
-    public SpacePortal getSpR() {return spR;}*/
 
     public int getFuel() {
         return fuel;
@@ -342,8 +332,9 @@ public class GameWorld {
     public void fight(Helicopter helicopter) {
         for (GameObject go: gameObjectCollection) {
             if (go instanceof Fire) {
-                if (helicopter.getWater() > 0 && ((Fire) go).getIsOverFire() && !((Fire) go).getWasExtinguished()) {
-                    ((Fire) go).fight(helicopter.getWater());
+                Fire f = (Fire) go;
+                if (f.getWasExtinguished() == false && f.checkIsOverFire(helicopter) == true && helicopter.getWater() > 0) {
+                    f.fight(helicopter.getWater());
                 }
             }
         }

@@ -28,7 +28,7 @@ public class Fire extends GameObject implements Observer {
     private boolean isOverFire;       // set true when helicopter is over fire
 
     private boolean selected;
-    private int myRadius;
+    //private int myRadius;
 
     // Constant
     private final int MIN_SIZE = 8;
@@ -48,7 +48,7 @@ public class Fire extends GameObject implements Observer {
         this.dimension = new Dimension(size, size);
 
         //selected = false;
-        myRadius = dimension.getWidth()/2;
+        //myRadius = dimension.getWidth()/2;
         this.scale(1,-1);
 
         this.subject = subject;
@@ -124,15 +124,18 @@ public class Fire extends GameObject implements Observer {
                 f.select(false);
         }*/
 
-    public void isOverFire(Helicopter helicopter) {
-        isOverFire = helicopter.getLocation().getX() >=
-                myTranslation.getTranslateX() - this.size / 2 &&
-                helicopter.getLocation().getX() <=
-                        myTranslation.getTranslateX() + this.size / 2 &&
-                helicopter.getLocation().getY() >=
-                        myTranslation.getTranslateY() - this.size / 2 &&
-                helicopter.getLocation().getY() <=
-                        myTranslation.getTranslateY() + this.size / 2;
+    public boolean checkIsOverFire(Helicopter helicopter) {
+        if  (helicopter.getTranslation().getTranslateX() >=
+                myTranslation.getTranslateX() - size / 2 &&
+                helicopter.getTranslation().getTranslateX() <=
+                        myTranslation.getTranslateX() + size / 2 &&
+                helicopter.getTranslation().getTranslateY() >=
+                        myTranslation.getTranslateY() - size / 2 &&
+                helicopter.getTranslation().getTranslateY() <=
+                        myTranslation.getTranslateY() + size / 2) {
+            return true;
+        } else
+            return false;
     }
 
     @Override
@@ -185,9 +188,8 @@ public class Fire extends GameObject implements Observer {
     public class Burning extends FireState {
         @Override
         void grow() {
-            System.err.println("yes");
-            increaseRate = 1 + r.nextInt(2);
-            scaleRate = 1 + r.nextInt(increaseRate) / 100;
+            increaseRate = 1 + r.nextInt(3);
+            scaleRate = 1 + r.nextInt(increaseRate) / 10f;
             scale(scaleRate, scaleRate);
             size *= scaleRate;
 //            dimension = new Dimension(size, size);
@@ -206,16 +208,16 @@ public class Fire extends GameObject implements Observer {
 
         @Override
         void fight(int water) {
-            int tempSize = this.getFire().size;
-            if (getFire().getIsOverFire() && water > 0) {
-                tempSize -= water / 3;
-                if (tempSize <= 0) {
-                    getFire().setWasExtinguished(true);
-                    getFire().changeState(new Extinguished());
-                } else {
-                    getFire().setFireSize(water / 3);
-                }
-                //water = 0;
+            int tempSize = size;
+            tempSize -= water/3f;
+            if (tempSize <= 0) {
+                setDimension(new Dimension(0, 0));
+                size = 0;
+                setWasExtinguished(true);
+                changeState(new Extinguished());
+            } else {
+                scale(30f/water, 30f/water);
+                size *= 30f/water;
             }
         }
 

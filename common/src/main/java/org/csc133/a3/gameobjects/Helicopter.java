@@ -60,8 +60,11 @@ public class Helicopter extends Movable implements Steerable {
     }
 
     public void drink() {
-        if (isOverRiver && water < MAX_WATER)
-            water += 100;
+        helicopterState.drink();
+    }
+
+    public void dumpWater() {
+        helicopterState.dropWater();
     }
 
     // refactor(delete)
@@ -261,7 +264,9 @@ public class Helicopter extends Movable implements Steerable {
 
         public void fuelConsume() {}
 
-        public void drink(Transform riverTransform, Dimension riverDimension) {}
+        public void drink() {}
+
+        public void dropWater() {}
 
         public void updateLocalTransforms() {}
     }
@@ -350,8 +355,15 @@ public class Helicopter extends Movable implements Steerable {
         }
 
         @Override
-        public void drink(Transform riverTransform, Dimension riverDimension) {}
+        public void drink() {
+            if (isOverRiver && water < MAX_WATER)
+                water += 100;
+        }
 
+        @Override
+        public void dropWater() {
+            water = 0;
+        }
         @Override
         public void updateLocalTransforms() {
             heloBlade.updateLocalTransforms(rotationSpeed = 30d);

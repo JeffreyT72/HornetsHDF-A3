@@ -30,8 +30,6 @@ public abstract class GameObject {
         myScale = Transform.makeIdentity();
     }
 
-
-
     protected void setColor(int color) {
         this.color = color;
     }
@@ -161,7 +159,6 @@ public abstract class GameObject {
 
         // restore the original xform in g
         //
-        //g.resetAffine();
         g.setTransform(gOrigXform);
     }
 }
