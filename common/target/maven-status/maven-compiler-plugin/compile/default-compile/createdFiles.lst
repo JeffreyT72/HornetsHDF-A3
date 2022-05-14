@@ -1,4 +1,9 @@
+org\csc133\a3\gameobjects\Fire$1.class
 org\csc133\a3\gameobjects\FlightPath$BezierCurve.class
 org\csc133\a3\gameobjects\FlightPath.class
 org\csc133\a3\gameobjects\NonPlayerHelicopter$FlightPathStrategy.class
 org\csc133\a3\gameobjects\Helicopter$HelicopterState.class
+org\csc133\a3\interfaces\Subject.class
+org\csc133\a3\gameobjects\Fire$FireState.class
+org\csc133\a3\interfaces\Observer.class
+org\csc133\a3\gameobjects\FireDispatch.class

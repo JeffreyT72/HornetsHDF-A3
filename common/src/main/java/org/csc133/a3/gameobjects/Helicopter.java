@@ -64,12 +64,15 @@ public class Helicopter extends Movable implements Steerable {
             water += 100;
     }
 
+    // refactor(delete)
+    // Move to fire.java
     public void fight(Fire f) {
         int tempSize = f.getFireSize();
         if (f.getIsOverFire() && water > MIN_WATER) {
             tempSize -= water / 3;
             if (tempSize <= 0) {
                 f.setWasExtinguished(true);
+
             } else {
                 f.setFireSize(water / 3);
             }
@@ -104,18 +107,9 @@ public class Helicopter extends Movable implements Steerable {
         helicopterState.steerRight();
     }
 
-    // testing
-/*    private FlightControl fc;
-    public void setFlightControl(FlightControl fc) {
-        this.fc = fc;
+    public int getWater() {
+        return water;
     }
-
-    //private double t = 0;
-    private double pathSpeed = 1.5;
-    public void testPath() {
-        fc.moveAlongPath(new Point2D(   myTranslation.getTranslateX(),
-                                        myTranslation.getTranslateY()));
-    }*/
 
     //```````````````````````````````````````````````````````````````````````````````````````
     private static class HeloBubble extends Arc {

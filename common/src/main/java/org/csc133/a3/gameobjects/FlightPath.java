@@ -16,9 +16,17 @@ public class FlightPath extends GameObject {
     private final BezierCurve fireToRiver;
     private ArrayList<Point2D> controlPoints;
     private final Dimension worldSize;
+    private final Transform startLocation;
+    private Transform selectedFire;
 
-    public FlightPath(Transform translation, Dimension worldSize) {
+    public FlightPath(Transform startLocation, Dimension worldSize) {
         this.worldSize = worldSize;
+        this.startLocation = startLocation;
+        Transform firstFire = Transform.makeIdentity();
+        firstFire.translate(worldSize.getWidth() * 0.8f,
+                worldSize.getHeight() * 0.2f);
+
+        this.selectedFire = firstFire;
         helipadToRiver = new BezierCurve(helipadToRiver());
         riverToFire = new BezierCurve(riverToFire());
         fireToRiver = new BezierCurve(fireToRiver());
@@ -26,26 +34,29 @@ public class FlightPath extends GameObject {
 
     private ArrayList helipadToRiver() {
         controlPoints = new ArrayList<>();
-        controlPoints.add(new Point2D(worldSize.getWidth() * 0.5,worldSize.getHeight() * 0.1));
+        controlPoints.add(new Point2D(startLocation.getTranslateX(), startLocation.getTranslateY()));
         controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.5));
         controlPoints.add(new Point2D(-100,worldSize.getHeight() * 0.7));
         controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.7));
         return controlPoints;
     }
+
     private ArrayList riverToFire() {
         controlPoints = new ArrayList<>();
         controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.7));
-        controlPoints.add(new Point2D(+100,worldSize.getHeight() * 0.7));
+        controlPoints.add(new Point2D(worldSize.getWidth() + 100,worldSize.getHeight() * 0.7));
+        controlPoints.add(new Point2D(worldSize.getWidth() + 100,0));
         // first default fire
-        controlPoints.add(new Point2D(worldSize.getWidth() * 0.5,worldSize.getHeight() * 0.5));
+        controlPoints.add(new Point2D(selectedFire.getTranslateX(), selectedFire.getTranslateY()));
         return controlPoints;
     }
 
     private ArrayList<Point2D> fireToRiver() {
         controlPoints = new ArrayList<>();
         // first default fire
-        controlPoints.add(new Point2D(worldSize.getWidth() * 0.5,worldSize.getHeight() * 0.5));
+        controlPoints.add(new Point2D(selectedFire.getTranslateX(), selectedFire.getTranslateY()));
         controlPoints.add(new Point2D(-100,0));
+        controlPoints.add(new Point2D(-100,worldSize.getHeight() * 0.7));
         controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.7));
         return controlPoints;
     }
@@ -65,7 +76,12 @@ public class FlightPath extends GameObject {
         return fireToRiver;
     }
 
-    @Override
+    public void updateSelectedFire(Transform selectedFire) {
+        this.selectedFire = selectedFire;
+        riverToFire.updateControlPoints(riverToFire());
+    }
+
+        @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
 
     }
@@ -98,6 +114,10 @@ public class FlightPath extends GameObject {
 
         public Point2D getStartControlPoint() {
             return controlPoints.get(0);
+        }
+
+        void updateControlPoints(ArrayList<Point2D> controlPoints) {
+            this.controlPoints = controlPoints;
         }
 
         Point2D evaluateCurve(double t) {

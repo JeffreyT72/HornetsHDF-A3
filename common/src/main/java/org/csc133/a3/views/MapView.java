@@ -110,10 +110,12 @@ public class MapView extends Container {
     public void pointerPressed(int x, int y) {
         x = x - getAbsoluteX();
         y = y - getAbsoluteY();
-        Point2D sp = transformPoint2D(getInverseVTM(),new Point2D(x,y));
+        Point2D inversedPoint = transformPoint2D(getInverseVTM(), new Point2D(x,y));
 
-        for (Fire f: gw.getFireCollection()) {
-            f.checkIsSelected(sp);
+        for(GameObject go : gw.getGameObjectCollection()) {
+            if (go instanceof Fire) {
+                ((Fire) go).checkIfSelected(inversedPoint);
+            }
         }
     }
 }

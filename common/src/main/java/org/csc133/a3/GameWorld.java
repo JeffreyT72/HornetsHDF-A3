@@ -1,6 +1,5 @@
 package org.csc133.a3;
 
-import com.codename1.charts.util.ColorUtil;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Transform;
@@ -43,8 +42,9 @@ public class GameWorld {
     //private SpacePortal spL;
     //private SpacePortal spR;
     // test
-    private Helicopter testObject;
+    //private Helicopter testObject;
     private FlightPath flightPath;
+    private FireDispatch fireDispatch;
 
     // ArrayLists
     //
@@ -81,11 +81,12 @@ public class GameWorld {
         fireCollection = new ArrayList<>();
         buildingCollection = new ArrayList<>();
 
+        flightPath = new FlightPath(helipad.getTranslation(), worldSize);
+        fireDispatch = new FireDispatch();
         //testing
         //bc = new BezierCurve(worldSize);
-        testObject = new Helicopter(worldSize, ColorUtil.BLUE, fuel, helipad.getTranslation());
+        //testObject = new Helicopter(worldSize, ColorUtil.BLUE, fuel, helipad.getTranslation());
 //        fc = new FlightControl(testObject);
-//        flightPath = new FlightPath(helipad.getTranslation(), worldSize);
 //        testObject.translate(fc.getPrimary().getStartControlPoint().getX(),
 //                                fc.getPrimary().getStartControlPoint().getY());
 //        testObject.setFlightControl(fc);
@@ -102,7 +103,11 @@ public class GameWorld {
         gameObjectCollectionDelete = new ArrayList<>();
 
         // testing
-        gameObjectCollection.add(testObject);
+        //gameObjectCollection.add(testObject);
+
+        gameObjectCollection.add(flightPath.getHelipadToRiver());
+        gameObjectCollection.add(flightPath.getRiverToFire());
+        gameObjectCollection.add(flightPath.getFireToRiver());
         // Add game objects into gameObjectCollection
         //
         gameObjectCollection.add(river);
@@ -115,7 +120,7 @@ public class GameWorld {
             // Create at least two fires in each building
             //
             for (int j = 0; j < 2; j ++) {
-                Fire temp = new Fire(worldSize,i);
+                Fire temp = new Fire(worldSize, i, fireDispatch);
                 fireCollection.add(temp);
                 gameObjectCollection.add(temp);
                 building.setFireInBuilding(temp);
@@ -125,7 +130,7 @@ public class GameWorld {
         //
         int i = 0;
         while (getTotalFireArea() < FIRE_AREA_BUDGET) {
-            Fire temp = new Fire(worldSize, i);
+            Fire temp = new Fire(worldSize, i, fireDispatch);
             fireCollection.add(temp);
             gameObjectCollection.add(temp);
             building = buildingCollection.get(i);
@@ -149,20 +154,20 @@ public class GameWorld {
         ticks++;
 
         helicopterTransforms();
-        //testObject.testPath();
-        NonPlayerHelicopter.getInstance().startNPH();
+        NonPlayerHelicopter.getInstance().nphAction();
 
         for (GameObject go: gameObjectCollection) {
             if (go instanceof Fire) {
                 Fire f = (Fire) go;
                 if (f.getIsBurning() == true) {     // if fire in burning state
+                    //System.err.println("yes");
                     randomTicks = 7 + r.nextInt(8);
                     if (ticks % randomTicks == 0)
                         f.grow();
                 }
                 f.isOverFire(PlayerHelicopter.getInstance());
+                f.isOverFire(NonPlayerHelicopter.getInstance());
                 if (f.getWasExtinguished()) {   // If the fire was extinguished,
-                    f.Extinguished();           // put fire into extinguished state
                     gameObjectCollectionDelete.add(f);
                 }
             }
@@ -200,21 +205,24 @@ public class GameWorld {
 
         move(10);
         PlayerHelicopter.getInstance().checkIsOnRiver(river.getTranslation(), river.getDimension());
+        NonPlayerHelicopter.getInstance().checkIsOnRiver(river.getTranslation(), river.getDimension());
         PlayerHelicopter.getInstance().fuel();
 
         // GameClear/GameOver screen
         // Set some tick delay preventing gameWorld init() bug
         if (!(ticks <= 10)) {
-            if (checkWinCondition() || checkRanOutFuel()
-                    || checkBuildingDestroy())
-                drawDialog();
+            checkWinLostCondition();
         }
+    }
+
+    private void checkWinLostCondition() {
+        if (checkWinCondition() || checkRanOutFuel() || checkBuildingDestroy())
+            drawDialog();
     }
 
     private void helicopterTransforms() {
         PlayerHelicopter.getInstance().updateLocalTransforms();
         NonPlayerHelicopter.getInstance().updateLocalTransforms();
-        //testObject.updateLocalTransforms();
     }
 
     public Dimension getDimension() {
@@ -331,16 +339,17 @@ public class GameWorld {
         PlayerHelicopter.getInstance().drink();
     }
 
-    public void fight() {
+    public void fight(Helicopter helicopter) {
         for (GameObject go: gameObjectCollection) {
             if (go instanceof Fire) {
-                Fire f = (Fire) go;
-                PlayerHelicopter.getInstance().fight(f);
+                if (helicopter.getWater() > 0 && ((Fire) go).getIsOverFire() && !((Fire) go).getWasExtinguished()) {
+                    ((Fire) go).fight(helicopter.getWater());
+                }
             }
         }
         // In case player drop the water after all fires arraylist is empty
         //
-        PlayerHelicopter.getInstance().miss();
+        helicopter.miss();
     }
 
     private boolean checkWinCondition() {
@@ -411,5 +420,9 @@ public class GameWorld {
 
     public FlightPath getFlightPath() {
         return flightPath;
+    }
+
+    public void updateSelectedFire(Transform fire) {
+        flightPath.updateSelectedFire(fire);
     }
 }
