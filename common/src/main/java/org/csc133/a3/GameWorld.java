@@ -83,13 +83,6 @@ public class GameWorld {
 
         flightPath = new FlightPath(helipad.getTranslation(), worldSize);
         fireDispatch = new FireDispatch();
-        //testing
-        //bc = new BezierCurve(worldSize);
-        //testObject = new Helicopter(worldSize, ColorUtil.BLUE, fuel, helipad.getTranslation());
-//        fc = new FlightControl(testObject);
-//        testObject.translate(fc.getPrimary().getStartControlPoint().getX(),
-//                                fc.getPrimary().getStartControlPoint().getY());
-//        testObject.setFlightControl(fc);
 
         building0Dmg = 0;
         building1Dmg = 0;
@@ -101,9 +94,6 @@ public class GameWorld {
 
         gameObjectCollection = new ArrayList<>();
         gameObjectCollectionDelete = new ArrayList<>();
-
-        // testing
-        //gameObjectCollection.add(testObject);
 
         gameObjectCollection.add(flightPath.getHelipadToRiver());
         gameObjectCollection.add(flightPath.getRiverToFire());
@@ -142,9 +132,6 @@ public class GameWorld {
         }
 
         gameObjectCollection.add(PlayerHelicopter.getInstance());
-        gameObjectCollection.add(NonPlayerHelicopter.getInstance());
-//        gameObjectCollection.add(fc.getPrimary());
-//        gameObjectCollection.add(fc.getCorrection());
 
         for (Building b: buildingCollection)
             totalValue += b.getValue();
@@ -153,14 +140,14 @@ public class GameWorld {
     void tick() {
         ticks++;
 
-        helicopterTransforms();
+        updateHelicopterTransforms();
         NonPlayerHelicopter.getInstance().nphAction();
 
         for (GameObject go: gameObjectCollection) {
             if (go instanceof Fire) {
                 Fire f = (Fire) go;
                 if (f.getIsBurning() == true) {     // if fire in burning state
-                    randomTicks = 7 + r.nextInt(8);
+                    randomTicks = 2 + r.nextInt(8);
                     if (ticks % randomTicks == 0)
                         f.grow();
                 }
@@ -215,11 +202,15 @@ public class GameWorld {
     }
 
     private void checkWinLostCondition() {
-        if (checkWinCondition() || checkRanOutFuel() || checkBuildingDestroy())
+        if (checkWinCondition() || checkRanOutFuel() || checkBuildingDestroy() || checkCrashed())
             drawDialog();
     }
 
-    private void helicopterTransforms() {
+    private boolean checkCrashed() {
+        return NonPlayerHelicopter.getInstance().crashed();
+    }
+
+    private void updateHelicopterTransforms() {
         PlayerHelicopter.getInstance().updateLocalTransforms();
         NonPlayerHelicopter.getInstance().updateLocalTransforms();
     }
@@ -234,7 +225,6 @@ public class GameWorld {
 
     public int getDisplayHeading() {
         double displayHeading;
-        //double temp = 90 + Math.toDegrees(helicopter.getDisplayAngle());
         double temp = PlayerHelicopter.getInstance().getDisplayAngle();
         displayHeading = temp % 360;
         if (displayHeading < 0)
@@ -324,8 +314,6 @@ public class GameWorld {
     }
 
     public void drink() {
-        //Dimension riverDimension = river.getDimension();
-        //PlayerHelicopter.getInstance().drink(river.getTranslation(), river.getDimension());
         PlayerHelicopter.getInstance().drink();
     }
 
@@ -333,7 +321,7 @@ public class GameWorld {
         for (GameObject go: gameObjectCollection) {
             if (go instanceof Fire) {
                 Fire f = (Fire) go;
-                if (f.getWasExtinguished() == false && f.checkIsOverFire(helicopter) == true && helicopter.getWater() > 0) {
+                if (!f.getWasExtinguished() && isOverFire(f, helicopter) && helicopter.getWater() > 0) {
                     f.fight(helicopter.getWater());
                 }
             }
@@ -341,6 +329,10 @@ public class GameWorld {
         // In case player drop the water after all fires arraylist is empty
         //
         helicopter.miss();
+    }
+
+    private boolean isOverFire(Fire f, Helicopter helicopter){
+        return f.checkIsOverFire(helicopter);
     }
 
     private boolean checkWinCondition() {
@@ -354,7 +346,7 @@ public class GameWorld {
                         helipad.getTranslation().getTranslateY() + helipad.getDimension().getHeight() / 2;
         return inHelipad &&
                 PlayerHelicopter.getInstance().getSpeed() == 0 &&
-                getTotalFireSize() == 0;
+                getTotalFireSize() == 0 && PlayerHelicopter.getInstance().currentState().equals("Off");
     }
 
     private boolean checkRanOutFuel() {
@@ -372,13 +364,22 @@ public class GameWorld {
             winLossText = "You ran out of fuel:(\nPlay again?";
         } else if (checkBuildingDestroy()) {
             winLossText = "All building were destroyed:(\nPlay again?";
+        } else if (checkCrashed()) {
+            winLossText = "Opps! Crashed:(\nPlay again?";
         }
         if (Dialog.show("Game Over", winLossText,
                 "Heck Yeah!", "Some Other Time")) {
-            new Game().show();
+            //new Game().show();
+            restart();
         } else {
             quit();
         }
+    }
+
+    private void restart() {
+        PlayerHelicopter.getInstance().reset();
+        NonPlayerHelicopter.getInstance().reset();
+        init();
     }
 
     public void quit() {
@@ -397,10 +398,6 @@ public class GameWorld {
         this.worldSize = worldSize;
     }
 
-//    public void updateLocalTransforms() {
-//        PlayerHelicopter.getInstance().updateLocalTransforms();
-//    }
-
     public Transform getHelipadLocation() {
         return helipad.getTranslation();
     }
@@ -416,4 +413,9 @@ public class GameWorld {
     public void updateSelectedFire(Transform fire) {
         flightPath.updateSelectedFire(fire);
     }
+
+    public void spawnNPH() {
+        gameObjectCollection.add(NonPlayerHelicopter.getInstance());
+    }
+
 }

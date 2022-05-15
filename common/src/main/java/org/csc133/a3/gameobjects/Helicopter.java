@@ -63,33 +63,13 @@ public class Helicopter extends Movable implements Steerable {
         helicopterState.drink();
     }
 
-    public void dumpWater() {
-        helicopterState.dropWater();
-    }
-
-    // refactor(delete)
-    // Move to fire.java
-    public void fight(Fire f) {
-        int tempSize = f.getFireSize();
-        if (f.getIsOverFire() && water > MIN_WATER) {
-            tempSize -= water / 3;
-            if (tempSize <= 0) {
-                f.setWasExtinguished(true);
-
-            } else {
-                f.setFireSize(water / 3);
-            }
-            water = 0;
-        }
-    }
-
     public void miss() {
         if (water > MIN_WATER)
             water = 0;
     }
 
     public void fuel() {
-        gw.setFuel((int)(Math.sqrt(currentSpeed) + 5));
+        helicopterState.fuelConsume();
     }
 
     public void accelerate() {
@@ -108,6 +88,14 @@ public class Helicopter extends Movable implements Steerable {
     @Override
     public void steerRight() {
         helicopterState.steerRight();
+    }
+
+    public String currentState() {
+        return helicopterState.getClass().getSimpleName();
+    }
+
+    public double getBladeLength() {
+        return BLADE_LENGTH/2;
     }
 
     public int getWater() {
@@ -258,15 +246,11 @@ public class Helicopter extends Movable implements Steerable {
 
         public void steerRight() {}
 
-        public boolean hasLandedAt() {
-            return false;
-        }
+        public boolean hasLandedAt() { return false;}
 
         public void fuelConsume() {}
 
         public void drink() {}
-
-        public void dropWater() {}
 
         public void updateLocalTransforms() {}
     }
@@ -282,7 +266,7 @@ public class Helicopter extends Movable implements Steerable {
         @Override
         public boolean hasLandedAt() {
             // check other requirements
-            return true;// some boolean expression;
+            return true; // some boolean expression;
         }
     }
 
@@ -291,6 +275,12 @@ public class Helicopter extends Movable implements Steerable {
         @Override
         public void startOrStopEngine() {
             getHelicopter().changeState(new Stopping());
+        }
+
+        @Override
+        public void fuelConsume() {
+            fuel -= (int) (Math.sqrt(currentSpeed) + 3);
+            gw.setFuel((int) (Math.sqrt(currentSpeed) + 3));
         }
 
         @Override
@@ -311,7 +301,7 @@ public class Helicopter extends Movable implements Steerable {
 
         @Override
         public void updateLocalTransforms() {
-            heloBlade.updateLocalTransforms(rotationSpeed -= 1);
+            heloBlade.updateLocalTransforms(rotationSpeed -= 2);
             if (rotationSpeed <= 0) {
                 // prevent the blade go to other direction
                 rotationSpeed = 0;
@@ -324,7 +314,8 @@ public class Helicopter extends Movable implements Steerable {
         @Override
         public void startOrStopEngine() {
             // conditions to stop engine
-            if (1>2)
+            // completely stop and press startStop button
+            if (getSpeed() == 0)
                 getHelicopter().changeState(new Stopping());
         }
 
@@ -361,9 +352,11 @@ public class Helicopter extends Movable implements Steerable {
         }
 
         @Override
-        public void dropWater() {
-            water = 0;
+        public void fuelConsume() {
+            fuel -= (int) (Math.sqrt(currentSpeed) + 5);
+            gw.setFuel((int) (Math.sqrt(currentSpeed) + 5));
         }
+
         @Override
         public void updateLocalTransforms() {
             heloBlade.updateLocalTransforms(rotationSpeed = 30d);
@@ -425,19 +418,15 @@ public class Helicopter extends Movable implements Steerable {
         cn1ReversePrimitiveTranslate(g, getDimension());
         cn1ReverseContainerTranslate(g, containerOrigin);
 
-        // draw axis for debugging
-//        g.setColor(ColorUtil.LTGRAY);
-//        g.drawLine(-worldSize.getWidth()/2, 0, worldSize.getWidth()/2, 0);
-//        g.drawLine(0, -worldSize.getHeight()/2, 0, worldSize.getHeight()/2);
-
         for (GameObject go : heloParts)
             go.draw(g, containerOrigin, screenOrigin);
 
+        textTranslate(g, containerOrigin, screenOrigin);
         g.setColor(ColorUtil.YELLOW);
         g.setFont(Font.createSystemFont(FACE_MONOSPACE,
                 STYLE_BOLD, SIZE_LARGE));
-        g.drawString("F  : " + gw.getFuel(), (int)myTranslation.getTranslateX(), (int)myTranslation.getTranslateY());
-        g.drawString("W : " + water, (int)myTranslation.getTranslateX(), (int)myTranslation.getTranslateY()+30);
+        g.drawString("F  : " + fuel, getWidth() +90, getHeight() + 40);
+        g.drawString("W : " + water, getWidth() +90,getHeight() + 40 * 2);
     }
 
     public void updateLocalTransforms() {

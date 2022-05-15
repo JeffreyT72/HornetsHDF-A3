@@ -16,11 +16,11 @@ import static com.codename1.ui.CN.*;
 
 //-----------------------------------------------------------------------------
 public class Fire extends GameObject implements Observer {
-    private Random  r;  // for grow() function
+    private Random  r;
 
     // Variable
     private int     buildingId;
-    private int     size;
+    private double     size;
     private int     increaseRate;
     private double  scaleRate;
     private boolean wasExtinguished;  // set true when fire was extinguished
@@ -28,11 +28,9 @@ public class Fire extends GameObject implements Observer {
     private boolean isOverFire;       // set true when helicopter is over fire
 
     private boolean selected;
-    //private int myRadius;
 
     // Constant
     private final int MIN_SIZE = 8;
-
 
     private final FireDispatch subject;
 
@@ -45,10 +43,8 @@ public class Fire extends GameObject implements Observer {
         this.isOverFire = false;
         this.r = new Random();
         this.size = MIN_SIZE + r.nextInt(10);
-        this.dimension = new Dimension(size, size);
+        this.dimension = new Dimension((int)size, (int)size);
 
-        //selected = false;
-        //myRadius = dimension.getWidth()/2;
         this.scale(1,-1);
 
         this.subject = subject;
@@ -77,7 +73,7 @@ public class Fire extends GameObject implements Observer {
 
     // Getter
     //
-    public int getFireSize() {
+    public double getFireSize() {
         return this.size;
     }
 
@@ -106,48 +102,21 @@ public class Fire extends GameObject implements Observer {
         this.size -= size;
     }
 
-/*    public void grow() {
-        increaseRate = 1 + r.nextInt(2);
-        size += increaseRate;
-        this.dimension = new Dimension(size, size);
-        myRadius = dimension.getWidth()/2;
-        //scale(increaseRate, increaseRate);
-    }*/
-
-/*        if (this.contains(sp) && !this.isSelected()) {
-            this.select(true);
-            //gw.getFc().getPrimary().setTail(this.getLocation());
-            //gw.getSpL().select(false);
-        }
-        for (Fire f: gw.getFireCollection()) {
-            if (!this.contains(sp) && this.isSelected())
-                f.select(false);
-        }*/
-
     public boolean checkIsOverFire(Helicopter helicopter) {
-        if  (helicopter.getTranslation().getTranslateX() >=
+        return helicopter.getTranslation().getTranslateX() >=
                 myTranslation.getTranslateX() - size / 2 &&
                 helicopter.getTranslation().getTranslateX() <=
                         myTranslation.getTranslateX() + size / 2 &&
                 helicopter.getTranslation().getTranslateY() >=
                         myTranslation.getTranslateY() - size / 2 &&
                 helicopter.getTranslation().getTranslateY() <=
-                        myTranslation.getTranslateY() + size / 2) {
-            return true;
-        } else
-            return false;
+                        myTranslation.getTranslateY() + size / 2;
     }
 
     @Override
     public void update(Observer object) {
         fireState.update(object);
     }
-
-/*    private double distanceBetween(Point2D a, Point2D b) {
-        double dx = a.getX() - b.getX();
-        double dy = a.getY() - b.getY();
-        return Math.sqrt(dx * dx + dy * dy);
-    }*/
 
     //```````````````````````````````````````````````````````````````````````````````````````
     // Fire State Pattern
@@ -174,7 +143,6 @@ public class Fire extends GameObject implements Observer {
         void fight(int water) {}
 
         void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {}
-
     }
 
     public class UnStarted extends FireState {
@@ -189,11 +157,9 @@ public class Fire extends GameObject implements Observer {
         @Override
         void grow() {
             increaseRate = 1 + r.nextInt(3);
-            scaleRate = 1 + r.nextInt(increaseRate) / 10f;
+            scaleRate = 1 + r.nextInt(increaseRate) / 60f;
             scale(scaleRate, scaleRate);
             size *= scaleRate;
-//            dimension = new Dimension(size, size);
-//            myRadius = dimension.getWidth()/2;
         }
 
         @Override
@@ -208,7 +174,7 @@ public class Fire extends GameObject implements Observer {
 
         @Override
         void fight(int water) {
-            int tempSize = size;
+            double tempSize = size;
             tempSize -= water/3f;
             if (tempSize <= 0) {
                 setDimension(new Dimension(0, 0));
@@ -235,9 +201,10 @@ public class Fire extends GameObject implements Observer {
             g.fillArc(0, 0, getWidth(), getHeight(), 0, 360);
 
             // Text
+            textTranslate(g, containerOrigin, screenOrigin);
             g.setFont(Font.createSystemFont(FACE_MONOSPACE,
                     STYLE_BOLD, SIZE_MEDIUM));
-            g.drawString(String.valueOf(size), getWidth()+10, getHeight()+10);
+            g.drawString(String.valueOf((int)size), (int)size / 2, (int)size / 2);
         }
     }
 

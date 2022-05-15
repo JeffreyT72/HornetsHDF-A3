@@ -16,17 +16,25 @@ public class MapView extends Container {
     private GameWorld gw;
 
     private float winLeft, winRight, winTop, winBottom;
+    private float zoomFactor;
+    // 0 = zoom out x0.5, 1 = normal x1
+    private int zoomScale;
 
     public MapView(GameWorld gw) {
         this.gw = gw;
         setLayout(new BorderLayout());
+        this.getAllStyles().setBgTransparency(255);
+        this.getAllStyles().setBgColor(ColorUtil.BLACK);
+        zoomFactor = 1f;
+        zoomScale = 0;
     }
+
     // Set up the world to ND transform
     //
     private Transform buildWorldToNDXform(float winWidth, float winHeight,
                                           float winLeft, float winBottom) {
         Transform tmpXform = Transform.makeIdentity();
-        tmpXform.scale(1 / winWidth, 1 / winHeight);
+        tmpXform.scale( zoomFactor / winWidth,  zoomFactor / winHeight);
         tmpXform.translate(-winLeft, -winBottom);
         return tmpXform;
     }
@@ -100,22 +108,34 @@ public class MapView extends Container {
         Point containerOrigin = new Point(getX(), getY());  // originRelativeToParent
         Point screenOrigin = new Point(getAbsoluteX(), getAbsoluteY());  // originRelativeToScreen
 
-        // draw all objects in the gameworld relative to this container object
+        // draw all objects in the gameWorld relative to this container object
         //
         for(GameObject go:gw.getGameObjectCollection())
             go.draw(g, containerOrigin, screenOrigin);
+
+        g.resetAffine();
     }
 
     @Override
     public void pointerPressed(int x, int y) {
         x = x - getAbsoluteX();
         y = y - getAbsoluteY();
-        Point2D invertedPoint = transformPoint2D(getInverseVTM(), new Point2D(x,y));
+        Point2D invertedPoint = transformPoint2D(getInverseVTM(), new Point2D(x, y));
 
         for(GameObject go : gw.getGameObjectCollection()) {
             if (go instanceof Fire) {
                 ((Fire) go).checkIfSelected(invertedPoint);
             }
+        }
+    }
+
+    public void zoom() {
+        if (zoomScale == 0) {
+            zoomFactor = 0.5f;
+            zoomScale++;
+        } else if (zoomScale == 1) {
+            zoomFactor = 1f;
+            zoomScale = 0;
         }
     }
 }

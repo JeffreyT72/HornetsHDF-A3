@@ -48,39 +48,6 @@ public class Building extends Fixed {
             this.translate(worldSize.getWidth() * 0.8, worldSize.getHeight() * 0.3);
         }
     }
-    /*
-    @Override
-    public void draw(Graphics g, Point containerOrigin) {
-        g.setColor(getColor());
-
-        // building
-        int x = containerOrigin.getX() + (int)getLocation().getX()
-                - dimension.getWidth()/2;
-        int y = containerOrigin.getY() + (int)getLocation().getY()
-                - dimension.getHeight()/2;
-        int w = dimension.getWidth();
-        int h = dimension.getHeight();
-        g.drawRect(x, y, w, h, 4);
-        // text
-        int textX = containerOrigin.getX() + (int)getLocation().getX()
-                + dimension.getWidth()/2 + 10;
-        int textY = containerOrigin.getY() + (int)getLocation().getY()
-                + dimension.getHeight()/2 - 30;
-        // If building damage over 100%, then keep display 100%.
-        // But only for visual, the actual damage still increasing
-        // until total building damage is 100% then player loss.
-        // (observe from demo playthrough)
-        if (damage <= 100)
-            g.drawString("D: " + damage + "%", textX, textY);
-        else
-            g.drawString("D: 100%", textX, textY);
-        textY -= 30;
-        g.drawString("V: " + value, textX, textY);
-    }
-    */
-/*    public int getId() {
-        return id;
-    }*/
 
     public int getSize() {
         return buildingArea;
@@ -109,6 +76,7 @@ public class Building extends Fixed {
             previousDamage = currentDamage;
         }
     }
+
     // Getter
     //
     public int getWidth() {

@@ -8,18 +8,24 @@ import com.codename1.util.MathUtil;
 import org.csc133.a3.GameWorld;
 import org.csc133.a3.interfaces.Strategy;
 
+import java.util.ArrayList;
+
 public class NonPlayerHelicopter extends Helicopter{
-    private static final int HELICOLOR = ColorUtil.GREEN;
     private static NonPlayerHelicopter instance;
     private Strategy strategy;
-    private final FlightPath flightPath;
+    private double t;
     private double avoidAngle;
-    // testing
-    //private FlightControl fc;
+    private FlightPath.BezierCurve currentPath;
+    private Point2D lastPointOfPath;
+    private final FlightPath flightPath;
+    private static final int HELICOPTER_COLOR = ColorUtil.GREEN;
 
     private NonPlayerHelicopter(Dimension worldSize, int initFuel, Transform helipadLocation) {
-        super(worldSize, HELICOLOR, initFuel, helipadLocation);
+        super(worldSize, HELICOPTER_COLOR, initFuel, helipadLocation);
+        initTValue();
         flightPath = GameWorld.getInstance().getFlightPath();
+        currentPath = flightPath.getHelipadToRiver();
+        lastPointOfPath = currentPath.getLastPointOfPath();
 
         setStrategy(new FlightPathStrategy());
     }
@@ -35,37 +41,140 @@ public class NonPlayerHelicopter extends Helicopter{
         return instance;
     }
 
-    // testing
-//    private BezierCurve bc;
-//    public void setFlightControl(BezierCurve bc) {
-//        this.bc = bc;
-//    }
-/*    public void setFlightControl(FlightControl fc) {
-        this.fc = fc;
-    }*/
     private void setStrategy(Strategy strategy) {
         this.strategy = strategy;
     }
-    
-    private double t = 0;
 
     public void nphAction() {
-        startOrStopEngine();
-        HelicopterSpeedUp();
-        strategy.followCurve();
+        if(isInOffState() && flightPath.selectFirstFire()) {
+            GameWorld.getInstance().spawnNPH();
+            startOrStopEngine();
+        } else if(isInReadyState()) {
+            helicopterSpeedUp();
+            updateStrategy();
+            strategy.followCurve();
+        }
     }
 
-    private void HelicopterSpeedUp() {
-        if (getSpeed() < 3) {
+    private boolean isInOffState() {
+        return currentState().equals("Off");
+    }
+
+    private boolean isInReadyState() {
+        return currentState().equals("Ready");
+    }
+
+    private void updateStrategy() {
+        if(isFlightPathStrategy()) {
+            collisionDetection();
+        }
+        if(needCorrection()) {
+            setStrategy(new PathCorrectionStrategy());
+        }
+        if (canExitAvoidStrategy()) {
+            createCorrectionPath();
+        }
+    }
+
+    private boolean isFlightPathStrategy() {
+        return strategy.getClass().getSimpleName().equals("FlightPathStrategy");
+    }
+
+    private boolean needCorrection() {
+        return (t > 0 && t < 1) && goalChanged() && isFlightPathStrategy();
+    }
+
+    private boolean canExitAvoidStrategy() {
+        return strategy.getClass().getSimpleName().equals("AvoidStrategy") &&
+                !checkCollision(0.5);
+    }
+
+    private boolean goalChanged() {
+        return lastPointOfPath != currentPath.getLastPointOfPath();
+    }
+
+    private void helicopterSpeedUp() {
+        if (getSpeed() < 9) {
             accelerate();
         }
     }
 
     private boolean arrived() {
-        if (t >= 1)
-            return true;
-        else
+        return t >= 1;
+    }
+
+    private void createCorrectionPath() {
+        ArrayList<Point2D> correctionPath = new ArrayList<>();
+
+        correctionPath.add(new Point2D(getTranslation().getTranslateX(), getTranslation().getTranslateY()));
+        correctionPath.add(currentPath.getControlPoints().get(1));
+        correctionPath.add(currentPath.getLastPointOfPath());
+
+        currentPath.updateControlPoints(correctionPath);
+        setStrategy(new FlightPathStrategy());
+        initTValue();
+    }
+
+    private void initTValue() {
+        t = 0;
+    }
+    private void updateLastPoint() {
+        lastPointOfPath = currentPath.getLastPointOfPath();
+    }
+
+    public void reset() {
+        instance = null;
+    }
+
+    private void collisionDetection() {
+        if (checkCollision(0.5)) {
+            setStrategy(new AvoidStrategy());
+            setAvoidanceAngle();
+        }
+    }
+
+    private void setAvoidanceAngle() {
+        int heading;
+        Transform playerHelicopter = PlayerHelicopter.getInstance().getTranslation();
+
+        // Use four quadrant to determine the opposite angle
+        //
+        if(getTranslation().getTranslateX() > playerHelicopter.getTranslateX()              // top left
+                && getTranslation().getTranslateY() > playerHelicopter.getTranslateY()) {
+            heading = 45;   // 45 degree because 0 is east
+        } else if(getTranslation().getTranslateX() < playerHelicopter.getTranslateX()       // top right
+                && getTranslation().getTranslateY() > playerHelicopter.getTranslateY()) {
+            heading = 135;
+        } else if(getTranslation().getTranslateX() < playerHelicopter.getTranslateX()       // bottom right
+                && getTranslation().getTranslateY() > playerHelicopter.getTranslateY()) {
+            heading = 225;
+        } else {
+            heading = 315;
+        }
+        avoidAngle = Math.toRadians(heading);
+    }
+
+    private boolean checkCollision(double circleFactor) {
+        double playerRadius = PlayerHelicopter.getInstance().getBladeLength() * circleFactor;
+        double nphRadius = NonPlayerHelicopter.getInstance().getBladeLength() * circleFactor;
+        float playerX = PlayerHelicopter.getInstance().getTranslation().getTranslateX();
+        float playerY = PlayerHelicopter.getInstance().getTranslation().getTranslateY();
+        float nphX = getTranslation().getTranslateX();
+        float nphY = getTranslation().getTranslateY();
+
+        double distance = MathUtil.pow(nphY - playerY, 2) + MathUtil.pow(nphX - playerX, 2);
+        return distance <= MathUtil.pow(playerRadius + nphRadius, 2);
+    }
+
+    public boolean crashed() {
+        if(notSpawned()) {
             return false;
+        }
+        return checkCollision(0.3);
+    }
+
+    private boolean notSpawned() {
+        return currentState().equals("Off");
     }
 
     public class FlightPathStrategy implements Strategy {
@@ -73,17 +182,37 @@ public class NonPlayerHelicopter extends Helicopter{
         public void followCurve() {
             if (arrived())
                 action();
-            else
+            else {
                 moveAlongPath();
+            }
         }
 
         private void action() {
+            if (getWater() < 1000) {
+                attemptToDrink();
 
+                // after drink water
+                if (getWater() >= 1000) {
+                    currentPath = flightPath.getRiverToFire();
+                    t=0;
+                    updateLastPoint();
+                }
+            } else if (getWater() >= 1000) {
+                gw.fight(NonPlayerHelicopter.getInstance());
+                currentPath = flightPath.getFireToRiver();
+                initTValue();
+                updateLastPoint();
+            }
+        }
+
+        private void attemptToDrink() {
+            setCurrentSpeed(0);
+            drink();
         }
 
         private void moveAlongPath() {
             Point2D currentPoint = new Point2D(getTranslation().getTranslateX(), getTranslation().getTranslateY());
-            Point2D nextPoint = flightPath.getHelipadToRiver().evaluateCurve(t);
+            Point2D nextPoint = currentPath.evaluateCurve(t);
 
             // Translate from current to next point.
             //
@@ -96,24 +225,31 @@ public class NonPlayerHelicopter extends Helicopter{
             int theta = (int) (90 - Math.toDegrees(MathUtil.atan2(ty, tx)));
 
             if(!arrived()) {
-                t = t + getSpeed() * 0.003; // getSpeed()
+                t += getSpeed() * 0.003;
                 rotate((float) (getHeading() - theta));
                 setHeading(theta);
             }
         }
     }
 
-    public class Avoid implements Strategy {
+    public class PathCorrectionStrategy implements Strategy {
+        @Override
+        public void followCurve() {
+            updateLastPoint();
+            createCorrectionPath();
+        }
+    }
 
+    public class AvoidStrategy implements Strategy {
         @Override
         public void followCurve() {
             avoid();
         }
 
         private void avoid() {
-            int speedMultiplier = 2;
-            double tx = getSpeed() * speedMultiplier * Math.cos(avoidAngle);
-            double ty = getSpeed() * speedMultiplier * Math.sin(avoidAngle);
+            int avoidSpeed = 2;
+            double tx = getSpeed() * avoidSpeed * Math.cos(avoidAngle);
+            double ty = getSpeed() * avoidSpeed * Math.sin(avoidAngle);
             translate(tx, ty);
 
             int theta = (int) (90 - Math.toDegrees(MathUtil.atan2(ty, tx)));

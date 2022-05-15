@@ -18,11 +18,12 @@ public class FlightPath extends GameObject {
     private final Dimension worldSize;
     private final Transform startLocation;
     private Transform selectedFire;
+    private Transform firstFire;
 
     public FlightPath(Transform startLocation, Dimension worldSize) {
         this.worldSize = worldSize;
         this.startLocation = startLocation;
-        Transform firstFire = Transform.makeIdentity();
+        firstFire = Transform.makeIdentity();
         firstFire.translate(worldSize.getWidth() * 0.8f,
                 worldSize.getHeight() * 0.2f);
 
@@ -61,24 +62,28 @@ public class FlightPath extends GameObject {
         return controlPoints;
     }
 
+    public boolean selectFirstFire() {
+        return selectedFire != firstFire;
+    }
+
     public BezierCurve getHelipadToRiver() {
-        //recreatePath();
         return helipadToRiver;
     }
 
     public BezierCurve getRiverToFire() {
-        //recreatePath();
+        updateSelectedFire(selectedFire);
         return riverToFire;
     }
 
     public BezierCurve getFireToRiver() {
-        //recreatePath();
+        updateSelectedFire(selectedFire);
         return fireToRiver;
     }
 
     public void updateSelectedFire(Transform selectedFire) {
         this.selectedFire = selectedFire;
         riverToFire.updateControlPoints(riverToFire());
+        fireToRiver.updateControlPoints(fireToRiver());
     }
 
         @Override
@@ -110,10 +115,6 @@ public class FlightPath extends GameObject {
             controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.5));
             controlPoints.add(new Point2D(-100,worldSize.getHeight() * 0.7));
             controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.7));
-        }
-
-        public Point2D getStartControlPoint() {
-            return controlPoints.get(0);
         }
 
         void updateControlPoints(ArrayList<Point2D> controlPoints) {
@@ -183,6 +184,14 @@ public class FlightPath extends GameObject {
 
         public void setTail(Point2D lastControlPoint) {
             controlPoints.set(controlPoints.size()-1, lastControlPoint);
+        }
+
+        ArrayList<Point2D> getControlPoints() {
+            return controlPoints;
+        }
+
+        public Point2D getLastPointOfPath() {
+            return controlPoints.get(controlPoints.size() - 1);
         }
     }
 }

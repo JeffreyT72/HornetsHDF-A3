@@ -37,9 +37,6 @@ public abstract class GameObject {
     protected void setDimension(Dimension d) {
         dimension = new Dimension(d.getWidth(), d.getHeight());
     }
-/*    void setLocation(Point location) {
-        this.location = location;
-    }*/
 
     // Getter
     //
@@ -111,6 +108,8 @@ public abstract class GameObject {
         // the screen origin post local transforms.
         //
         gXform.translate(-screenOrigin.getX(), -screenOrigin.getY());
+        // set the current transform of the graphics context
+        //
         g.setTransform(gXform);
     }
 
@@ -142,14 +141,21 @@ public abstract class GameObject {
         g.setTransform(gxForm);
     }
 
+    protected void textTranslate(Graphics g, Point containerOrigin, Point screenOrigin) {
+
+        g.setTransform(gOrigXform);
+        Transform gXform = preLTTransform(g, screenOrigin);
+        gXform.translate(getTranslation().getTranslateX(), getTranslation().getTranslateY());
+        gXform.scale(1, -1);
+        postLTransform(g, screenOrigin, gXform);
+        cn1ForwardPrimitiveTranslate(g, dimension);
+        containerTranslate(g, containerOrigin);
+    }
+
     public void draw(Graphics g, Point containerOrigin, Point screenOrigin) {
         Transform gXform = preLTTransform(g, screenOrigin);
         localTransforms(gXform);
         postLTransform(g, screenOrigin, gXform);
-
-        // set the current transform of the graphics context
-        //
-        //g.setTransform(gXform);
 
         cn1ForwardPrimitiveTranslate(g, dimension);
         containerTranslate(g, containerOrigin);
@@ -201,6 +207,10 @@ abstract class Movable extends GameObject {
 
     public void setHeading(double theta) {
         this.heading = theta;
+    }
+
+    public void setCurrentSpeed(int speed) {
+        this.currentSpeed = speed;
     }
 
     public int getSpeed() {

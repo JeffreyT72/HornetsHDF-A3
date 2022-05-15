@@ -38,7 +38,7 @@ public class Game extends Form implements Runnable {
         addKeyListener('f', new FightCommand(gw));
         addKeyListener('Q', new ExitCommand(gw));
         addKeyListener('s', new EngineStartStopCommand(gw));
-
+        addKeyListener('z', new ZoomCommand(mapView));
 
         // Timer, 50ms for each tick
         //
