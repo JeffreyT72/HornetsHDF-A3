@@ -11,7 +11,6 @@ public class PlayerHelicopter extends Helicopter{
 
     private PlayerHelicopter(Dimension worldSize, int initFuel, Transform helipadLocation){
         super(worldSize, HELICOLOR, initFuel, helipadLocation);
-        //this.translate(worldSize.getWidth() * 0.5, worldSize.getHeight() * 0.5);
     }
 
     public static PlayerHelicopter getInstance() {
@@ -23,5 +22,9 @@ public class PlayerHelicopter extends Helicopter{
             instance = new PlayerHelicopter(worldSize, initFuel, helipadLocation);
         }
         return instance;
+    }
+
+    public void reset() {
+        instance = null;
     }
 }

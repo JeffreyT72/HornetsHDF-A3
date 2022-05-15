@@ -6,6 +6,7 @@ import com.codename1.ui.Label;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.plaf.Style;
 import org.csc133.a3.GameWorld;
+import org.csc133.a3.gameobjects.*;
 
 public class GlassCockpit extends Container {
     private GameWorld gw;
@@ -73,7 +74,7 @@ public class GlassCockpit extends Container {
     public void update() {
         heading.setText(String.valueOf(gw.getDisplayHeading()));
         speed.setText(String.valueOf(gw.getCurrentSpeed()));
-        fuel.setText(String.valueOf(gw.getFuel()));
+        fuel.setText(String.valueOf(PlayerHelicopter.getInstance().getFuel()));
         fireCount.setText(String.valueOf(gw.getCurrentFireNo()));
         fireSize.setText(String.valueOf(gw.getTotalFireSize()));
         damage.setText(gw.getTotalDmg() + " %");

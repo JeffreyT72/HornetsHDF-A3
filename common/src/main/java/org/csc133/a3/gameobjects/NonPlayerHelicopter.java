@@ -86,7 +86,7 @@ public class NonPlayerHelicopter extends Helicopter{
 
     private boolean canExitAvoidStrategy() {
         return strategy.getClass().getSimpleName().equals("AvoidStrategy") &&
-                !checkCollision(0.5);
+                !checkCollision(1);
     }
 
     private boolean goalChanged() {
@@ -139,14 +139,14 @@ public class NonPlayerHelicopter extends Helicopter{
 
         // Use four quadrant to determine the opposite angle
         //
-        if(getTranslation().getTranslateX() > playerHelicopter.getTranslateX()              // top left
+        if (getTranslation().getTranslateX() > playerHelicopter.getTranslateX()              // top left
                 && getTranslation().getTranslateY() > playerHelicopter.getTranslateY()) {
             heading = 45;   // 45 degree because 0 is east
-        } else if(getTranslation().getTranslateX() < playerHelicopter.getTranslateX()       // top right
+        } else if (getTranslation().getTranslateX() < playerHelicopter.getTranslateX()       // top right
                 && getTranslation().getTranslateY() > playerHelicopter.getTranslateY()) {
             heading = 135;
-        } else if(getTranslation().getTranslateX() < playerHelicopter.getTranslateX()       // bottom right
-                && getTranslation().getTranslateY() > playerHelicopter.getTranslateY()) {
+        } else if (getTranslation().getTranslateX() < playerHelicopter.getTranslateX()       // bottom right
+                && getTranslation().getTranslateY() < playerHelicopter.getTranslateY()) {
             heading = 225;
         } else {
             heading = 315;
@@ -167,14 +167,10 @@ public class NonPlayerHelicopter extends Helicopter{
     }
 
     public boolean crashed() {
-        if(notSpawned()) {
+        if(isInOffState()) {
             return false;
         }
         return checkCollision(0.3);
-    }
-
-    private boolean notSpawned() {
-        return currentState().equals("Off");
     }
 
     public class FlightPathStrategy implements Strategy {

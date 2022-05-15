@@ -11,12 +11,12 @@ import com.codename1.util.MathUtil;
 import java.util.ArrayList;
 
 public class FlightPath extends GameObject {
+    private final Dimension worldSize;
+    private final Transform startLocation;
     private final BezierCurve helipadToRiver;
     private final BezierCurve riverToFire;
     private final BezierCurve fireToRiver;
     private ArrayList<Point2D> controlPoints;
-    private final Dimension worldSize;
-    private final Transform startLocation;
     private Transform selectedFire;
     private Transform firstFire;
 
@@ -47,14 +47,12 @@ public class FlightPath extends GameObject {
         controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.7));
         controlPoints.add(new Point2D(worldSize.getWidth() + 100,worldSize.getHeight() * 0.7));
         controlPoints.add(new Point2D(worldSize.getWidth() + 100,0));
-        // first default fire
         controlPoints.add(new Point2D(selectedFire.getTranslateX(), selectedFire.getTranslateY()));
         return controlPoints;
     }
 
     private ArrayList<Point2D> fireToRiver() {
         controlPoints = new ArrayList<>();
-        // first default fire
         controlPoints.add(new Point2D(selectedFire.getTranslateX(), selectedFire.getTranslateY()));
         controlPoints.add(new Point2D(-100,0));
         controlPoints.add(new Point2D(-100,worldSize.getHeight() * 0.7));
@@ -86,35 +84,17 @@ public class FlightPath extends GameObject {
         fireToRiver.updateControlPoints(fireToRiver());
     }
 
-        @Override
+    @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
-
     }
 
     class BezierCurve extends GameObject {
         private ArrayList<Point2D> controlPoints;
         final static int POINT_SIZE = 30;
 
-        public void setControlPoints(ArrayList<Point2D> controlPoints) {
-            this.controlPoints = controlPoints;
-        }
-
         public BezierCurve(ArrayList<Point2D> controlPoints) {
             this.dimension = new Dimension(30, 30);
             this.controlPoints = controlPoints;
-        }
-
-        public BezierCurve() {
-            this.dimension = new Dimension(30, 30);
-            pathToRiver();
-        }
-
-        private void pathToRiver() {
-            controlPoints = new ArrayList<>();
-            controlPoints.add(new Point2D(worldSize.getWidth() *0.5,worldSize.getHeight() * 0.1));
-            controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.5));
-            controlPoints.add(new Point2D(-100,worldSize.getHeight() * 0.7));
-            controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.7));
         }
 
         void updateControlPoints(ArrayList<Point2D> controlPoints) {

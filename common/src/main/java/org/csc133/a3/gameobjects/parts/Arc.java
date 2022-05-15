@@ -15,8 +15,13 @@ public class Arc extends GameObject {
         this.arcAngle = 0;
     }
 
-    public Arc(int color, int width, int height, int startAngle, int arcAngle) {
-        this(color, width, height, 0, 0, 0, 0, 0, startAngle, arcAngle);
+    public Arc(int color, int width, int height,
+               int startAngle, int arcAngle) {
+        this(color, width, height,
+                0, 0,
+                0, 0,
+                0,
+                startAngle, arcAngle);
     }
 
     public Arc(int color, int width, int height,
@@ -38,8 +43,7 @@ public class Arc extends GameObject {
     @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
         g.setColor(getColor());
-        //containerTranslate(g, containerOrigin);
-        //cn1ForwardPrimitiveTranslate(g, getDimension());
+        
         if (getColor() == ColorUtil.BLACK)
             g.fillArc(0, 0, getWidth(), getHeight(), startAngle, arcAngle);
         else

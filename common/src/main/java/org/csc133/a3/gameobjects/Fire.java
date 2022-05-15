@@ -7,9 +7,7 @@ import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
 import com.codename1.ui.geom.Point2D;
 import org.csc133.a3.interfaces.Observer;
-import org.csc133.a3.interfaces.Subject;
 
-import java.util.List;
 import java.util.Random;
 
 import static com.codename1.ui.CN.*;
@@ -77,10 +75,6 @@ public class Fire extends GameObject implements Observer {
         return this.size;
     }
 
-    public boolean getIsOverFire() {
-        return this.isOverFire;
-    }
-
     public boolean getWasExtinguished() {
         return this.wasExtinguished;
     }
@@ -98,19 +92,15 @@ public class Fire extends GameObject implements Observer {
         this.wasExtinguished = wasExtinguished;
     }
 
-    void setFireSize(int size) {
-        this.size -= size;
-    }
-
     public boolean checkIsOverFire(Helicopter helicopter) {
         return helicopter.getTranslation().getTranslateX() >=
-                myTranslation.getTranslateX() - size / 2 &&
+                getTranslation().getTranslateX() - size / 2 &&
                 helicopter.getTranslation().getTranslateX() <=
-                        myTranslation.getTranslateX() + size / 2 &&
+                        getTranslation().getTranslateX() + size / 2 &&
                 helicopter.getTranslation().getTranslateY() >=
-                        myTranslation.getTranslateY() - size / 2 &&
+                        getTranslation().getTranslateY() - size / 2 &&
                 helicopter.getTranslation().getTranslateY() <=
-                        myTranslation.getTranslateY() + size / 2;
+                        getTranslation().getTranslateY() + size / 2;
     }
 
     @Override

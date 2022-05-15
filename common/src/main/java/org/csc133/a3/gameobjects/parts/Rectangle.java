@@ -25,8 +25,7 @@ public class Rectangle extends GameObject {
     @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
         g.setColor(getColor());
-        //containerTranslate(g, containerOrigin);
-        //cn1ForwardPrimitiveTranslate(g, getDimension());
+
         if (getColor() == ColorUtil.GRAY)
             g.fillRect(0, 0, getWidth(), getHeight());
         else

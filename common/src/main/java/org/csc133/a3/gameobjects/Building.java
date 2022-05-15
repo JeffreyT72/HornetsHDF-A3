@@ -49,19 +49,9 @@ public class Building extends Fixed {
         }
     }
 
-    public int getSize() {
-        return buildingArea;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
     public void setFireInBuilding(Fire fire) {
-        // Passing building location
-        //
-        int x = (int) (myTranslation.getTranslateX() - getWidth()/2);
-        int y = (int) (myTranslation.getTranslateY() - getHeight()/2);
+        int x = (int) (getTranslation().getTranslateX() - getWidth()/2);
+        int y = (int) (getTranslation().getTranslateY() - getHeight()/2);
         int w = getWidth();
         int h = getHeight();
 
@@ -70,7 +60,7 @@ public class Building extends Fixed {
     }
 
     public void updateBuildingDmg(int totalFireSizeInBuilding) {
-        currentDamage = totalFireSizeInBuilding*100/buildingArea;
+        currentDamage = totalFireSizeInBuilding * 100 / buildingArea;
         if (currentDamage > previousDamage) {
             damage = currentDamage;
             previousDamage = currentDamage;
@@ -87,6 +77,14 @@ public class Building extends Fixed {
         return dimension.getHeight();
     }
 
+    public int getSize() {
+        return buildingArea;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
     @Override
     protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
         g.drawRect(0, 0, getWidth(), getHeight(), THICKNESS);
@@ -94,23 +92,11 @@ public class Building extends Fixed {
         // Text
         g.setFont(Font.createSystemFont(FACE_MONOSPACE,
                 STYLE_BOLD, SIZE_MEDIUM));
+        g.drawString("V: " + value, getWidth() + 20, getHeight());
+
         if (damage <= 100)
-            g.drawString("D: " + damage + "%", getWidth(), getHeight());
+            g.drawString("D: " + damage + "%", getWidth() + 20, getHeight() + 20 * 2);
         else
-            g.drawString("D: 100%", getWidth(), getHeight());
-
-        g.drawString("V: " + value, getWidth(), getHeight()-30);
-    }
-
-    public void rotate(float degrees) {
-        myRotation.rotate((float)Math.toRadians(degrees), 0, 0);
-    }
-
-    public void scale(double sx, double sy) {
-        myScale.scale((float)sx, (float)sy);
-    }
-
-    public void translate(double tx, double ty) {
-        myTranslation.translate((float)tx, (float)ty);
+            g.drawString("D: 100%", getWidth() + 20, getHeight() + 20 * 2);
     }
 }

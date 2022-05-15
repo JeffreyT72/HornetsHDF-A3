@@ -4,7 +4,6 @@ import com.codename1.ui.Graphics;
 import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
-import com.codename1.ui.geom.Point2D;
 import org.csc133.a3.GameWorld;
 
 public abstract class GameObject {
@@ -12,9 +11,9 @@ public abstract class GameObject {
     private int objectId;
     Dimension dimension;
     Dimension worldSize;
-    Transform gXform;
-    Transform gOrigXform;
-    Transform myTranslation;
+    private Transform gXform;
+    private Transform gOrigXform;
+    private Transform myTranslation;
     Transform myRotation;
     Transform myScale;
     // For getting the fuel value from GameWorld
@@ -54,10 +53,6 @@ public abstract class GameObject {
 
     public Dimension getDimension() {
         return this.dimension;
-    }
-
-    public Point2D getLocation() {
-        return new Point2D(myTranslation.getTranslateX(), myTranslation.getTranslateY());
     }
 
     public Transform getTranslation() {
@@ -170,23 +165,22 @@ public abstract class GameObject {
 }
 
 abstract class Fixed extends GameObject {
-    boolean fixed;
+    private boolean fixed;
 
     public Fixed() {
-        fixed = false;
+        this.fixed = false;
     }
 
     // Once object's location is initialized,
     // it won't be able to set it again.
     //
-/*    @Override
-    void setLocation(Point location) {
+    @Override
+    public void translate(double tx, double ty) {
         if (!fixed) {
-            this.location = location;
+            super.translate(tx, ty);
+            fixed = true;
         }
-        fixed = true;
-    }*/
-
+    }
 }
 
 abstract class Movable extends GameObject {
@@ -195,6 +189,8 @@ abstract class Movable extends GameObject {
     double displayAngle;
 
     public Movable() {
+        currentSpeed = 0;
+        heading = 0;
     }
 
     public void move(long elapsedTimeInMillis) {
@@ -225,4 +221,3 @@ abstract class Movable extends GameObject {
         return this.heading;
     }
 }
-

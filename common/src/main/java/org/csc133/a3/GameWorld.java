@@ -37,12 +37,6 @@ public class GameWorld {
     private Building building;
     private Helipad helipad;
     private River river;
-    //private BezierCurve bc;
-    //private FlightControl fc;
-    //private SpacePortal spL;
-    //private SpacePortal spR;
-    // test
-    //private Helicopter testObject;
     private FlightPath flightPath;
     private FireDispatch fireDispatch;
 
@@ -95,11 +89,6 @@ public class GameWorld {
         gameObjectCollection = new ArrayList<>();
         gameObjectCollectionDelete = new ArrayList<>();
 
-        gameObjectCollection.add(flightPath.getHelipadToRiver());
-        gameObjectCollection.add(flightPath.getRiverToFire());
-        gameObjectCollection.add(flightPath.getFireToRiver());
-        // Add game objects into gameObjectCollection
-        //
         gameObjectCollection.add(river);
         gameObjectCollection.add(helipad);
         // Adding three building with at least 6 fires
@@ -131,6 +120,10 @@ public class GameWorld {
                 i = 0;
         }
 
+        gameObjectCollection.add(flightPath.getHelipadToRiver());
+        gameObjectCollection.add(flightPath.getRiverToFire());
+        gameObjectCollection.add(flightPath.getFireToRiver());
+
         gameObjectCollection.add(PlayerHelicopter.getInstance());
 
         for (Building b: buildingCollection)
@@ -142,7 +135,44 @@ public class GameWorld {
 
         updateHelicopterTransforms();
         NonPlayerHelicopter.getInstance().nphAction();
+        fireAction();
+        removeFire();
+        calculateBuildingDmg();
+        updateBuildingDisplay();
+        move(10);
+        checkHelicopterOnRiver();
+        fuelConsume();
 
+        // GameClear/GameOver screen
+        // Set some tick delay preventing gameWorld init() bug
+        if (ticks >= 10) {
+            checkWinLostCondition();
+        }
+    }
+
+    private void calculateBuildingDmg() {
+        for (Fire f: fireCollection) {
+            int buildingId = f.getBuildingId();
+            if (buildingId == 0) {
+                building0Dmg += Math.PI * MathUtil.pow(f.getFireSize()/2, 2);
+            } else if (buildingId == 1) {
+                building1Dmg += Math.PI * MathUtil.pow(f.getFireSize()/2, 2);
+            } else if (buildingId == 2) {
+                building2Dmg += Math.PI * MathUtil.pow(f.getFireSize()/2, 2);
+            }
+        }
+    }
+
+    private void removeFire() {
+        if (!gameObjectCollectionDelete.isEmpty()) {
+            gameObjectCollection.remove(gameObjectCollectionDelete.
+                    get(gameObjectCollectionDelete.size() - 1));
+            fireCollection.remove(gameObjectCollectionDelete.
+                    get(gameObjectCollectionDelete.size() - 1));
+        }
+    }
+
+    private void fireAction() {
         for (GameObject go: gameObjectCollection) {
             if (go instanceof Fire) {
                 Fire f = (Fire) go;
@@ -158,24 +188,19 @@ public class GameWorld {
                 }
             }
         }
-        if (!gameObjectCollectionDelete.isEmpty()) {
-            gameObjectCollection.remove(gameObjectCollectionDelete.
-                    get(gameObjectCollectionDelete.size() - 1));
-            fireCollection.remove(gameObjectCollectionDelete.
-                    get(gameObjectCollectionDelete.size() - 1));
-        }
+    }
 
-        for (Fire f: fireCollection) {
-            int buildingId = f.getBuildingId();
-            if (buildingId == 0) {
-                building0Dmg += Math.PI * MathUtil.pow(f.getFireSize()/2, 2);
-            } else if (buildingId == 1) {
-                building1Dmg += Math.PI * MathUtil.pow(f.getFireSize()/2, 2);
-            } else if (buildingId == 2) {
-                building2Dmg += Math.PI * MathUtil.pow(f.getFireSize()/2, 2);
-            }
-        }
+    private void fuelConsume() {
+        PlayerHelicopter.getInstance().fuel();
+        NonPlayerHelicopter.getInstance().fuel();
+    }
 
+    private void checkHelicopterOnRiver() {
+        PlayerHelicopter.getInstance().checkIsOnRiver(river.getTranslation(), river.getDimension());
+        NonPlayerHelicopter.getInstance().checkIsOnRiver(river.getTranslation(), river.getDimension());
+    }
+
+    private void updateBuildingDisplay() {
         for (Building b: buildingCollection) {
             if (b.getId() == 0) {
                 b.updateBuildingDmg(building0Dmg);
@@ -188,21 +213,13 @@ public class GameWorld {
                 building2Dmg = 0;
             }
         }
-
-        move(10);
-        PlayerHelicopter.getInstance().checkIsOnRiver(river.getTranslation(), river.getDimension());
-        NonPlayerHelicopter.getInstance().checkIsOnRiver(river.getTranslation(), river.getDimension());
-        PlayerHelicopter.getInstance().fuel();
-
-        // GameClear/GameOver screen
-        // Set some tick delay preventing gameWorld init() bug
-        if (!(ticks <= 10)) {
-            checkWinLostCondition();
-        }
     }
 
     private void checkWinLostCondition() {
-        if (checkWinCondition() || checkRanOutFuel() || checkBuildingDestroy() || checkCrashed())
+        if (checkWinCondition() ||
+            checkRanOutFuel() ||
+            checkBuildingDestroy() ||
+            checkCrashed())
             drawDialog();
     }
 
@@ -287,10 +304,6 @@ public class GameWorld {
         return (int)totalLoss;
     }
 
-    public void setFuel(int f) {
-        fuel -= f;
-    }
-
     // Action controller
     //
     public void accelerate() {
@@ -346,7 +359,7 @@ public class GameWorld {
                         helipad.getTranslation().getTranslateY() + helipad.getDimension().getHeight() / 2;
         return inHelipad &&
                 PlayerHelicopter.getInstance().getSpeed() == 0 &&
-                getTotalFireSize() == 0 && PlayerHelicopter.getInstance().currentState().equals("Off");
+                getTotalFireSize() == 0;
     }
 
     private boolean checkRanOutFuel() {
