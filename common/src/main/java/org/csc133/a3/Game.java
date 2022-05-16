@@ -66,6 +66,7 @@ public class Game extends Form implements Runnable {
     public void run() {
         glassCockpit.update();
         gw.tick();
+        controlCluster.updateButton();
         repaint();
     }
 }

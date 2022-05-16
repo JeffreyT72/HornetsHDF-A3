@@ -22,8 +22,9 @@ public class NonPlayerHelicopter extends Helicopter{
 
     private NonPlayerHelicopter(Dimension worldSize, int initFuel, Transform helipadLocation) {
         super(worldSize, HELICOPTER_COLOR, initFuel, helipadLocation);
+
         initTValue();
-        flightPath = GameWorld.getInstance().getFlightPath();
+        flightPath = getGameWorld().getFlightPath();
         currentPath = flightPath.getHelipadToRiver();
         lastPointOfPath = currentPath.getLastPointOfPath();
 
@@ -47,10 +48,17 @@ public class NonPlayerHelicopter extends Helicopter{
 
     public void nphAction() {
         if(isInOffState() && flightPath.selectFirstFire()) {
-            GameWorld.getInstance().spawnNPH();
+            getGameWorld().spawnNPH();
             startOrStopEngine();
         } else if(isInReadyState()) {
-            helicopterSpeedUp();
+            if (getGameWorld().getFireCollection().isEmpty()) {
+                if (arrived()) {
+                    setCurrentSpeed(0);
+                    startOrStopEngine();
+                }
+            } else {
+                helicopterSpeedUp();
+            }
             updateStrategy();
             strategy.followCurve();
         }
@@ -172,7 +180,7 @@ public class NonPlayerHelicopter extends Helicopter{
         }
         return checkCollision(0.3);
     }
-
+//-----------------------------------------------------------------------------
     public class FlightPathStrategy implements Strategy {
         @Override
         public void followCurve() {
@@ -190,11 +198,11 @@ public class NonPlayerHelicopter extends Helicopter{
                 // after drink water
                 if (getWater() >= 1000) {
                     currentPath = flightPath.getRiverToFire();
-                    t=0;
+                    initTValue();
                     updateLastPoint();
                 }
             } else if (getWater() >= 1000) {
-                gw.fight(NonPlayerHelicopter.getInstance());
+                getGameWorld().fight(NonPlayerHelicopter.getInstance());
                 currentPath = flightPath.getFireToRiver();
                 initTValue();
                 updateLastPoint();
@@ -227,7 +235,7 @@ public class NonPlayerHelicopter extends Helicopter{
             }
         }
     }
-
+//-----------------------------------------------------------------------------
     public class PathCorrectionStrategy implements Strategy {
         @Override
         public void followCurve() {
@@ -235,7 +243,7 @@ public class NonPlayerHelicopter extends Helicopter{
             createCorrectionPath();
         }
     }
-
+//-----------------------------------------------------------------------------
     public class AvoidStrategy implements Strategy {
         @Override
         public void followCurve() {

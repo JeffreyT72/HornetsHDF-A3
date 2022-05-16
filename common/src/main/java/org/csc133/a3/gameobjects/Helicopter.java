@@ -304,12 +304,12 @@ public class Helicopter extends Movable implements Steerable {
         @Override
         public void fuelConsume() {
             fuel -= (int) (Math.sqrt(currentSpeed) + 3);
-            //gw.setFuel((int) (Math.sqrt(currentSpeed) + 3));
         }
 
         @Override
         public void updateLocalTransforms() {
             heloBlade.updateLocalTransforms(rotationSpeed += 1);
+
             if (rotationSpeed >= 30) {
                 getHelicopter().changeState(new Ready());
             }
@@ -378,12 +378,12 @@ public class Helicopter extends Movable implements Steerable {
         @Override
         public void fuelConsume() {
             fuel -= (int) (Math.sqrt(currentSpeed) + 5);
-            //gw.setFuel((int) (Math.sqrt(currentSpeed) + 5));
         }
 
         @Override
         public void updateLocalTransforms() {
-            heloBlade.updateLocalTransforms(rotationSpeed = 30d);
+            rotationSpeed = 30d;
+            heloBlade.updateLocalTransforms(rotationSpeed);
         }
     }
 

@@ -12,7 +12,6 @@ import static com.codename1.ui.CN.*;
 
 public class Building extends Fixed {
     private Random r;
-    private int id;
     private int damage;
     private int value;
     private int buildingArea;
@@ -22,7 +21,7 @@ public class Building extends Fixed {
 
     public Building (Dimension worldSize, int id) {
         this.r = new Random();
-        this.id = id;
+        objectId = id;
         this.worldSize = worldSize;
         setColor(ColorUtil.rgb(255, 0, 0));
         this.damage = 0;

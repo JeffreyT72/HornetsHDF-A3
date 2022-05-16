@@ -363,7 +363,7 @@ public class GameWorld {
     }
 
     private boolean checkRanOutFuel() {
-        return fuel <= 0;
+        return PlayerHelicopter.getInstance().getFuel() <= 0;
     }
 
     private boolean checkBuildingDestroy() {
@@ -415,6 +415,10 @@ public class GameWorld {
         return helipad.getTranslation();
     }
 
+    public String getCurrentState() {
+        return PlayerHelicopter.getInstance().currentState();
+    }
+
     public void engineStartStop() {
         PlayerHelicopter.getInstance().startOrStopEngine();
     }
@@ -430,5 +434,4 @@ public class GameWorld {
     public void spawnNPH() {
         gameObjectCollection.add(NonPlayerHelicopter.getInstance());
     }
-
 }

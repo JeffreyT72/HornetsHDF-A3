@@ -21,9 +21,9 @@ public class Fire extends GameObject implements Observer {
     private double     size;
     private int     increaseRate;
     private double  scaleRate;
-    private boolean wasExtinguished;  // set true when fire was extinguished
+    private boolean wasExtinguished;
     private boolean startBurning;
-    private boolean isOverFire;       // set true when helicopter is over fire
+    private boolean isOverFire;
 
     private boolean selected;
 

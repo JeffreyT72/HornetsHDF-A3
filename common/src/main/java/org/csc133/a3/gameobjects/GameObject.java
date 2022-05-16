@@ -8,17 +8,17 @@ import org.csc133.a3.GameWorld;
 
 public abstract class GameObject {
     private int color;
-    private int objectId;
-    Dimension dimension;
-    Dimension worldSize;
+    protected int objectId;
+    protected Dimension dimension;
+    protected Dimension worldSize;
     private Transform gXform;
     private Transform gOrigXform;
     private Transform myTranslation;
-    Transform myRotation;
-    Transform myScale;
+    private Transform myRotation;
+    private Transform myScale;
     // For getting the fuel value from GameWorld
     //
-    GameWorld gw;
+    private GameWorld gw;
 
     public GameObject() {
         gw = GameWorld.getInstance();
@@ -39,6 +39,10 @@ public abstract class GameObject {
 
     // Getter
     //
+    public GameWorld getGameWorld() {
+        return gw;
+    }
+
     public int getWidth() {
         return getDimension().getWidth();
     }
@@ -48,11 +52,11 @@ public abstract class GameObject {
     }
 
     protected int getColor() {
-        return this.color;
+        return color;
     }
 
     public Dimension getDimension() {
-        return this.dimension;
+        return dimension;
     }
 
     public Transform getTranslation() {
@@ -184,28 +188,30 @@ abstract class Fixed extends GameObject {
 }
 
 abstract class Movable extends GameObject {
-    int currentSpeed;
-    double heading;
-    double displayAngle;
+    protected int currentSpeed;
+    protected double speedMultiplier;
+    protected double heading;
+    protected double displayAngle;
+    protected double angle;
 
     public Movable() {
-        currentSpeed = 0;
-        heading = 0;
+        this.currentSpeed = 0;
+        this.heading = 0;
     }
 
     public void move(long elapsedTimeInMillis) {
-        double speedMultiplier = (elapsedTimeInMillis / 100d) * 5;
-        double angle = Math.toRadians(heading + 90);
+        speedMultiplier = (elapsedTimeInMillis / 100d) * 5;
+        angle = Math.toRadians(heading + 90);
 
         this.translate(currentSpeed * speedMultiplier * Math.cos(angle),
                 currentSpeed * speedMultiplier * Math.sin(angle));
     }
 
-    public void setHeading(double theta) {
+    void setHeading(double theta) {
         this.heading = theta;
     }
 
-    public void setCurrentSpeed(int speed) {
+    void setCurrentSpeed(int speed) {
         this.currentSpeed = speed;
     }
 

@@ -6,7 +6,7 @@ import org.csc133.a3.GameWorld;
 
 public class EngineStartStopCommand extends Command {
     public EngineStartStopCommand(GameWorld gw) {
-        super("StartStop");
+        super("Start/Stop Engine");
     }
 
     @Override

@@ -6,11 +6,11 @@ import com.codename1.ui.geom.Dimension;
 import org.csc133.a3.GameWorld;
 
 public class PlayerHelicopter extends Helicopter{
-    private static final int HELICOLOR = ColorUtil.YELLOW;
+    private static final int HELICOPTER_COLOR = ColorUtil.YELLOW;
     private static PlayerHelicopter instance;
 
     private PlayerHelicopter(Dimension worldSize, int initFuel, Transform helipadLocation){
-        super(worldSize, HELICOLOR, initFuel, helipadLocation);
+        super(worldSize, HELICOPTER_COLOR, initFuel, helipadLocation);
     }
 
     public static PlayerHelicopter getInstance() {

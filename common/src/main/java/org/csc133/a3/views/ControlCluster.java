@@ -9,6 +9,7 @@ import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.plaf.Style;
 import org.csc133.a3.GameWorld;
 import org.csc133.a3.commands.*;
+import org.csc133.a3.gameobjects.PlayerHelicopter;
 
 public class ControlCluster extends Container {
     private GameWorld gw;
@@ -31,11 +32,14 @@ public class ControlCluster extends Container {
         rightBtn = this.buttonMaker(new TurnRightCommand(gw), "Right");
         fightBtn = this.buttonMaker(new FightCommand(gw), "Fight");
         exitBtn = this.buttonMaker(new ExitCommand(gw), "Exit");
-        startStopEngineBtn = this.buttonMaker(new EngineStartStopCommand(gw), " Start/Stop Engine");
+        startStopEngineBtn = this.buttonMaker(new EngineStartStopCommand(gw), "Start Engine");
 
+        startStopEngineBtn.getDisabledStyle().setBgColor(ColorUtil.GRAY);
         this.setLayout(new BorderLayout());
         this.getAllStyles().setBgColor(ColorUtil.WHITE);
         this.getAllStyles().setBgTransparency(255);
+        ((BorderLayout)this.getLayout()).setCenterBehavior(
+                            BorderLayout.CENTER_BEHAVIOR_CENTER);
         createEastBtn();
         createWestBtn();
         createMidBtn();
@@ -63,6 +67,7 @@ public class ControlCluster extends Container {
         midBtn.add(BorderLayout.CENTER, exitBtn);
         this.add(BorderLayout.CENTER, midBtn);
     }
+
     private Button buttonMaker(Command command, String text) {
         // Create button and set button command
         //
@@ -79,7 +84,22 @@ public class ControlCluster extends Container {
         btnStyle.setFgColor(ColorUtil.BLUE);
         btnStyle.setBgColor(ColorUtil.WHITE);
         btnStyle.setBgTransparency(255);
+
+        button.getPressedStyle().setBgColor(ColorUtil.GRAY, true);
+
         return button;
+    }
+
+    public void updateButton() {
+        if (gw.getCurrentState().equals("Ready")) {
+            startStopEngineBtn.setText("Stop Engine");
+            if (PlayerHelicopter.getInstance().getSpeed() != 0)
+                startStopEngineBtn.setEnabled(false);
+            else
+                startStopEngineBtn.setEnabled(true);
+        } else {
+            startStopEngineBtn.setText("Start Engine");
+        }
     }
 }
 
