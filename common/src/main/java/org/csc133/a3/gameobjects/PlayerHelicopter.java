@@ -9,15 +9,17 @@ public class PlayerHelicopter extends Helicopter{
     private static final int HELICOPTER_COLOR = ColorUtil.YELLOW;
     private static PlayerHelicopter instance;
 
-    private PlayerHelicopter(Dimension worldSize, int initFuel, Transform helipadLocation){
+    private PlayerHelicopter(Dimension worldSize,
+                             int initFuel, Transform helipadLocation) {
         super(worldSize, HELICOPTER_COLOR, initFuel, helipadLocation);
     }
 
     public static PlayerHelicopter getInstance() {
         if(instance == null) {
-            Dimension worldSize         = GameWorld.getInstance().getDimension();
-            int initFuel                = GameWorld.getInstance().getFuel();
-            Transform helipadLocation   = GameWorld.getInstance().getHelipadLocation();
+            Dimension worldSize = GameWorld.getInstance().getDimension();
+            int initFuel = GameWorld.getInstance().getFuel();
+            Transform helipadLocation =
+                    GameWorld.getInstance().getHelipadLocation();
 
             instance = new PlayerHelicopter(worldSize, initFuel, helipadLocation);
         }

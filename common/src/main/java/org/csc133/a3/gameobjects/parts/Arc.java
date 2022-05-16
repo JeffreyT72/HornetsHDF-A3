@@ -41,7 +41,9 @@ public class Arc extends GameObject {
     }
 
     @Override
-    protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
+    protected void localDraw(Graphics g,
+                             Point containerOrigin,
+                             Point screenOrigin) {
         g.setColor(getColor());
         
         if (getColor() == ColorUtil.BLACK)

@@ -35,28 +35,39 @@ public class FlightPath extends GameObject {
 
     private ArrayList helipadToRiver() {
         controlPoints = new ArrayList<>();
-        controlPoints.add(new Point2D(startLocation.getTranslateX(), startLocation.getTranslateY()));
-        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.5));
-        controlPoints.add(new Point2D(-100,worldSize.getHeight() * 0.7));
-        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.7));
+        controlPoints.add(new Point2D(  startLocation.getTranslateX(),
+                                        startLocation.getTranslateY()));
+        controlPoints.add(new Point2D(worldSize.getWidth()/2,
+                                      worldSize.getHeight() * 0.5));
+        controlPoints.add(new Point2D(-100,
+                                      worldSize.getHeight() * 0.7));
+        controlPoints.add(new Point2D(worldSize.getWidth()/2,
+                                      worldSize.getHeight() * 0.7));
         return controlPoints;
     }
 
     private ArrayList riverToFire() {
         controlPoints = new ArrayList<>();
-        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.7));
-        controlPoints.add(new Point2D(worldSize.getWidth() + 100,worldSize.getHeight() * 0.7));
-        controlPoints.add(new Point2D(worldSize.getWidth() + 100,0));
-        controlPoints.add(new Point2D(selectedFire.getTranslateX(), selectedFire.getTranslateY()));
+        controlPoints.add(new Point2D(worldSize.getWidth()/2,
+                                      worldSize.getHeight() * 0.7));
+        controlPoints.add(new Point2D(worldSize.getWidth() + 100,
+                                      worldSize.getHeight() * 0.7));
+        controlPoints.add(new Point2D(worldSize.getWidth() + 100,
+                                      0));
+        controlPoints.add(new Point2D(  selectedFire.getTranslateX(),
+                                        selectedFire.getTranslateY()));
         return controlPoints;
     }
 
     private ArrayList<Point2D> fireToRiver() {
         controlPoints = new ArrayList<>();
-        controlPoints.add(new Point2D(selectedFire.getTranslateX(), selectedFire.getTranslateY()));
+        controlPoints.add(new Point2D(  selectedFire.getTranslateX(),
+                                        selectedFire.getTranslateY()));
         controlPoints.add(new Point2D(-100,0));
-        controlPoints.add(new Point2D(-100,worldSize.getHeight() * 0.7));
-        controlPoints.add(new Point2D(worldSize.getWidth()/2,worldSize.getHeight() * 0.7));
+        controlPoints.add(new Point2D(-100,
+                                      worldSize.getHeight() * 0.7));
+        controlPoints.add(new Point2D(worldSize.getWidth()/2,
+                                      worldSize.getHeight() * 0.7));
         return controlPoints;
     }
 
@@ -85,7 +96,9 @@ public class FlightPath extends GameObject {
     }
 
     @Override
-    protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
+    protected void localDraw(Graphics g,
+                             Point containerOrigin,
+                             Point screenOrigin) {
     }
 
     class BezierCurve extends GameObject {
@@ -115,11 +128,14 @@ public class FlightPath extends GameObject {
             return p;
         }
 
-        private void drawBezierCurve(Graphics g, ArrayList<Point2D> controlPoints) {
+        private void drawBezierCurve(Graphics g,
+                                     ArrayList<Point2D> controlPoints) {
             final double smallFloatIncrement = 0.06;
             g.setColor(ColorUtil.GREEN);
             for (Point2D p : controlPoints)
-                g.fillArc((int)p.getX()-POINT_SIZE/2, (int)p.getY()-POINT_SIZE/2, POINT_SIZE, POINT_SIZE, 0, 360);
+                g.fillArc(  (int)p.getX()-POINT_SIZE/2,
+                            (int)p.getY()-POINT_SIZE/2,
+                            POINT_SIZE, POINT_SIZE, 0, 360);
 
             g.setColor(ColorUtil.GREEN);
             Point2D currentPoint = controlPoints.get(0);
@@ -158,7 +174,9 @@ public class FlightPath extends GameObject {
         }
 
         @Override
-        protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
+        protected void localDraw(Graphics g,
+                                 Point containerOrigin,
+                                 Point screenOrigin) {
             drawBezierCurve(g, controlPoints);
         }
 

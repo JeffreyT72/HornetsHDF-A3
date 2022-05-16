@@ -18,13 +18,12 @@ public class Fire extends GameObject implements Observer {
 
     // Variable
     private int     buildingId;
-    private double     size;
+    private double  size;
     private int     increaseRate;
     private double  scaleRate;
     private boolean wasExtinguished;
     private boolean startBurning;
     private boolean isOverFire;
-
     private boolean selected;
 
     // Constant
@@ -132,7 +131,7 @@ public class Fire extends GameObject implements Observer {
 
         void fight(int water) {}
 
-        void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {}
+        void localDraw(Graphics g, Point containerOrigin, Point screenOrigin){}
     }
 
     public class UnStarted extends FireState {
@@ -154,10 +153,14 @@ public class Fire extends GameObject implements Observer {
 
         @Override
         void checkIfSelected(Point2D invertedPoint) {
-            if (invertedPoint.getY() >= getTranslation().getTranslateY() - getHeight() * 2 &&
-                    invertedPoint.getY() <= getTranslation().getTranslateY() + getHeight() * 2 &&
-                    invertedPoint.getX() >= getTranslation().getTranslateX() - getWidth() * 2 &&
-                    invertedPoint.getX() <= getTranslation().getTranslateX() + getWidth() * 2) {
+            if (invertedPoint.getY() >=
+                    getTranslation().getTranslateY() - getHeight() * 2 &&
+                invertedPoint.getY() <=
+                    getTranslation().getTranslateY() + getHeight() * 2 &&
+                invertedPoint.getX() >=
+                    getTranslation().getTranslateX() - getWidth() * 2 &&
+                invertedPoint.getX() <=
+                    getTranslation().getTranslateX() + getWidth() * 2) {
                 subject.setSelectedFire(Fire.this);
             }
         }
@@ -187,14 +190,17 @@ public class Fire extends GameObject implements Observer {
         }
 
         @Override
-        protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
+        protected void localDraw(Graphics g,
+                                 Point containerOrigin,
+                                 Point screenOrigin) {
             g.fillArc(0, 0, getWidth(), getHeight(), 0, 360);
 
             // Text
             textTranslate(g, containerOrigin, screenOrigin);
             g.setFont(Font.createSystemFont(FACE_MONOSPACE,
                     STYLE_BOLD, SIZE_MEDIUM));
-            g.drawString(String.valueOf((int)size), (int)size / 2, (int)size / 2);
+            g.drawString(   String.valueOf((int)size),
+                        (int)size / 2, (int)size / 2);
         }
     }
 
@@ -207,7 +213,9 @@ public class Fire extends GameObject implements Observer {
     }
 
     @Override
-    protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
+    protected void localDraw(Graphics g,
+                             Point containerOrigin,
+                             Point screenOrigin) {
         fireState.localDraw(g, containerOrigin, screenOrigin);
     }
 }

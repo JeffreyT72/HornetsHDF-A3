@@ -72,8 +72,8 @@ public abstract class GameObject {
     }
 
     public void rotate(float degrees) {
-    myRotation.rotate((float)Math.toRadians(degrees), 0, 0);
-}
+        myRotation.rotate((float)Math.toRadians(degrees), 0, 0);
+    }
 
     public void scale(double sx, double sy) {
         myScale.scale((float)sx, (float)sy);
@@ -83,7 +83,9 @@ public abstract class GameObject {
         myTranslation.translate((float)tx, (float)ty);
     }
 
-    protected abstract void localDraw(Graphics g, Point containerOrigin, Point screenOrigin);
+    protected abstract void localDraw(Graphics g,
+                                      Point containerOrigin,
+                                      Point screenOrigin);
 
     protected Transform preLTTransform(Graphics g, Point screenOrigin) {
         Transform gxForm = Transform.makeIdentity();
@@ -97,7 +99,8 @@ public abstract class GameObject {
     }
 
     protected void localTransforms(Transform gxForm) {
-        gxForm.translate(myTranslation.getTranslateX(), myTranslation.getTranslateY());
+        gxForm.translate(   myTranslation.getTranslateX(),
+                            myTranslation.getTranslateY());
         gxForm.concatenate(myRotation);
         gxForm.scale(myScale.getScaleX(), myScale.getScaleY());
     }
@@ -119,32 +122,37 @@ public abstract class GameObject {
         g.setTransform(gxForm);
     }
 
-    protected void cn1ReverseContainerTranslate(Graphics g, Point parentOrigin) {
+    protected void cn1ReverseContainerTranslate(Graphics g,
+                                                Point parentOrigin) {
         Transform gxForm = Transform.makeIdentity();
         g.getTransform(gxForm);
         gxForm.translate(-parentOrigin.getX(), -parentOrigin.getY());
         g.setTransform(gxForm);
     }
 
-    protected void cn1ForwardPrimitiveTranslate(Graphics g, Dimension pDimension) {
+    protected void cn1ForwardPrimitiveTranslate(Graphics g,
+                                                Dimension pDimension) {
         Transform gxForm = Transform.makeIdentity();
         g.getTransform(gxForm);
         gxForm.translate(-pDimension.getWidth()/2, -pDimension.getHeight()/2);
         g.setTransform(gxForm);
     }
 
-    protected void cn1ReversePrimitiveTranslate(Graphics g, Dimension pDimension) {
+    protected void cn1ReversePrimitiveTranslate(Graphics g,
+                                                Dimension pDimension) {
         Transform gxForm = Transform.makeIdentity();
         g.getTransform(gxForm);
         gxForm.translate(pDimension.getWidth()/2, pDimension.getHeight()/2);
         g.setTransform(gxForm);
     }
 
-    protected void textTranslate(Graphics g, Point containerOrigin, Point screenOrigin) {
-
+    protected void textTranslate(Graphics g,
+                                 Point containerOrigin,
+                                 Point screenOrigin) {
         g.setTransform(gOrigXform);
         Transform gXform = preLTTransform(g, screenOrigin);
-        gXform.translate(getTranslation().getTranslateX(), getTranslation().getTranslateY());
+        gXform.translate(   getTranslation().getTranslateX(),
+                            getTranslation().getTranslateY());
         gXform.scale(1, -1);
         postLTransform(g, screenOrigin, gXform);
         cn1ForwardPrimitiveTranslate(g, dimension);
@@ -189,7 +197,7 @@ abstract class Fixed extends GameObject {
 
 abstract class Movable extends GameObject {
     protected int currentSpeed;
-    protected double speedMultiplier;
+    protected double speedFactor;
     protected double heading;
     protected double displayAngle;
     protected double angle;
@@ -200,11 +208,11 @@ abstract class Movable extends GameObject {
     }
 
     public void move(long elapsedTimeInMillis) {
-        speedMultiplier = (elapsedTimeInMillis / 100d) * 5;
+        speedFactor = elapsedTimeInMillis/10d;
         angle = Math.toRadians(heading + 90);
 
-        this.translate(currentSpeed * speedMultiplier * Math.cos(angle),
-                currentSpeed * speedMultiplier * Math.sin(angle));
+        this.translate(currentSpeed * speedFactor * Math.cos(angle),
+                currentSpeed * speedFactor * Math.sin(angle));
     }
 
     void setHeading(double theta) {

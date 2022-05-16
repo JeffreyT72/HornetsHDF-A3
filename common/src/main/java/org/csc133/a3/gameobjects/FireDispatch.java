@@ -40,7 +40,8 @@ public class FireDispatch implements Subject {
 
     private void updateSelectedFire() {
         Transform fire = Transform.makeIdentity();
-        fire.translate(selected.getTranslation().getTranslateX(), selected.getTranslation().getTranslateY());
+        fire.translate( selected.getTranslation().getTranslateX(),
+                        selected.getTranslation().getTranslateY());
         GameWorld.getInstance().updateSelectedFire(fire);
     }
 }

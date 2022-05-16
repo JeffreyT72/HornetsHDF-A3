@@ -2,7 +2,6 @@ package org.csc133.a3.gameobjects;
 
 import com.codename1.charts.util.ColorUtil;
 import com.codename1.ui.Graphics;
-import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
 
@@ -20,7 +19,9 @@ public class River extends Fixed {
     }
 
     @Override
-    public void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
+    public void localDraw(Graphics g,
+                          Point containerOrigin,
+                          Point screenOrigin) {
         g.drawRect(0, 0, getWidth(), getHeight(), THICKNESS);
     }
 }

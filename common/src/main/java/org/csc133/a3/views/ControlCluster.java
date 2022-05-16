@@ -32,7 +32,8 @@ public class ControlCluster extends Container {
         rightBtn = this.buttonMaker(new TurnRightCommand(gw), "Right");
         fightBtn = this.buttonMaker(new FightCommand(gw), "Fight");
         exitBtn = this.buttonMaker(new ExitCommand(gw), "Exit");
-        startStopEngineBtn = this.buttonMaker(new EngineStartStopCommand(gw), "Start Engine");
+        startStopEngineBtn = this.buttonMaker(new EngineStartStopCommand(gw),
+                                            "Start Engine");
 
         startStopEngineBtn.getDisabledStyle().setBgColor(ColorUtil.GRAY);
         this.setLayout(new BorderLayout());

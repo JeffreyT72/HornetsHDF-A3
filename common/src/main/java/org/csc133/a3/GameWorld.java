@@ -53,12 +53,8 @@ public class GameWorld {
     private static final int MAX_BUILDING = 3;
     private int FIRE_AREA_BUDGET = 1000;
 
-    // Make the constructor private
-    //
     private GameWorld(){}
 
-    // Get the only object available
-    //
     public static GameWorld getInstance(){
         if (instance == null)
             instance = new GameWorld();
@@ -74,10 +70,8 @@ public class GameWorld {
         helipad = new Helipad(worldSize);
         fireCollection = new ArrayList<>();
         buildingCollection = new ArrayList<>();
-
         flightPath = new FlightPath(helipad.getTranslation(), worldSize);
         fireDispatch = new FireDispatch();
-
         building0Dmg = 0;
         building1Dmg = 0;
         building2Dmg = 0;
@@ -88,7 +82,6 @@ public class GameWorld {
 
         gameObjectCollection = new ArrayList<>();
         gameObjectCollectionDelete = new ArrayList<>();
-
         gameObjectCollection.add(river);
         gameObjectCollection.add(helipad);
         // Adding three building with at least 6 fires
@@ -132,7 +125,6 @@ public class GameWorld {
 
     void tick() {
         ticks++;
-
         updateHelicopterTransforms();
         NonPlayerHelicopter.getInstance().nphAction();
         fireAction();
@@ -142,7 +134,6 @@ public class GameWorld {
         move(10);
         checkHelicopterOnRiver();
         fuelConsume();
-
         // GameClear/GameOver screen
         // Set some tick delay preventing gameWorld init() bug
         if (ticks >= 10) {
@@ -173,6 +164,20 @@ public class GameWorld {
     }
 
     private void fireAction() {
+        // Chance to spawn new fire
+        //
+        int spawnRate = 1 + r.nextInt(300);
+        if (spawnRate == 100) {
+            if (!getFireCollection().isEmpty()) {
+                int i = r.nextInt(3);   // random building
+                Fire temp = new Fire(worldSize, i, fireDispatch);
+                fireCollection.add(temp);
+                gameObjectCollection.add(temp);
+                building = buildingCollection.get(i);
+                building.setFireInBuilding(temp);
+            }
+        }
+
         for (GameObject go: gameObjectCollection) {
             if (go instanceof Fire) {
                 Fire f = (Fire) go;
@@ -183,7 +188,7 @@ public class GameWorld {
                 }
                 f.checkIsOverFire(PlayerHelicopter.getInstance());
                 f.checkIsOverFire(NonPlayerHelicopter.getInstance());
-                if (f.getWasExtinguished()) {   // If the fire was extinguished,
+                if (f.getWasExtinguished()) {   // If the fire was extinguished
                     gameObjectCollectionDelete.add(f);
                 }
             }
@@ -196,8 +201,10 @@ public class GameWorld {
     }
 
     private void checkHelicopterOnRiver() {
-        PlayerHelicopter.getInstance().checkIsOnRiver(river.getTranslation(), river.getDimension());
-        NonPlayerHelicopter.getInstance().checkIsOnRiver(river.getTranslation(), river.getDimension());
+        PlayerHelicopter.getInstance().
+                checkIsOnRiver(river.getTranslation(), river.getDimension());
+        NonPlayerHelicopter.getInstance().
+                checkIsOnRiver(river.getTranslation(), river.getDimension());
     }
 
     private void updateBuildingDisplay() {
@@ -232,6 +239,10 @@ public class GameWorld {
         NonPlayerHelicopter.getInstance().updateLocalTransforms();
     }
 
+    public void setDimension(Dimension worldSize) {
+        this.worldSize = worldSize;
+    }
+
     public Dimension getDimension() {
         return worldSize;
     }
@@ -251,6 +262,30 @@ public class GameWorld {
 
     public int getCurrentSpeed() {
         return PlayerHelicopter.getInstance().getSpeed();
+    }
+
+    public ArrayList<GameObject> getGameObjectCollection() {
+        return gameObjectCollection;
+    }
+
+    public ArrayList<Fire> getFireCollection() {
+        return fireCollection;
+    }
+
+    public Transform getHelipadLocation() {
+        return helipad.getTranslation();
+    }
+
+    public String getCurrentState() {
+        return PlayerHelicopter.getInstance().currentState();
+    }
+
+    public void engineStartStop() {
+        PlayerHelicopter.getInstance().startOrStopEngine();
+    }
+
+    public FlightPath getFlightPath() {
+        return flightPath;
     }
 
     public int getCurrentFireNo() {
@@ -334,29 +369,34 @@ public class GameWorld {
         for (GameObject go: gameObjectCollection) {
             if (go instanceof Fire) {
                 Fire f = (Fire) go;
-                if (!f.getWasExtinguished() && isOverFire(f, helicopter) && helicopter.getWater() > 0) {
+                if (!f.getWasExtinguished() &&
+                    isOverFire(f, helicopter) &&
+                    helicopter.getWater() > 0) {
                     f.fight(helicopter.getWater());
                 }
             }
         }
-        // In case player drop the water after all fires arraylist is empty
-        //
         helicopter.miss();
     }
 
-    private boolean isOverFire(Fire f, Helicopter helicopter){
+    private boolean isOverFire(Fire f, Helicopter helicopter) {
         return f.checkIsOverFire(helicopter);
     }
 
     private boolean checkWinCondition() {
-        boolean inHelipad = PlayerHelicopter.getInstance().getTranslation().getTranslateX() >=
-                helipad.getTranslation().getTranslateX() - helipad.getDimension().getWidth() / 2 &&
-                PlayerHelicopter.getInstance().getTranslation().getTranslateX() <=
-                        helipad.getTranslation().getTranslateX() + helipad.getDimension().getWidth() / 2 &&
-                PlayerHelicopter.getInstance().getTranslation().getTranslateY() >=
-                        helipad.getTranslation().getTranslateY() - helipad.getDimension().getHeight() / 2 &&
-                PlayerHelicopter.getInstance().getTranslation().getTranslateY() <=
-                        helipad.getTranslation().getTranslateY() + helipad.getDimension().getHeight() / 2;
+        boolean inHelipad =
+             PlayerHelicopter.getInstance().getTranslation().getTranslateX() >=
+                helipad.getTranslation().getTranslateX() -
+                helipad.getDimension().getWidth() / 2 &&
+             PlayerHelicopter.getInstance().getTranslation().getTranslateX() <=
+                helipad.getTranslation().getTranslateX() +
+                helipad.getDimension().getWidth() / 2 &&
+             PlayerHelicopter.getInstance().getTranslation().getTranslateY() >=
+                helipad.getTranslation().getTranslateY() -
+                helipad.getDimension().getHeight() / 2 &&
+             PlayerHelicopter.getInstance().getTranslation().getTranslateY() <=
+                helipad.getTranslation().getTranslateY() +
+                helipad.getDimension().getHeight() / 2;
         return inHelipad &&
                 PlayerHelicopter.getInstance().getSpeed() == 0 &&
                 getTotalFireSize() == 0;
@@ -397,34 +437,6 @@ public class GameWorld {
 
     public void quit() {
         Display.getInstance().exitApplication();
-    }
-
-    public ArrayList<GameObject> getGameObjectCollection() {
-        return gameObjectCollection;
-    }
-
-    public ArrayList<Fire> getFireCollection() {
-        return fireCollection;
-    }
-
-    public void setDimension(Dimension worldSize) {
-        this.worldSize = worldSize;
-    }
-
-    public Transform getHelipadLocation() {
-        return helipad.getTranslation();
-    }
-
-    public String getCurrentState() {
-        return PlayerHelicopter.getInstance().currentState();
-    }
-
-    public void engineStartStop() {
-        PlayerHelicopter.getInstance().startOrStopEngine();
-    }
-
-    public FlightPath getFlightPath() {
-        return flightPath;
     }
 
     public void updateSelectedFire(Transform fire) {

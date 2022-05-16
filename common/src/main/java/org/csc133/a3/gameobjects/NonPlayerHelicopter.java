@@ -20,7 +20,8 @@ public class NonPlayerHelicopter extends Helicopter{
     private final FlightPath flightPath;
     private static final int HELICOPTER_COLOR = ColorUtil.GREEN;
 
-    private NonPlayerHelicopter(Dimension worldSize, int initFuel, Transform helipadLocation) {
+    private NonPlayerHelicopter(Dimension worldSize,
+                                int initFuel, Transform helipadLocation) {
         super(worldSize, HELICOPTER_COLOR, initFuel, helipadLocation);
 
         initTValue();
@@ -33,11 +34,13 @@ public class NonPlayerHelicopter extends Helicopter{
 
     public static NonPlayerHelicopter getInstance() {
         if(instance == null) {
-            Dimension worldSize         = GameWorld.getInstance().getDimension();
-            int initFuel                = GameWorld.getInstance().getFuel();
-            Transform helipadLocation   = GameWorld.getInstance().getHelipadLocation();
+            Dimension worldSize = GameWorld.getInstance().getDimension();
+            int initFuel = GameWorld.getInstance().getFuel();
+            Transform helipadLocation =
+                    GameWorld.getInstance().getHelipadLocation();
 
-            instance = new NonPlayerHelicopter(worldSize, initFuel, helipadLocation);
+            instance = new NonPlayerHelicopter( worldSize,
+                                                initFuel, helipadLocation);
         }
         return instance;
     }
@@ -60,7 +63,7 @@ public class NonPlayerHelicopter extends Helicopter{
                 helicopterSpeedUp();
             }
             updateStrategy();
-            strategy.followCurve();
+            strategy.followPath();
         }
     }
 
@@ -85,11 +88,12 @@ public class NonPlayerHelicopter extends Helicopter{
     }
 
     private boolean isFlightPathStrategy() {
-        return strategy.getClass().getSimpleName().equals("FlightPathStrategy");
+        return strategy.getClass().getSimpleName()
+                .equals("FlightPathStrategy");
     }
 
     private boolean needCorrection() {
-        return (t > 0 && t < 1) && goalChanged() && isFlightPathStrategy();
+        return (t > 0 && t < 1) && pointChanged() && isFlightPathStrategy();
     }
 
     private boolean canExitAvoidStrategy() {
@@ -97,7 +101,7 @@ public class NonPlayerHelicopter extends Helicopter{
                 !checkCollision(1);
     }
 
-    private boolean goalChanged() {
+    private boolean pointChanged() {
         return lastPointOfPath != currentPath.getLastPointOfPath();
     }
 
@@ -143,18 +147,25 @@ public class NonPlayerHelicopter extends Helicopter{
 
     private void setAvoidanceAngle() {
         int heading;
-        Transform playerHelicopter = PlayerHelicopter.getInstance().getTranslation();
+        Transform playerHelicopter =
+                PlayerHelicopter.getInstance().getTranslation();
 
         // Use four quadrant to determine the opposite angle
         //
-        if (getTranslation().getTranslateX() > playerHelicopter.getTranslateX()              // top left
-                && getTranslation().getTranslateY() > playerHelicopter.getTranslateY()) {
+        if (getTranslation().getTranslateX() >
+                playerHelicopter.getTranslateX() &&     // top left
+                getTranslation().getTranslateY() >
+                playerHelicopter.getTranslateY()) {
             heading = 45;   // 45 degree because 0 is east
-        } else if (getTranslation().getTranslateX() < playerHelicopter.getTranslateX()       // top right
-                && getTranslation().getTranslateY() > playerHelicopter.getTranslateY()) {
+        } else if (getTranslation().getTranslateX() <
+                playerHelicopter.getTranslateX() &&     // top right
+                getTranslation().getTranslateY() >
+                playerHelicopter.getTranslateY()) {
             heading = 135;
-        } else if (getTranslation().getTranslateX() < playerHelicopter.getTranslateX()       // bottom right
-                && getTranslation().getTranslateY() < playerHelicopter.getTranslateY()) {
+        } else if (getTranslation().getTranslateX() <
+                playerHelicopter.getTranslateX() &&     // bottom right
+                getTranslation().getTranslateY() <
+                playerHelicopter.getTranslateY()) {
             heading = 225;
         } else {
             heading = 315;
@@ -163,15 +174,20 @@ public class NonPlayerHelicopter extends Helicopter{
     }
 
     private boolean checkCollision(double circleFactor) {
-        double playerRadius = PlayerHelicopter.getInstance().getBladeLength() * circleFactor;
-        double nphRadius = NonPlayerHelicopter.getInstance().getBladeLength() * circleFactor;
-        float playerX = PlayerHelicopter.getInstance().getTranslation().getTranslateX();
-        float playerY = PlayerHelicopter.getInstance().getTranslation().getTranslateY();
+        double playerRadius = PlayerHelicopter.getInstance().getBladeLength()
+                                * circleFactor;
+        double nphRadius = NonPlayerHelicopter.getInstance().getBladeLength()
+                                * circleFactor;
+        float playerX =
+               PlayerHelicopter.getInstance().getTranslation().getTranslateX();
+        float playerY =
+               PlayerHelicopter.getInstance().getTranslation().getTranslateY();
         float nphX = getTranslation().getTranslateX();
         float nphY = getTranslation().getTranslateY();
 
-        double distance = MathUtil.pow(nphY - playerY, 2) + MathUtil.pow(nphX - playerX, 2);
-        return distance <= MathUtil.pow(playerRadius + nphRadius, 2);
+        double distance =   MathUtil.pow(nphY - playerY, 2) +
+                            MathUtil.pow(nphX - playerX, 2);
+        return distance <=  MathUtil.pow(playerRadius + nphRadius, 2);
     }
 
     public boolean crashed() {
@@ -183,7 +199,7 @@ public class NonPlayerHelicopter extends Helicopter{
 //-----------------------------------------------------------------------------
     public class FlightPathStrategy implements Strategy {
         @Override
-        public void followCurve() {
+        public void followPath() {
             if (arrived())
                 action();
             else {
@@ -215,7 +231,9 @@ public class NonPlayerHelicopter extends Helicopter{
         }
 
         private void moveAlongPath() {
-            Point2D currentPoint = new Point2D(getTranslation().getTranslateX(), getTranslation().getTranslateY());
+            Point2D currentPoint =
+                    new Point2D(getTranslation().getTranslateX(),
+                                getTranslation().getTranslateY());
             Point2D nextPoint = currentPath.evaluateCurve(t);
 
             // Translate from current to next point.
@@ -238,7 +256,7 @@ public class NonPlayerHelicopter extends Helicopter{
 //-----------------------------------------------------------------------------
     public class PathCorrectionStrategy implements Strategy {
         @Override
-        public void followCurve() {
+        public void followPath() {
             updateLastPoint();
             createCorrectionPath();
         }
@@ -246,7 +264,7 @@ public class NonPlayerHelicopter extends Helicopter{
 //-----------------------------------------------------------------------------
     public class AvoidStrategy implements Strategy {
         @Override
-        public void followCurve() {
+        public void followPath() {
             avoid();
         }
 

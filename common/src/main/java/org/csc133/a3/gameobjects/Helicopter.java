@@ -6,7 +6,6 @@ import com.codename1.ui.Graphics;
 import com.codename1.ui.Transform;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.geom.Point;
-import com.codename1.ui.geom.Point2D;
 import org.csc133.a3.gameobjects.parts.Arc;
 import org.csc133.a3.gameobjects.parts.Rectangle;
 import org.csc133.a3.gameobjects.parts.Trapezoid;
@@ -43,7 +42,8 @@ public class Helicopter extends Movable implements Steerable {
     final static int SKID_WIDTH = 30;
     final static int SKID_HEIGHT = 400;
 
-    public void checkIsOnRiver(Transform riverTransform, Dimension riverDimension) {
+    public void checkIsOnRiver(Transform riverTransform,
+                               Dimension riverDimension) {
         int riverStartX = (int)riverTransform.getTranslateX()
                 - riverDimension.getWidth()/2;
         int riverStartY = (int)riverTransform.getTranslateY()
@@ -125,7 +125,8 @@ public class Helicopter extends Movable implements Steerable {
     private static class HeloEngineBlock extends Rectangle {
         public HeloEngineBlock(int color) {
             super(color,
-                    Helicopter.ENGINE_BLOCK_WIDTH, Helicopter.ENGINE_BLOCK_HEIGHT,
+                    Helicopter.ENGINE_BLOCK_WIDTH,
+                    Helicopter.ENGINE_BLOCK_HEIGHT,
                     0, (float) (-Helicopter.ENGINE_BLOCK_HEIGHT/2),
                     1, 1, 0);
         }
@@ -161,7 +162,8 @@ public class Helicopter extends Movable implements Steerable {
         public HeloFrontLeftJoint() {
             super(ColorUtil.GRAY,
                     JOINT_WIDTH, JOINT_HEIGHT,
-                    Helicopter.BUBBLE_RADIUS + 10, Helicopter.BUBBLE_RADIUS + 10,
+                    Helicopter.BUBBLE_RADIUS + 10,
+                    Helicopter.BUBBLE_RADIUS + 10,
                     1, 1, 0);
         }
     }
@@ -170,7 +172,8 @@ public class Helicopter extends Movable implements Steerable {
         public HeloFrontRightJoint() {
             super(ColorUtil.GRAY,
                     JOINT_WIDTH, JOINT_HEIGHT,
-                    -Helicopter.BUBBLE_RADIUS-10, Helicopter.BUBBLE_RADIUS + 10,
+                    -Helicopter.BUBBLE_RADIUS-10,
+                    Helicopter.BUBBLE_RADIUS + 10,
                     1, 1, 0);
         }
     }
@@ -282,14 +285,19 @@ public class Helicopter extends Movable implements Steerable {
 
         @Override
         public boolean hasLandedAt(Helipad helipad) {
-            boolean inHelipad = PlayerHelicopter.getInstance().getTranslation().getTranslateX() >=
-                    helipad.getTranslation().getTranslateX() - helipad.getDimension().getWidth() / 2 &&
-                    PlayerHelicopter.getInstance().getTranslation().getTranslateX() <=
-                            helipad.getTranslation().getTranslateX() + helipad.getDimension().getWidth() / 2 &&
-                    PlayerHelicopter.getInstance().getTranslation().getTranslateY() >=
-                            helipad.getTranslation().getTranslateY() - helipad.getDimension().getHeight() / 2 &&
-                    PlayerHelicopter.getInstance().getTranslation().getTranslateY() <=
-                            helipad.getTranslation().getTranslateY() + helipad.getDimension().getHeight() / 2;
+            boolean inHelipad =
+                    getHelicopter().getTranslation().getTranslateX() >=
+                        helipad.getTranslation().getTranslateX() -
+                        helipad.getDimension().getWidth() / 2 &&
+                    getHelicopter().getTranslation().getTranslateX() <=
+                        helipad.getTranslation().getTranslateX() +
+                        helipad.getDimension().getWidth() / 2 &&
+                    getHelicopter().getTranslation().getTranslateY() >=
+                        helipad.getTranslation().getTranslateY() -
+                        helipad.getDimension().getHeight() / 2 &&
+                    getHelicopter().getTranslation().getTranslateY() <=
+                        helipad.getTranslation().getTranslateY() +
+                        helipad.getDimension().getHeight() / 2;
             return inHelipad;
         }
     }
@@ -325,7 +333,8 @@ public class Helicopter extends Movable implements Steerable {
 
         @Override
         public void updateLocalTransforms() {
-            heloBlade.updateLocalTransforms(rotationSpeed -= 2);
+            rotationSpeed -= 2;
+            heloBlade.updateLocalTransforms(rotationSpeed);
             if (rotationSpeed <= 0) {
                 // prevent the blade go to other direction
                 rotationSpeed = 0;
@@ -397,7 +406,9 @@ public class Helicopter extends Movable implements Steerable {
     private int color;
     private int fuel;
 
-    public Helicopter(Dimension worldSize, int HeliColor, int initFuel, Transform helipadLocation) {
+    public Helicopter(Dimension worldSize,
+                      int HeliColor, int initFuel,
+                      Transform helipadLocation) {
         this.worldSize = worldSize;
         this.color = HeliColor;
         setColor(HeliColor);
@@ -409,7 +420,8 @@ public class Helicopter extends Movable implements Steerable {
         this.heading = Math.toRadians(SANGLE);
         this.displayAngle = 0;
 
-        this.translate(helipadLocation.getTranslateX(), helipadLocation.getTranslateY());
+        this.translate( helipadLocation.getTranslateX(),
+                        helipadLocation.getTranslateY());
         this.scale(0.3,0.3);
 
         helicopterState = new Off();
@@ -438,7 +450,9 @@ public class Helicopter extends Movable implements Steerable {
     }
 
     @Override
-    protected void localDraw(Graphics g, Point containerOrigin, Point screenOrigin) {
+    protected void localDraw(Graphics g,
+                             Point containerOrigin,
+                             Point screenOrigin) {
         cn1ReversePrimitiveTranslate(g, getDimension());
         cn1ReverseContainerTranslate(g, containerOrigin);
 
