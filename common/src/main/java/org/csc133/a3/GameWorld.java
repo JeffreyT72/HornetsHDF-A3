@@ -100,6 +100,19 @@ public class GameWorld {
         }
         // Add the rest of the fires until it reach the fireAreaBudget
         //
+        spawnFires();
+
+        gameObjectCollection.add(flightPath.getHelipadToRiver());
+        gameObjectCollection.add(flightPath.getRiverToFire());
+        gameObjectCollection.add(flightPath.getFireToRiver());
+
+        gameObjectCollection.add(PlayerHelicopter.getInstance());
+
+        for (Building b: buildingCollection)
+            totalValue += b.getValue();
+    }
+
+    private void spawnFires() {
         int i = 0;
         while (getTotalFireArea() < FIRE_AREA_BUDGET) {
             Fire temp = new Fire(worldSize, i, fireDispatch);
@@ -112,15 +125,6 @@ public class GameWorld {
             if (i >= MAX_BUILDING)
                 i = 0;
         }
-
-        gameObjectCollection.add(flightPath.getHelipadToRiver());
-        gameObjectCollection.add(flightPath.getRiverToFire());
-        gameObjectCollection.add(flightPath.getFireToRiver());
-
-        gameObjectCollection.add(PlayerHelicopter.getInstance());
-
-        for (Building b: buildingCollection)
-            totalValue += b.getValue();
     }
 
     void tick() {
@@ -420,9 +424,7 @@ public class GameWorld {
         } else if (checkCrashed()) {
             winLossText = "Opps! Crashed:(\nPlay again?";
         }
-        if (Dialog.show("Game Over", winLossText,
-                "Heck Yeah!", "Some Other Time")) {
-            //new Game().show();
+        if (Dialog.show("Game Over", winLossText, "Heck Yeah!", "Some Other Time")) {
             restart();
         } else {
             quit();

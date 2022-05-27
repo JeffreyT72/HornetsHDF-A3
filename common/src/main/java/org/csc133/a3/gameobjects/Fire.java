@@ -154,13 +154,13 @@ public class Fire extends GameObject implements Observer {
         @Override
         void checkIfSelected(Point2D invertedPoint) {
             if (invertedPoint.getY() >=
-                    getTranslation().getTranslateY() - getHeight() * 2 &&
+                    getTranslation().getTranslateY() - size / 2 &&
                 invertedPoint.getY() <=
-                    getTranslation().getTranslateY() + getHeight() * 2 &&
+                    getTranslation().getTranslateY() + size / 2 &&
                 invertedPoint.getX() >=
-                    getTranslation().getTranslateX() - getWidth() * 2 &&
+                    getTranslation().getTranslateX() - size / 2 &&
                 invertedPoint.getX() <=
-                    getTranslation().getTranslateX() + getWidth() * 2) {
+                    getTranslation().getTranslateX() + size / 2) {
                 subject.setSelectedFire(Fire.this);
             }
         }

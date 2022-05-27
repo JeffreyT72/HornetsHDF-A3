@@ -208,11 +208,15 @@ abstract class Movable extends GameObject {
     }
 
     public void move(long elapsedTimeInMillis) {
-        speedFactor = elapsedTimeInMillis/10d;
+        speedFactor = calcSpeedMultiplier(elapsedTimeInMillis);
         angle = Math.toRadians(heading + 90);
 
         this.translate(currentSpeed * speedFactor * Math.cos(angle),
                 currentSpeed * speedFactor * Math.sin(angle));
+    }
+
+    private double calcSpeedMultiplier(long elapsedTime) {
+        return (elapsedTime / 100f) * 4;
     }
 
     void setHeading(double theta) {

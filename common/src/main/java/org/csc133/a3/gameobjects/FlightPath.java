@@ -19,6 +19,7 @@ public class FlightPath extends GameObject {
     private ArrayList<Point2D> controlPoints;
     private Transform selectedFire;
     private Transform firstFire;
+    private final int DOT_OFFSET = 15;
 
     public FlightPath(Transform startLocation, Dimension worldSize) {
         this.worldSize = worldSize;
@@ -35,39 +36,39 @@ public class FlightPath extends GameObject {
 
     private ArrayList helipadToRiver() {
         controlPoints = new ArrayList<>();
-        controlPoints.add(new Point2D(  startLocation.getTranslateX(),
-                                        startLocation.getTranslateY()));
-        controlPoints.add(new Point2D(worldSize.getWidth()/2,
-                                      worldSize.getHeight() * 0.5));
-        controlPoints.add(new Point2D(-100,
-                                      worldSize.getHeight() * 0.7));
-        controlPoints.add(new Point2D(worldSize.getWidth()/2,
-                                      worldSize.getHeight() * 0.7));
+        controlPoints.add(new Point2D(  startLocation.getTranslateX() + DOT_OFFSET,
+                                        startLocation.getTranslateY() + DOT_OFFSET));
+        controlPoints.add(new Point2D(worldSize.getWidth()/2 + DOT_OFFSET,
+                                      worldSize.getHeight() * 0.5 + DOT_OFFSET));
+        controlPoints.add(new Point2D(-100 + DOT_OFFSET,
+                                      worldSize.getHeight() * 0.7 + DOT_OFFSET));
+        controlPoints.add(new Point2D(worldSize.getWidth()/2 + DOT_OFFSET,
+                                      worldSize.getHeight() * 0.7 + DOT_OFFSET));
         return controlPoints;
     }
 
     private ArrayList riverToFire() {
         controlPoints = new ArrayList<>();
-        controlPoints.add(new Point2D(worldSize.getWidth()/2,
-                                      worldSize.getHeight() * 0.7));
-        controlPoints.add(new Point2D(worldSize.getWidth() + 100,
-                                      worldSize.getHeight() * 0.7));
-        controlPoints.add(new Point2D(worldSize.getWidth() + 100,
-                                      0));
-        controlPoints.add(new Point2D(  selectedFire.getTranslateX(),
-                                        selectedFire.getTranslateY()));
+        controlPoints.add(new Point2D(worldSize.getWidth()/2 + DOT_OFFSET,
+                                      worldSize.getHeight() * 0.7 + DOT_OFFSET));
+        controlPoints.add(new Point2D(worldSize.getWidth() + 100 + DOT_OFFSET,
+                                      worldSize.getHeight() * 0.7 + DOT_OFFSET));
+        controlPoints.add(new Point2D(worldSize.getWidth() + 100 + DOT_OFFSET,
+                                      0 + DOT_OFFSET));
+        controlPoints.add(new Point2D(  selectedFire.getTranslateX() + DOT_OFFSET,
+                                        selectedFire.getTranslateY() + DOT_OFFSET));
         return controlPoints;
     }
 
     private ArrayList<Point2D> fireToRiver() {
         controlPoints = new ArrayList<>();
-        controlPoints.add(new Point2D(  selectedFire.getTranslateX(),
-                                        selectedFire.getTranslateY()));
-        controlPoints.add(new Point2D(-100,0));
-        controlPoints.add(new Point2D(-100,
-                                      worldSize.getHeight() * 0.7));
-        controlPoints.add(new Point2D(worldSize.getWidth()/2,
-                                      worldSize.getHeight() * 0.7));
+        controlPoints.add(new Point2D(  selectedFire.getTranslateX() + DOT_OFFSET,
+                                        selectedFire.getTranslateY() + DOT_OFFSET));
+        controlPoints.add(new Point2D(-100 + DOT_OFFSET,0 + DOT_OFFSET));
+        controlPoints.add(new Point2D(-100 + DOT_OFFSET,
+                                      worldSize.getHeight() * 0.7 + DOT_OFFSET));
+        controlPoints.add(new Point2D(worldSize.getWidth()/2 + DOT_OFFSET,
+                                      worldSize.getHeight() * 0.7 + DOT_OFFSET));
         return controlPoints;
     }
 
